@@ -27,7 +27,7 @@ HotSpot虚拟机架构以下这幅图展示了Java虚拟机里面的关键组件
 指向当前方法的类的运行时">
 <meta property="og:image" content="http://yoursite.com/images/JVM/JVM4.png">
 <meta property="og:image" content="http://yoursite.com/images/JVM/JVM7.jpg">
-<meta property="og:updated_time" content="2015-08-02T13:05:45.956Z">
+<meta property="og:updated_time" content="2015-08-02T13:09:13.441Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解JVM(3)">
 <meta name="twitter:description" content="这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。
@@ -293,9 +293,14 @@ HotSpot虚拟机架构以下这幅图展示了Java虚拟机里面的关键组件
 <h3 id="PawNew收集器">PawNew收集器</h3><p>是Serial收集器的多线程版本。</p>
 <blockquote>
 <p>在讨论垃圾收集器的上下文语境中：</p>
-<pre><code>-<span class="ruby"> 并行： 指多条垃圾收集器线程并行工作，但此时用户线程依然处于等待状态
-</span>-<span class="ruby"> 并发： 指用户线程与垃圾收集线程同时运行（但不一定是并行的，可能会交替运行），用户程序继续运行，而垃圾收集程序运行在另一个<span class="constant">CPU</span>上。</span>
-</code></pre><h3 id="Parallel_Scavenge收集器">Parallel Scavenge收集器</h3><p>新生代收集器，使用“复制”算法，并行的多线程收集器。着重于达到一个可控制的吞吐量。<br>吞吐量 = 运行用户代码时间/(运行用户带啊时间+垃圾收集时间)</p>
+<ul>
+<li>并行： 指多条垃圾收集器线程并行工作，但此时用户线程依然处于等待状态</li>
+<li>并发： 指用户线程与垃圾收集线程同时运行（但不一定是并行的，可能会交替运行），用户程序继续运行，而垃圾收集程序运行在另一个CPU上。</li>
+</ul>
+</blockquote>
+<h3 id="Parallel_Scavenge收集器">Parallel Scavenge收集器</h3><p>新生代收集器，使用“复制”算法，并行的多线程收集器。着重于达到一个可控制的吞吐量。</p>
+<blockquote>
+<p>吞吐量 = 运行用户代码时间/(运行用户带啊时间+垃圾收集时间)</p>
 <h3 id="Serial_Old收集器">Serial Old收集器</h3><p>是Serial收集器的老年代版本，单线程收集器，使用“标记-整理”算法。</p>
 <h3 id="Parallel_Old收集器">Parallel Old收集器</h3><p>Parallel Scavenge收集器的老年代版本。</p>
 <h3 id="CMS收集器">CMS收集器</h3><p>系统停顿很短。</p>
