@@ -180,6 +180,115 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-deep-into-JVM-4-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/04/deep-into-JVM-4-1/" class="article-date">
+  	<time datetime="2015-08-04T13:43:42.000Z" itemprop="datePublished">2015-08-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/04/deep-into-JVM-4-1/">深入理解JVM(5)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
+<h1 id="虚拟机类加载机制">虚拟机类加载机制</h1><p>与C++语言在编译时需要进行链接工作不同，Java语言里，类的加载和链接都是在运行时完成的，Java语言的动态扩展的特性便是依赖运行期动态加载和动态连接这个特点实现的。</p>
+<h2 id="类加载的时机">类加载的时机</h2><p>类从加载到虚拟机内存中开始，到卸载出内存为止，共经历了七个阶段。<br><img src="/images/JVM/JVM10.jpg" alt="类的生命周期"><br>如图，加载、验证、准备、初始化和卸载这五个过程是确定的，解析过程则不一定：它在某些情况下可以在初始化之后开始，这样是为了支持Java语言的运行时绑定。<br>jvm规定了下面四种情况需要立即对类进行“初始化”（而加载，验证，准备工作自然要在此之前）：</p>
+<ol>
+<li>遇到new、getstatic、putstatic、invokestatic这四条指令时，如果类没有进行初始化(被final修饰、已在编译期把结果放入常量池的静态字段除外)，需要先触发初始化。</li>
+<li>遇到java.lang.reflect包方法对类进行发射调用时。</li>
+<li>当一个类进行初始化时，如果发现其父类还未进行初始化时。</li>
+<li>当虚拟机启动时，用户需要指定一个要执行的主类，虚拟机会先初始化这个主类。</li>
+</ol>
+<p>以上四类场景成为类的主动引用，除此之外所有引用类的方式，都不会触发初始化，成为被动引用。</p>
+<h2 id="类加载的过程">类加载的过程</h2><h3 id="1-加载">1.加载</h3><p>在加载阶段，虚拟机需要完成以下三件事情：</p>
+<ol>
+<li>通过一个类的全限定名来获取此类的二进制字节流</li>
+<li>将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构</li>
+<li>在java堆中生成一个代表这个类的java.lang.Class对象，作为方法区这些数据的访问入口</li>
+</ol>
+<h3 id="2-验证">2.验证</h3><p>验证阶段虚拟机类加载机制里面的一项很重要的步骤。主要包括四个阶段。</p>
+<ol>
+<li>文件格式验证</li>
+<li>元数据验证</li>
+<li>字节码验证</li>
+<li>符号引用验证：确保解析动作的职场执行。</li>
+</ol>
+<h3 id="3-准备">3.准备</h3><p>准备阶段是正式为类变量分配内存并设置类变量初始值的阶段，这些内存都将在方法区中进行分配。</p>
+<blockquote>
+<p>这时候进行内存分配的仅包括类变量（被static修饰的变量），而不包括实例变量，实例变量将会在对象实例化时随着对象一起分配在Java堆中。</p>
+</blockquote>
+<h3 id="4-解析">4.解析</h3><p>解析阶段是虚拟机将常量池内符号引用替换为直接引用的过程。<br>解析动作主要针对类或接口、字段、类方法、接口方法四类符号引用进行。</p>
+<ol>
+<li>类或接口的解析<br>假设当前代码所处的类为D,如果要把一个从未解析过的符号引用解析为一个类或接口C的直接引用，那虚拟机完成整个解析的过程需要包括以下3个步骤：<ol>
+<li>如果C不是一个数组类型，那虚拟机将会把代表N的全限定名传递给D的类加载器去加载这个类C。</li>
+<li>如果C是一个数组类型，并且数组类型为对象，那就按照点1的规则进行。<br>3.略</li>
+</ol>
+</li>
+<li>字段解析</li>
+<li>类方法解析</li>
+<li>接口方法解析</li>
+</ol>
+<h3 id="5-初始化">5.初始化</h3><p>类初始化阶段是类加载过程的最后一步。在准备阶段，变量已经赋过一次系统要求的初始值，而在初始化阶段，则是根据程序员通过程序制定的主观计划去初始化类变量和其他资源，或者可以从另外一个角度来表达：初始化阶段是执行类构造器<clinit>()方法的过程。</clinit></p>
+<ul>
+<li><clinit>()方法是由编译器自动收集类中的所有类变量的赋值动作和静态语句块(static{} 块)中的语句合并产生的。</clinit></li>
+<li><clinit>()方法与类的构造函数(或者说实例构造器<init>()方法)不同，它不需要显式地调用父类构造器，虚拟机会保证在子类的<clinit>()方法执行之前，父类的<clinit>()方法已经执行完毕。</clinit></clinit></init></clinit></li>
+<li>由于父类的<clinit>()方法先执行，也就意味着父类中定义的静态语句块要优先于子类的变量赋值操作。</clinit></li>
+<li><clinit>()方法不是必须的。</clinit></li>
+</ul>
+<h2 id="类加载器">类加载器</h2><p>定义：虚拟机设计团队把类加载阶段中的“通过一个类的全限定名来获取此类的二进制字节流”这个动作放到Java虚拟机外部去实现，以便让应用程序自己决定如何去获取所需要的类。实现这个动作的代码模块被称为“类加载器”。</p>
+<h3 id="类与类加载器">类与类加载器</h3><p>对于任意一个类，都需要由加载它的类加载器和这个类本身一同确立其在Java虚拟机中的唯一性。</p>
+<h3 id="双亲委派模型"><strong>双亲委派模型</strong></h3><p>从Java开发人员的角度来看，类加载器可以分为三类。<br><img src="/images/JVM/JVM11.PNG" alt="类加载器"></p>
+<ul>
+<li>启动类加载器（Bootstrap ClassLoader）:Bootstrap类加载器通常是由本地码实现的，因为它在JVM被装载时就被实例化了。Bootstrap类加载器负责加载基础的Java API,像rt.jar。它只加载在启动路径上的类。</li>
+<li>扩展类加载器（Extension ClassLoader）:Extension 类加载器加载标准的Java扩展API，像安全扩展功能。</li>
+<li>应用程序类（系统类）加载器（System class ClassLoader）：负责加载用户类路径上所指定的类库。</li>
+</ul>
+<p>双亲委派模型要求除了顶层的启动类加载器外，其余的类加载器都应当有自己的父类加载器。这个类加载器之间的父子关系一般不会以继承的关系实现，而是使用组合关系来复用父加载器的代码。</p>
+<p>双亲委派模型的工作过程是：如果一个类加载器受到了类加载的请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器去实现，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父加载器反馈自己无法完成这个加载请求（它的搜索范围中没有扎到所需要的类）时，子加载器才会尝试自己去加载。<br>双亲委派模型的好处是：保证了Java程序的稳定运行。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书笔记/">读书笔记</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-deep-into-JVM-4" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
