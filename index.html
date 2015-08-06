@@ -180,6 +180,81 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-deep-into-JVM-6" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/06/deep-into-JVM-6/" class="article-date">
+  	<time datetime="2015-08-06T13:09:21.000Z" itemprop="datePublished">2015-08-06</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/06/deep-into-JVM-6/">深入理解JVM(6)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
+<h1 id="早期优化">早期优化</h1><h2 id="概述">概述</h2><ul>
+<li>前端编译器：Sun的Javac、 Eclipse JDT中的增量编译器</li>
+<li>JIT编译器： HotSpot VM的C1、C2编译器</li>
+<li>AOT编译器： GNU Compiler for Java<br>虚拟机设计团队把对性能的优化集中到后端的即时编译器中，这样能够保证让那些不是由Javac产生的Class文件也能同样能享受到编译器优化所带来的好处。</li>
+</ul>
+<h2 id="Javac编译器">Javac编译器</h2><ol>
+<li>解析与填充符号表的过程</li>
+<li>插入式注解处理器的注解处理过程</li>
+<li>分析与字节码生成过程</li>
+</ol>
+<h2 id="Java语法糖的味道">Java语法糖的味道</h2><h3 id="Java泛型">Java泛型</h3><p>Java语言中的泛型，在编译后的字节码文件中，就已经被替换为原来的原生类型（Raw Type）了，并且在相应的地方插入了强制转型代码，因此对于运行期Java来说，ArrayList<int>与ArrayList<string>就是同一个类。所以说Java语言中的泛型实现成为类型擦除，基于这种方法实现的泛型被称为伪泛型。<br>将如下代码编译：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	Map&lt;String, String&gt; map = <span class="keyword">new</span> Map&lt;String, String&gt;();</span><br><span class="line">	map.put(<span class="string">"hello"</span>, <span class="string">"你好"</span>);</span><br><span class="line">	map.put(<span class="string">"how are you?"</span>, <span class="string">"吃了没"</span>);</span><br><span class="line">	system.out.println(map.get(<span class="string">"hello"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></string></int></p>
+<p>将这段代码编译成Class文件，然后在反编译，将会发现泛型都不见了，程序又变成Java泛型出现之前的写法，泛型类型都变回了原生类型，如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(Strings[] args)</span> </span>&#123;</span><br><span class="line">	Map map = <span class="keyword">new</span> map();</span><br><span class="line">	map.put(<span class="string">"hello"</span>, <span class="string">"你好"</span>);</span><br><span class="line">	map.put(<span class="string">"how are you?"</span>, <span class="string">"吃了没"</span>);</span><br><span class="line">	system.out.println(map.get(<span class="string">"hello"</span>));	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p><strong>通过泛型擦除法来实现泛型丧失了泛型思想一些应有的优雅</strong></p>
+</blockquote>
+<p>例如一下代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericTypes</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">(List&lt;String&gt; list)</span> </span>&#123;</span><br><span class="line">	    System.out.println(<span class="string">"Invoke method 1"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">(List&lt;Integer&gt; list)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Invoke method 2"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码不能被正常编译，因为两个参数在编译之后都被擦除了，变成了原生类型List<e>, 擦除动作导致这两个方法的特征签名变得一模一样。</e></p>
+<h3 id="自动装箱、拆箱与遍历循环">自动装箱、拆箱与遍历循环</h3><ul>
+<li>遍历循环需要被遍历的类实现Iterable接口。</li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书笔记/">读书笔记</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-deep-into-JVM-4-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
