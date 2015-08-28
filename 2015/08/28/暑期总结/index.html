@@ -3,39 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>深入理解JVM(1) | My Blog</title>
+  <title>暑期总结（2015） | My Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。
-Java技术体系其中
-
-JDK = Java程序设计语言 + Java虚拟机 + Java API类库JRE = Java虚拟机 + Java SE API子集
-
-Sun HotSpot JVM
-Shortly after acquiring Animorphic, Sun intended to write">
+  <meta name="description" content="本科毕业典礼一完事，就早早地被学校赶回家了，非常感谢胖子和知雨兄最后的送行，感觉在大学四年能有几个志同道合的小伙伴还是一件蛮幸运的事 o(∩_∩)o 。然后就好好的在家里躺尸了几天，吃了几天妈妈吃的饭菜，就开始整理大学四年的一些记忆了，整理了几天，发现自己果然是一个拍照狂魔啊，好的差的拍了几万张，一张一张的整理了两三天，终于挑好了一些自己觉得满意的几百张照片。整理了将近两个星期，终于把这些杂七杂八">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深入理解JVM(1)">
-<meta property="og:url" content="http://yoursite.com/2015/07/31/deep-into-JVM-1/index.html">
+<meta property="og:title" content="暑期总结（2015）">
+<meta property="og:url" content="http://yoursite.com/2015/08/28/暑期总结/index.html">
 <meta property="og:site_name" content="My Blog">
-<meta property="og:description" content="这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。
-Java技术体系其中
-
-JDK = Java程序设计语言 + Java虚拟机 + Java API类库JRE = Java虚拟机 + Java SE API子集
-
-Sun HotSpot JVM
-Shortly after acquiring Animorphic, Sun intended to write">
-<meta property="og:image" content="http://yoursite.com/images/JVM/JVM1.jpg">
-<meta property="og:image" content="http://yoursite.com/images/JVM/JVM2.PNG">
-<meta property="og:image" content="http://yoursite.com/images/JVM/JVM3.PNG">
-<meta property="og:updated_time" content="2015-08-02T08:14:29.791Z">
+<meta property="og:description" content="本科毕业典礼一完事，就早早地被学校赶回家了，非常感谢胖子和知雨兄最后的送行，感觉在大学四年能有几个志同道合的小伙伴还是一件蛮幸运的事 o(∩_∩)o 。然后就好好的在家里躺尸了几天，吃了几天妈妈吃的饭菜，就开始整理大学四年的一些记忆了，整理了几天，发现自己果然是一个拍照狂魔啊，好的差的拍了几万张，一张一张的整理了两三天，终于挑好了一些自己觉得满意的几百张照片。整理了将近两个星期，终于把这些杂七杂八">
+<meta property="og:updated_time" content="2015-08-28T14:43:59.393Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深入理解JVM(1)">
-<meta name="twitter:description" content="这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。
-Java技术体系其中
-
-JDK = Java程序设计语言 + Java虚拟机 + Java API类库JRE = Java虚拟机 + Java SE API子集
-
-Sun HotSpot JVM
-Shortly after acquiring Animorphic, Sun intended to write">
+<meta name="twitter:title" content="暑期总结（2015）">
+<meta name="twitter:description" content="本科毕业典礼一完事，就早早地被学校赶回家了，非常感谢胖子和知雨兄最后的送行，感觉在大学四年能有几个志同道合的小伙伴还是一件蛮幸运的事 o(∩_∩)o 。然后就好好的在家里躺尸了几天，吃了几天妈妈吃的饭菜，就开始整理大学四年的一些记忆了，整理了几天，发现自己果然是一个拍照狂魔啊，好的差的拍了几万张，一张一张的整理了两三天，终于挑好了一些自己觉得满意的几百张照片。整理了将近两个星期，终于把这些杂七杂八">
   
     <link rel="alternative" href="/atom.xml" title="My Blog" type="application/atom+xml">
   
@@ -200,11 +179,11 @@ Shortly after acquiring Animorphic, Sun intended to write">
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap"><article id="post-deep-into-JVM-1" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-暑期总结" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/07/31/deep-into-JVM-1/" class="article-date">
-  	<time datetime="2015-07-31T13:07:34.000Z" itemprop="datePublished">2015-07-31</time>
+      <a href="/2015/08/28/暑期总结/" class="article-date">
+  	<time datetime="2015-08-28T09:30:26.000Z" itemprop="datePublished">2015-08-28</time>
 </a>
     </div>
   
@@ -217,7 +196,7 @@ Shortly after acquiring Animorphic, Sun intended to write">
         
   
     <h1 class="article-title" itemprop="name">
-      深入理解JVM(1)
+      暑期总结（2015）
     </h1>
   
 
@@ -226,7 +205,7 @@ Shortly after acquiring Animorphic, Sun intended to write">
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书笔记/">读书笔记</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书笔记/">读书笔记</a></li></ul>
 	</div>
 
         
@@ -237,24 +216,13 @@ Shortly after acquiring Animorphic, Sun intended to write">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
-<h2 id="Java技术体系">Java技术体系</h2><p><img src="/images/JVM/JVM1.jpg" alt="Java技术体系"><br>其中</p>
-<blockquote>
-<p>JDK = Java程序设计语言 + Java虚拟机 + Java API类库<br>JRE = Java虚拟机 + Java SE API子集</p>
-</blockquote>
-<h2 id="Sun_HotSpot_JVM">Sun HotSpot JVM</h2><blockquote>
-<p>Shortly after acquiring Animorphic, Sun intended to write a new just-in-time (JIT) compiler for the newly developed virtual machine.[3] This new compiler would give rise to the name “HotSpot”, which derives from the fact that, as the software runs Java bytecode, it continually analyzes the program’s performance for “hot spots” which are frequently or repeatedly executed. These are then targeted for optimization, leading to high-performance execution with a minimum of overhead for less performance-critical code. –<a href="https://en.wikipedia.org/wiki/HotSpot" target="_blank" rel="external">Wikipedia</a></p>
-</blockquote>
-<p>Sun公司主要开发两种JVM: 客户端虚拟机和服务器端虚拟机；客户端虚拟机主要为应用程序快速加载而调制；服务器端版本加载更慢，但运行更加高效。</p>
-<p>HotSpot提供如下部件：</p>
-<ul>
-<li>一个<a href="https://en.wikipedia.org/wiki/Java_Classloader" target="_blank" rel="external">类加载器</a></li>
-<li>一个<a href="https://en.wikipedia.org/wiki/Java_bytecode" target="_blank" rel="external">字节码</a><a href="https://en.wikipedia.org/wiki/Interpreter_(computing" target="_blank" rel="external">解释器</a>)</li>
-<li>客户端和服务器端虚拟机</li>
-<li>一些<a href="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science" target="_blank" rel="external">垃圾收集器</a>)</li>
-<li>运行库集合</li>
-</ul>
-<p>HotSpot源码结构图:<br><img src="/images/JVM/JVM2.PNG" alt="HotSpot源码结构"><br><img src="/images/JVM/JVM3.PNG" alt="HotSpot源码结构"></p>
+        <p>本科毕业典礼一完事，就早早地被学校赶回家了，非常感谢胖子和知雨兄最后的送行，感觉在大学四年能有几个志同道合的小伙伴还是一件蛮幸运的事 o(∩_∩)o 。然后就好好的在家里躺尸了几天，吃了几天妈妈吃的饭菜，就开始整理大学四年的一些记忆了，整理了几天，发现自己果然是一个拍照狂魔啊，好的差的拍了几万张，一张一张的整理了两三天，终于挑好了一些自己觉得满意的几百张照片。整理了将近两个星期，终于把这些杂七杂八的东西整理完了。接下来就要好好考虑该干嘛了，正好又买了Kindle,我就看了一些自己感兴趣的书籍，现一一列出：</p>
+<h2 id="1-演讲之禅">1.<a href="http://book.douban.com/subject/4760725/" target="_blank" rel="external">演讲之禅</a></h2><p>这是一本介绍关于演讲技巧的书籍，作者是一位技术演讲家，常年在各大互联网公司之间进行技术性的演讲。作者根据他多年的演讲经历总结了一些十分实用的演讲技巧。看完后，我觉得这是一本十分使用的书籍，书中的很多技巧无论对于小型演讲还是大型演讲都是十分有效的。</p>
+<h2 id="2-平凡的世界">2.<a href="http://book.douban.com/subject/6835758/" target="_blank" rel="external">平凡的世界</a></h2><p>无需多言，经典中的经典，作者平实的语言深刻形象地刻画了几个人物形象，尤为佩服孙少平和孙少安，他们都是铁骨铮铮的汉子！</p>
+<h2 id="3-明朝那些事儿">3.<a href="http://book.douban.com/subject/7163250/" target="_blank" rel="external">明朝那些事儿</a></h2><p>一本通俗有趣的历史科普书，本来以前也完整地看过一偏，但是意犹未尽，于是又看了一偏，记得看得第一遍的时候，只觉得里面的历史故事都蛮有趣的，但是这次再读的时候，我感受到了更多的东西，感受到名族大义与一己私利，忠诚与背叛，理性和感性，永垂不朽与遗臭万年，阿谀奉承与刚正不阿…。</p>
+<h2 id="4-深入理解Java虚拟机">4.<a href="http://book.douban.com/subject/6522893/" target="_blank" rel="external">深入理解Java虚拟机</a></h2><p>这是我读过的为数不多的国人写过的好的技术书籍之一。书中对于JVM的内存管理系统，执行子系统，程序编译和优化等内容都有很详细的介绍。我觉得对于想从事Java编程的人都应该读一下这本书。值得再看一遍。</p>
+<h2 id="5-Effective_Java">5.<a href="http://book.douban.com/subject/3360807/" target="_blank" rel="external">Effective Java</a></h2><p>本书介绍了在Java编程中78条极具实用价值的经验规则，这些经验规则涵盖了大多数开发人员每天所面临的问题的解决方案。但是以现在我的编程经验对于里面一些内容还不能理解，看来还要加强学习实践。这是一本值得多看几遍的书籍。</p>
+<h2 id="6-美国纽约摄影学院摄影教材">6.<a href="http://book.douban.com/subject/1007928/" target="_blank" rel="external">美国纽约摄影学院摄影教材</a></h2><p>觉得自己既然这么喜欢拍照，应该加强一下自己的拍照技巧，然后就在网上找到这本书，不得不说，对于喜欢摄影的人来说，这真的是一本非常合适的入门书籍，但是我只看了60%，因为暂时还没有买单反的计划 orz,就没有再看下去的动力了。</p>
 
       
     </div>
@@ -264,18 +232,9 @@ Shortly after acquiring Animorphic, Sun intended to write">
     
 <nav id="article-nav">
   
-    <a href="/2015/08/02/deep-into-JVM-2/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          深入理解JVM(2)
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/07/31/markdown-test/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">markdown-test</div>
+    <a href="/2015/08/06/deep-into-JVM-6/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">深入理解JVM(6)</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -304,7 +263,7 @@ Shortly after acquiring Animorphic, Sun intended to write">
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="deep-into-JVM-1" data-title="深入理解JVM(1)" data-url="http://yoursite.com/2015/07/31/deep-into-JVM-1/"></div>
+	<div class="ds-thread" data-thread-key="暑期总结" data-title="暑期总结（2015）" data-url="http://yoursite.com/2015/08/28/暑期总结/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
