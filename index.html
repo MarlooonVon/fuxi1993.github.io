@@ -110,7 +110,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/Spark/" style="font-size: 10px;">Spark</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/toast/" style="font-size: 10px;">toast</a> <a href="/tags/读书笔记/" style="font-size: 20px;">读书笔记</a>
+						<a href="/tags/Java/" style="font-size: 16.67px;">Java</a> <a href="/tags/SQL/" style="font-size: 10px;">SQL</a> <a href="/tags/Spark/" style="font-size: 13.33px;">Spark</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/toast/" style="font-size: 10px;">toast</a> <a href="/tags/读书笔记/" style="font-size: 20px;">读书笔记</a>
 					</div>
 				</section>
 				
@@ -179,6 +179,80 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-Spark-SQL对多数据源的支持" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/03/Spark-SQL对多数据源的支持/" class="article-date">
+  	<time datetime="2016-01-03T11:08:17.000Z" itemprop="datePublished">2016-01-03</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/03/Spark-SQL对多数据源的支持/">Spark SQL对多数据源的支持</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-_什么是Spark_SQL?">1. 什么是Spark SQL?</h2><p>Spark SQL是一个针对结构化数据的Spark框架，它提供了一个叫DataFrames的编程抽象，而且还可以扮演分布式SQL查询引擎的角色。</p>
+<h3 id="1-1_Spark_SQL提供的数据抽象:DataFrame">1.1 Spark SQL提供的数据抽象:DataFrame</h3><p>一个DataFrame是一个列式数据构成的数据集合。它概念上等同于关系数据库中的一张表或者Python/R语言中的框架，但是在底层有更多的优化。DataFrame可以通过广泛的数据源来构建，例如：结构化的数据文件、Hive中的表、外部的数据库，或者已经存在的RDD。</p>
+<blockquote>
+<p>关于Spark SQL更多的介绍，可见<a href="http://spark.apache.org/docs/latest/sql-programming-guide.html#creating-dataframes" target="_blank" rel="external">Spark SQL and DataFrame Guide</a></p>
+</blockquote>
+<h2 id="2-_支持JSON数据类型">2. 支持JSON数据类型</h2><p>以下关于Spark SQL对JSON文件的处理过程同样适用与其他各种类型的外部数据源，DataFrame数据结构提供了统一的数据抽象。</p>
+<h3 id="2-1_开始：SQLContext">2.1 开始：SQLContext</h3><p>Spark SQL的入口是SQLContext类（或者是它的子类）。为了创建SQLContext，只需要SparkContext。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sc</span>:</span> <span class="type">SparkContext</span> <span class="comment">// An existing SparkContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> <span class="keyword">new</span> org.apache.spark.sql.<span class="type">SQLContext</span>(sc)</span><br><span class="line"></span><br><span class="line"><span class="comment">// this is used to implicitly convert an RDD to a DataFrame.</span></span><br><span class="line"><span class="keyword">import</span> sqlContext.implicits._</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-2_创建DataFrame">2.2 创建DataFrame</h3><p>利用SQLContext，应用可以从一个已存在的RDD（需要知道Schema）、Hive Table、各种外部数据源来创建DataFrame。<br>下面是基于一个JSON文件的内容创建一个DataFrame：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sc</span>:</span> <span class="type">SparkContext</span> <span class="comment">// An existing SparkContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> <span class="keyword">new</span> org.apache.spark.sql.<span class="type">SQLContext</span>(sc)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">df</span> =</span> sqlContext.read.json(<span class="string">"examples/src/main/resources/people.json"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Displays the content of the DataFrame to stdout</span></span><br><span class="line">df.show()</span><br></pre></td></tr></table></figure></p>
+<p>###2.3 DataFrame的操作<br>DataFrame以Scala, Java, Python语言为结构化的数据操作提供了域限定性语言。<br>下面展示了使用DataFrame进行一些基本的结构化数据操作：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sc</span>:</span> <span class="type">SparkContext</span> <span class="comment">// An existing SparkContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> <span class="keyword">new</span> org.apache.spark.sql.<span class="type">SQLContext</span>(sc)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Create the DataFrame</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">df</span> =</span> sqlContext.read.json(<span class="string">"examples/src/main/resources/people.json"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Show the content of the DataFrame</span></span><br><span class="line">df.show()</span><br><span class="line"><span class="comment">// age  name</span></span><br><span class="line"><span class="comment">// null Michael</span></span><br><span class="line"><span class="comment">// 30   Andy</span></span><br><span class="line"><span class="comment">// 19   Justin</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Print the schema in a tree format</span></span><br><span class="line">df.printSchema()</span><br><span class="line"><span class="comment">// root</span></span><br><span class="line"><span class="comment">// |-- age: long (nullable = true)</span></span><br><span class="line"><span class="comment">// |-- name: string (nullable = true)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Select only the "name" column</span></span><br><span class="line">df.select(<span class="string">"name"</span>).show()</span><br><span class="line"><span class="comment">// name</span></span><br><span class="line"><span class="comment">// Michael</span></span><br><span class="line"><span class="comment">// Andy</span></span><br><span class="line"><span class="comment">// Justin</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Select everybody, but increment the age by 1</span></span><br><span class="line">df.select(df(<span class="string">"name"</span>), df(<span class="string">"age"</span>) + <span class="number">1</span>).show()</span><br><span class="line"><span class="comment">// name    (age + 1)</span></span><br><span class="line"><span class="comment">// Michael null</span></span><br><span class="line"><span class="comment">// Andy    31</span></span><br><span class="line"><span class="comment">// Justin  20</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Select people older than 21</span></span><br><span class="line">df.filter(df(<span class="string">"age"</span>) &gt; <span class="number">21</span>).show()</span><br><span class="line"><span class="comment">// age name</span></span><br><span class="line"><span class="comment">// 30  Andy</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Count people by age</span></span><br><span class="line">df.groupBy(<span class="string">"age"</span>).count().show()</span><br><span class="line"><span class="comment">// age  count</span></span><br><span class="line"><span class="comment">// null 1</span></span><br><span class="line"><span class="comment">// 19   1</span></span><br><span class="line"><span class="comment">// 30   1</span></span><br></pre></td></tr></table></figure></p>
+<p>关于DataFrame的全部的操作列表，可见<a href="http://spark.apache.org/docs/latest/api/java/org/apache/spark/sql/DataFrame.html" target="_blank" rel="external">the API Documentation</a>。<br>除了上面这些简单的列操作已经表达式操作，DataFrame还有一个丰富的库来支持字符串操作，数值运算等。完整的列表可见<a href="http://spark.apache.org/docs/latest/api/java/org/apache/spark/sql/functions.html" target="_blank" rel="external">DataFrame Function Reference</a>。</p>
+<h3 id="2-4_运行SQL查询语句">2.4 运行SQL查询语句</h3><p>SQLContext类中的sql函数可以使应用程序化的运行SQL 查询语句，并且以DataFrame的形式返回。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> ...  <span class="comment">// An existing SQLContext</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">df</span> =</span> sqlContext.sql(<span class="string">"SELECT * FROM table"</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-_解释RDD">3. 解释RDD</h2><p>Spark SQL支持两种不同的方法将现有的RDD转化为DataFrames。第一种方法是使用反射来导出一个RDD的schema。写spark的应用程序时，在已知数据的schema的时候，反射的方法可以帮助写出更简介的代码。<br>第二种方法，通过一个编程接口（这个编程接口可以帮助你构建一个schema并且应用到一个已经存在的RDD上）。</p>
+<h3 id="3-1_利用反射来导出Schema">3.1 利用反射来导出Schema</h3><p>Spark SQL 的scala接口支持将一个包含类类型(case class)的RDD转换成DataFrame的接口。类类型(case class)定义了表的schema。通过反射机制来读取类类型的参数，其将成为列名(column)，类类型(case class)也支持嵌套以及复杂的数据类型，像Sequence 和 Array。这种RDD可以被隐式地转换成DataFrame并转换成表，然后就可以执行SQL操作。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sc is an existing SparkContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> <span class="keyword">new</span> org.apache.spark.sql.<span class="type">SQLContext</span>(sc)</span><br><span class="line"><span class="comment">// this is used to implicitly convert an RDD to a DataFrame.</span></span><br><span class="line"><span class="keyword">import</span> sqlContext.implicits._</span><br><span class="line"></span><br><span class="line"><span class="comment">// Define the schema using a case class.</span></span><br><span class="line"><span class="comment">// Note: Case classes in Scala 2.10 can support only up to 22 fields. To work around this limit,</span></span><br><span class="line"><span class="comment">// you can use custom classes that implement the Product interface.</span></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span>(</span>name: <span class="type">String</span>, age: <span class="type">Int</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Create an RDD of Person objects and register it as a table.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">people</span> =</span> sc.textFile(<span class="string">"examples/src/main/resources/people.txt"</span>).map(_.split(<span class="string">","</span>)).map(p =&gt; <span class="type">Person</span>(p(<span class="number">0</span>), p(<span class="number">1</span>).trim.toInt)).toDF()</span><br><span class="line">people.registerTempTable(<span class="string">"people"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// SQL statements can be run by using the sql methods provided by sqlContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">teenagers</span> =</span> sqlContext.sql(<span class="string">"SELECT name, age FROM people WHERE age &gt;= 13 AND age &lt;= 19"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// The results of SQL queries are DataFrames and support all the normal RDD operations.</span></span><br><span class="line"><span class="comment">// The columns of a row in the result can be accessed by field index:</span></span><br><span class="line">teenagers.map(t =&gt; <span class="string">"Name: "</span> + t(<span class="number">0</span>)).collect().foreach(println)</span><br><span class="line"></span><br><span class="line"><span class="comment">// or by field name:</span></span><br><span class="line">teenagers.map(t =&gt; <span class="string">"Name: "</span> + t.getAs[<span class="type">String</span>](<span class="string">"name"</span>)).collect().foreach(println)</span><br><span class="line"></span><br><span class="line"><span class="comment">// row.getValuesMap[T] retrieves multiple columns at once into a Map[String, T]</span></span><br><span class="line">teenagers.map(_.getValuesMap[<span class="type">Any</span>](<span class="type">List</span>(<span class="string">"name"</span>, <span class="string">"age"</span>))).collect().foreach(println)</span><br><span class="line"><span class="comment">// Map("name" -&gt; "Justin", "age" -&gt; 19)</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="3-2_利用编程接口来得出Schema">3.2 利用编程接口来得出Schema</h3><p>当一个case class类没有事先定义的时候（比如说，一个记录的结构被编码进了一个字符串中，或者是一个文本集，它针对不同的用户可能解析不同的field），则一个DataFrame可以通过下面三步构造成功：</p>
+<ol>
+<li>从一个存在RDD中构造行RDD（RDD of Rows）；</li>
+<li>从步骤1中每行对应的结构类型中构造Schema；</li>
+<li>通过CreateDataFrame方法将每行的Schema(schema of rows)应用到行RDD中；</li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sc is an existing SparkContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> <span class="keyword">new</span> org.apache.spark.sql.<span class="type">SQLContext</span>(sc)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Create an RDD</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">people</span> =</span> sc.textFile(<span class="string">"examples/src/main/resources/people.txt"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// The schema is encoded in a string</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">schemaString</span> =</span> <span class="string">"name age"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Import Row.</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.<span class="type">Row</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Import Spark SQL data types</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.types.&#123;<span class="type">StructType</span>,<span class="type">StructField</span>,<span class="type">StringType</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Generate the schema based on the string of schema</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">schema</span> =</span></span><br><span class="line">  <span class="type">StructType</span>(</span><br><span class="line">    schemaString.split(<span class="string">" "</span>).map(fieldName =&gt; <span class="type">StructField</span>(fieldName, <span class="type">StringType</span>, <span class="literal">true</span>)))</span><br><span class="line"></span><br><span class="line"><span class="comment">// Convert records of the RDD (people) to Rows.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">rowRDD</span> =</span> people.map(_.split(<span class="string">","</span>)).map(p =&gt; <span class="type">Row</span>(p(<span class="number">0</span>), p(<span class="number">1</span>).trim))</span><br><span class="line"></span><br><span class="line"><span class="comment">// Apply the schema to the RDD.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">peopleDataFrame</span> =</span> sqlContext.createDataFrame(rowRDD, schema)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Register the DataFrames as a table.</span></span><br><span class="line">peopleDataFrame.registerTempTable(<span class="string">"people"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// SQL statements can be run by using the sql methods provided by sqlContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">results</span> =</span> sqlContext.sql(<span class="string">"SELECT name FROM people"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// The results of SQL queries are DataFrames and support all the normal RDD operations.</span></span><br><span class="line"><span class="comment">// The columns of a row in the result can be accessed by field index or by field name.</span></span><br><span class="line">results.map(t =&gt; <span class="string">"Name: "</span> + t(<span class="number">0</span>)).collect().foreach(println)</span><br></pre></td></tr></table></figure>
+<h2 id="4-_支持MySQL等关系型数据库">4. 支持MySQL等关系型数据库</h2><h2 id="5-_支持MangoDB等非惯性数据库">5. 支持MangoDB等非惯性数据库</h2><h2 id="6-_支持HBase">6. 支持HBase</h2>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SQL/">SQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spark/">Spark</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-解忧杂货店" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -990,67 +1064,6 @@
 
 
   
-    <article id="post-markdown-test" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/07/31/markdown-test/" class="article-date">
-  	<time datetime="2015-07-31T02:30:26.000Z" itemprop="datePublished">2015-07-31</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/07/31/markdown-test/">markdown-test</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>this is a toast for markdown</p>
-<h2 id="start"><strong>start</strong></h2><h3 id="1-_insert_a_hyperlink"><strong>1. insert a hyperlink</strong></h3><p>More information about markdown: <a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">markdown</a></p>
-<h3 id="2-_insert_a_code_block"><strong>2. insert a code block</strong></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">"hello markdown"</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="3-_insert_a_picture"><strong>3. insert a picture</strong></h3><p>this is a picture:<br><img src="/images/true-monster.JPG" alt="this is a picture"></p>
-<h3 id="4-_insert_a_reference"><strong>4. insert a reference</strong></h3><blockquote>
-<p>this world is beautiful and worth fighting for it. I only agree with the latter one.</p>
-</blockquote>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/toast/">toast</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1061,7 +1074,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2015 Fu Xi
+    		&copy; 2016 Fu Xi
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
