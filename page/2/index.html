@@ -110,7 +110,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Java/" style="font-size: 16.67px;">Java</a> <a href="/tags/SQL/" style="font-size: 10px;">SQL</a> <a href="/tags/Spark/" style="font-size: 13.33px;">Spark</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/toast/" style="font-size: 10px;">toast</a> <a href="/tags/年度总结/" style="font-size: 10px;">年度总结</a> <a href="/tags/读书笔记/" style="font-size: 20px;">读书笔记</a>
+						<a href="/tags/Java/" style="font-size: 16.67px;">Java</a> <a href="/tags/SQL/" style="font-size: 10px;">SQL</a> <a href="/tags/Spark/" style="font-size: 13.33px;">Spark</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/plan/" style="font-size: 10px;">plan</a> <a href="/tags/toast/" style="font-size: 10px;">toast</a> <a href="/tags/年度总结/" style="font-size: 10px;">年度总结</a> <a href="/tags/读书笔记/" style="font-size: 20px;">读书笔记</a>
 					</div>
 				</section>
 				
@@ -179,6 +179,103 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-deep-into-JVM-2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/02/deep-into-JVM-2/" class="article-date">
+  	<time datetime="2015-08-02T08:16:11.000Z" itemprop="datePublished">2015-08-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/02/deep-into-JVM-2/">深入理解JVM(2)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
+<h2 id="HotSpot虚拟机架构">HotSpot虚拟机架构</h2><p>以下这幅图展示了Java虚拟机里面的关键组件(是依据Java SE 7版本的Java虚拟机)。<br><img src="/images/JVM/JVM4.png" alt="HotSpot虚拟机"></p>
+<h2 id="线程">线程</h2><p>一个线程是程序的一次执行。JVM允许一个应用程序并行运行多个线程。在Hotspot JVM中存在着在Java线程和本地操作系统线程之间的映射。在准备完一个Java线程的所有状态，像thread-local存储、缓冲分配、对象同步、栈和程序计数器之后，本地线程就被创造出来了。本地线程将在Java线程终止后被回收。操作系统因此负责调度所有的线程和分配给它们可用的CPU。一旦本地线程初始化后，它将调用Java 线程里面的run()方法。当run()方法返回时，未捕捉的异常被处理，随后本地线程确定JVM是否需要因为线程的终止而被终止(比如说，它是最后的非守护线程)。当线程终止后，所有本地线程的和JVM线程的资源将被释放。</p>
+<h3 id="JVM系统线程">JVM系统线程</h3><p>如果你是用jconsole或者其他任何调试器是有可能看到后台有无数的线程在运行。这些后台线程运行是来补充主线程的，其部分是由于调用public static void main(String[])而构造出来的。在Hotspot JVM系统中主要的后台系统线程如下：</p>
+<ul>
+<li>VM 线程：这个线程等待那些需要JVM到达一个安全点(Safe-point)的操作。之所以这些操作需要发生在一个独立的线程是因为它们都需要JVM在一个安全点(safe-point)、这个点对堆的修改不会出现。线程执行的操作是stop-the-world型的垃圾回收器、线程栈dumps、thread suspension、和biased locking revocation。</li>
+<li>Periodic task 线程:这些线程是负责哪些用于调度阶段性的操作执行的时间事件(比如中断)</li>
+<li>GC 线程： 这些线程支持不同类型的垃圾回收活动</li>
+<li>Compiler 线程： 这些线程在运行时将byte code编译成本地码</li>
+<li>Signal dispatcher thread 这个线程接受发送给JVM进程的信号并且通过调用合适的JVM方法处理它们。<h3 id="每个线程">每个线程</h3>每一个线程有如下组件：<ol>
+<li>程序计数器(PC):除非它是本地的(Native)(在这种情况，PC的值为空(Undefined))，那么PC表示当前指令的地址，JVM用PC去追踪当前执行的指令；事实上PC将会指向方法区(Method Area)的一个内存地址；每条线程都需要一个独立的PC，各条线程之间互不影响，独立存储，我们称这类内存区域为“线程私有”的内存。</li>
+<li>栈：虚拟机栈描绘的是Java方法执行的内存模型：每个方法被执行的时候同时会创建一个栈帧(Stack Frame)用于存储局部变量表、操作栈、动态连接、方法出口(Return)等信息。在Java虚拟机规范中，对这个区域规定了两种异常情况：StackOverflowError异常；OutOfMemoryError异常（虚拟机栈在扩展时无法申请到足够的内存时会抛出）。</li>
+<li>本地方法栈(Native Stack)：本地方法栈与虚拟机栈所发挥的作用是非常相似的其区别不过是虚拟机栈执行的是Java方法(也就是字节码)服务，而本地方法栈则是为虚拟机执行Native方法服务。同样，在Java虚拟机规范中，对这个区域规定了两种异常情况：StackOverflowError异常；OutOfMemoryError异常（虚拟机栈在扩展时无法申请到足够的内存时会抛出）。</li>
+<li>栈限制：一个栈可以是动态的或者固定的大小。如果一个线程需要一个大的栈那么一个StackOverflowError异常被抛出。如果一个线程需要一些多的框架并且没有足够的存储分配那么一个OutOfMemoryError异常被抛出。</li>
+</ol>
+</li>
+</ul>
+<p><strong> 关于每个虚拟机栈的具体内容，可见会在下几个章节总结出来 </strong></p>
+<h2 id="线程共享的内容">线程共享的内容</h2><h3 id="堆内存">堆内存</h3><p>堆是用于在运行时分配类实例和数组的。因为一个框架(Frame)在创建后不是被设计为可以改变的，所以数组和对象永远不会存储在栈中。框架只会存储指向堆中的对象或者数组的引用。不像原始变量和引用存储在局部变量数组(在框架)中，对象总是存储在堆中，所以它们在一个方法结束后不会被移除。相反对象只会被垃圾收集器移除。</p>
+<h3 id="非堆内存">非堆内存</h3><p>那些被逻辑上认为是JVM机制的一部分对象不是被创建在堆中。<br>非堆内存包括：</p>
+<ol>
+<li>永久一代(permanent generation), 包括：<ul>
+<li>方法区(method area)</li>
+<li>内部字符串</li>
+</ul>
+</li>
+<li>缓存代码：主要用来存储那些被JIT编译器编译成的本地码(Native Code)</li>
+</ol>
+<blockquote>
+<p>Just In Time(JIT) Compilation：Java byte code 是被解释的但是这个并没有直接在JVM的宿主机CPU上执行本地代码快。为了改善性能，Oracle Hotspot VM寻找那些频繁执行的byte code代码并将它们编译成本地码。本地代码然后存放在缓存代码中(code cache)。用这种方法，Hotspot VM试着选择最合适的方法去在编译代码和执行解释的代码之间取得平衡。</p>
+</blockquote>
+<p><strong> 关于方法区的具体内容会在下几个章节写</strong></p>
+<h2 id="对象访问">对象访问</h2><p>对象访问涉及到Java栈、Java堆、方法去这三个重要的内存区域。<br>例如下面的代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object obj = <span class="keyword">new</span> Object();</span><br></pre></td></tr></table></figure></p>
+<p>假设这句代码出现在方法体中，那么“Object obj”这部分语意将反映在Java栈的本地变量表中，作为一个reference类型出现。而“new Object()”这部分的语义将会反映在Java堆中，形成一块存储了Ojbect()类型所有实例数据值(Instance Data, 对象中各个实例字段的数据)的结构化内存。另外在Java堆中还必须包含能查找到此对象类型数据(如对象类型、父类、实现的接口、方法等)的地址信息，这些类型信息则存储在方法区中。<br>由于reference类型在Java虚拟机规范里只定义了一个指向对象的引用，并没有定义这个引用应该通过那种方式去定位，以及访问到Java堆中的具体位置，因此不同虚拟机实现的对象访问方式会有所不同，主流的有两种：使用句柄和直接指针。</p>
+<ul>
+<li>通过句柄访问对象：<br><img src="/images/JVM/JVM5.PNG" alt="通过句柄访问对象"></li>
+<li>通过直接指针访问方式：<br><img src="/images/JVM/JVM6.PNG" alt="通过直接指针访问方式"></li>
+</ul>
+<p><strong> 引用 </strong></p>
+<ol>
+<li><a href="http://www.cnblogs.com/maverick-fu/p/4451811.html#3170784" target="_blank" rel="external">JVM剖析</a></li>
+<li><a href="http://blog.jamesdbloom.com/JVMInternals.html" target="_blank" rel="external">JVM Internals</a></li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书笔记/">读书笔记</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-deep-into-JVM-1" class="article article-type-post" itemscope itemprop="blogPost">
   
