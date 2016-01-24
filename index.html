@@ -1,11 +1,49 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html class="theme-next use-motion ">
 <head>
-  <meta charset="utf-8">
   
-  <title>My Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  
+
+
+<link rel="stylesheet" type="text/css" href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" />
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.2"/>
+
+
+
+
+  <meta name="keywords" content="Hexo,next" />
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+<meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="My Blog">
 <meta property="og:url" content="http://yoursite.com/index.html">
@@ -14,199 +52,173 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="My Blog">
 <meta name="twitter:description">
-  
-    <link rel="alternative" href="/atom.xml" title="My Blog" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post'
+  };
+</script>
+
+
+
+  <title> My Blog </title>
 </head>
-<body>
-  <div id="container">
-    <div class="left-col">
-    <div class="overlay"></div>
-<div class="intrude-less">
-	<header id="header" class="inner">
-		<a href="/" class="profilepic">
-			
-			<img lazy-src="http://i3.tietuku.com/c9c79e4be8360f8e.png" class="js-avatar">
-			
-		</a>
 
-		<hgroup>
-		  <h1 class="header-author"><a href="/">Fu Xi</a></h1>
-		</hgroup>
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
 
-		
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
 
-		
-			<div class="switch-btn">
-				<div class="icon">
-					<div class="icon-ctn">
-						<div class="icon-wrap icon-house" data-idx="0">
-							<div class="birdhouse"></div>
-							<div class="birdhouse_holes"></div>
-						</div>
-						<div class="icon-wrap icon-ribbon hide" data-idx="1">
-							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
-						</div>
-						
-						
-						<div class="icon-wrap icon-me hide" data-idx="3">
-							<div class="user"></div>
-							<div class="shoulder"></div>
-						</div>
-						
-					</div>
-					
-				</div>
-				<div class="tips-box hide">
-					<div class="tips-arrow"></div>
-					<ul class="tips-inner">
-						<li>菜单</li>
-						<li>标签</li>
-						
-						<li>友情链接</li>
-						
-						
-						<li>关于我</li>
-						
-					</ul>
-				</div>
-			</div>
-		
 
-		<div class="switch-area">
-			<div class="switch-wrap">
-				<section class="switch-part switch-part1">
-					<nav class="header-menu">
-						<ul>
-						
-							<li><a href="/">主页</a></li>
-				        
-							<li><a href="/archives">所有文章</a></li>
-				        
-						</ul>
-					</nav>
-					<nav class="header-nav">
-						<div class="social">
-							
-								<a class="github" target="_blank" href="https://github.com/fuxi1993" title="github">github</a>
-					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2495420042/profile?topnav=1&wvr=6" title="weibo">weibo</a>
-					        
-								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/hill-fu" title="zhihu">zhihu</a>
-					        
-						</div>
-					</nav>
-				</section>
-				
-				
-				<section class="switch-part switch-part2">
-					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Java/" style="font-size: 16.67px;">Java</a> <a href="/tags/SQL/" style="font-size: 10px;">SQL</a> <a href="/tags/Spark/" style="font-size: 13.33px;">Spark</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/plan/" style="font-size: 10px;">plan</a> <a href="/tags/toast/" style="font-size: 10px;">toast</a> <a href="/tags/年度总结/" style="font-size: 10px;">年度总结</a> <a href="/tags/读书笔记/" style="font-size: 20px;">读书笔记</a>
-					</div>
-				</section>
-				
-				
-				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://tsien.github.io/">Tsien的博客</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://gsclife.info/">gsclife的博客</a>
-			        
-			        </div>
-				</section>
-				
 
-				
-				
-				<section class="switch-part switch-part4">
-				
-					<div id="js-aboutme">Duty First</div>
-				</section>
-				
-			</div>
-		</div>
-	</header>				
+
+
+
+  <div class="container one-column 
+   page-home 
+">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
 </div>
-    </div>
-    <div class="mid-col">
-      <nav id="mobile-nav">
-  	<div class="overlay">
-  		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">Fu Xi</h1>
-  	</div>
-	<div class="intrude-less">
-		<header id="header" class="inner">
-			<div class="profilepic">
-				<img lazy-src="http://i3.tietuku.com/c9c79e4be8360f8e.png" class="js-avatar">
-			</div>
-			<hgroup>
-			  <h1 class="header-author">Fu Xi</h1>
-			</hgroup>
-			
-			<nav class="header-menu">
-				<ul>
-				
-					<li><a href="/">主页</a></li>
-		        
-					<li><a href="/archives">所有文章</a></li>
-		        
-		        <div class="clearfix"></div>
-				</ul>
-			</nav>
-			<nav class="header-nav">
-				<div class="social">
-					
-						<a class="github" target="_blank" href="https://github.com/fuxi1993" title="github">github</a>
-			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2495420042/profile?topnav=1&wvr=6" title="weibo">weibo</a>
-			        
-						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/hill-fu" title="zhihu">zhihu</a>
-			        
-				</div>
-			</nav>
-		</header>				
-	</div>
-</nav>
-      <div class="body-wrap">
-  
-    <article id="post-advices-for-2016" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/24/advices-for-2016/" class="article-date">
-  	<time datetime="2016-01-24T11:30:02.000Z" itemprop="datePublished">2016-01-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/24/advices-for-2016/">advice &amp;&amp; list for 2016</a>
-    </h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
   
 
-      </header>
+  
+    <ul id="menu" class="menu ">
       
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags"></i> <br />
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+  <section id="posts" class="posts-expand">
     
-    <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="关于生活">关于生活</h2><h3 id="1-for_sports">1.for sports</h3><ul>
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2016/01/24/advices-for-2016/" itemprop="url">
+                  advice && list for 2016
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            發表於
+            <time itemprop="dateCreated" datetime="2016-01-24T19:30:02+08:00" content="2016-01-24">
+              2016-01-24
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="关于生活">关于生活</h2><h3 id="1-for_sports">1.for sports</h3><ul>
 <li>be professional:无论是健身，跑步，还是游泳，都应该尽量专业，以达到高效、安全的目的；这方面可以从知乎、quora以及相关的论坛找到相关的专业知识。</li>
 <li>try to be regular: 虽然有各种各样的事情来打乱计划，但是应该尽量保持有规律的运动，每个星期尽量能偶健身一到两次，游泳一次。</li>
 <li>try to break the bottleneck:尽量有意识的通过较为专业的训练来突破自己的界限，走出身体的舒适区，尝试那些没有试过的分支项目。</li>
@@ -233,60 +245,81 @@
 </ul>
 <p><em>to be continued</em></p>
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/plan/">plan</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-2015总结" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/24/2015总结/" class="article-date">
-  	<time datetime="2016-01-24T01:40:19.000Z" itemprop="datePublished">2016-01-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+            
+          </span>
         
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/24/2015总结/">2015总结</a>
-    </h1>
   
 
-      </header>
-      
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2016/01/24/2015总结/" itemprop="url">
+                  2015总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            發表於
+            <time itemprop="dateCreated" datetime="2016-01-24T09:40:19+08:00" content="2016-01-24">
+              2016-01-24
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        <h2 id="时间轴">时间轴</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2015年应该可以从保研之后开始算起；但是我觉得推免应该可以说是对我四年成绩的一次总体体现，且其中出现的各种意外也可以说是给我狠狠地上了几堂课，还是值得一说的，保研（推免）这个事可以说是从2014年七月份开始算起的，那个时候其实也没有想的那么多事情，但是Tisen说有时间就应该到处看看，见识一下外面的世界，对比一下就知道自己和别人的差距了，顿时觉得十分在理（在这里要特别说一下Tisen，真的是一位有远见，有计划，执行力强的牛人，膜拜ing），然后就是在新老校区之间跑来跑去，打成绩单、荣誉证书、推荐信等相关的东西。搞定这些东西，剩下的就是选择学校了，当时时有很多的合适的学校的，当时因为自己的固执和偏见只选择了里家里近的几所学校，会过来看自己的眼光还是太局限了，另外一个就是担心新的政策的施行问题，也错过了另一些学校的暑期实习，不得不说还是非常遗憾的。到了九十月份的时候基本上很多东西都确定了，不过在这个时候还是犯了提前计划不足，眼光局限的问题，这些方面都是我以后需要注意、改进、提高的提防的方面，但是最后的结果还是蛮令人满意的，非常荣幸能够来到科大继续我的研究生学习。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后就是11月份的考驾照，不得不说考驾照真的是一件熬心的事，天天早起去排队，还要受教练的气，熬了几个月，磕磕绊绊的算是考完驾照了。</p>
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="时间轴">时间轴</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2015年应该可以从保研之后开始算起；但是我觉得推免应该可以说是对我四年成绩的一次总体体现，且其中出现的各种意外也可以说是给我狠狠地上了几堂课，还是值得一说的，保研（推免）这个事可以说是从2014年七月份开始算起的，那个时候其实也没有想的那么多事情，但是Tisen说有时间就应该到处看看，见识一下外面的世界，对比一下就知道自己和别人的差距了，顿时觉得十分在理（在这里要特别说一下Tisen，真的是一位有远见，有计划，执行力强的牛人，膜拜ing），然后就是在新老校区之间跑来跑去，打成绩单、荣誉证书、推荐信等相关的东西。搞定这些东西，剩下的就是选择学校了，当时时有很多的合适的学校的，当时因为自己的固执和偏见只选择了里家里近的几所学校，会过来看自己的眼光还是太局限了，另外一个就是担心新的政策的施行问题，也错过了另一些学校的暑期实习，不得不说还是非常遗憾的。到了九十月份的时候基本上很多东西都确定了，不过在这个时候还是犯了提前计划不足，眼光局限的问题，这些方面都是我以后需要注意、改进、提高的提防的方面，但是最后的结果还是蛮令人满意的，非常荣幸能够来到科大继续我的研究生学习。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后就是11月份的考驾照，不得不说考驾照真的是一件熬心的事，天天早起去排队，还要受教练的气，熬了几个月，磕磕绊绊的算是考完驾照了。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;再后面就是三月份的开学了，开学过后就直接来科大准备毕业课设了，毕业设计是由师兄带着做的，这个毕业设计做的自己并不是非常满意，主要是后面没有做成一个可用，可以展示的model，另外就是还有自己的一些想法没有验证和实现，如果要要给自己的毕业设计打一个分数的话，我觉得差不多70分吧，毕业设计的经历给了我几个指导：</p>
 <ol>
 <li>多和师兄和老师交流，他们的经验可以让自己少走很多的弯路</li>
@@ -296,60 +329,81 @@
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在后面就是开学的事情了，上学期的课其实还有很多蛮有意思的，首先要说的是密码学，原本我是不喜欢密码学这个方向的，觉得都是一堆的数论知识很无聊，但是上了课就觉得老师讲的蛮有意思的，唯一的缺憾就是没有什么相关的project，感觉有点浮在表面上；下一个我喜欢的课就是老王的导师教的高级计算机网络，虽然上课的时候并没有听多少，但是project做的很开心，也学习了很多，像目前研究的比较热的SDN, 新型网络架构等都可以说让我打开眼界；另外一门组合数学的课尽是理论，到目前为止我还没看到它对与计算机科学有什么用的啊，看来还是我的level太低了；</p>
 <h2 id="生活方面">生活方面</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关于生活方面，首先是运动方面，这一年的各种运动也都有一直在做，但是因为各种各样的原因总是断断续续的，一直不能持续的训练，其实这个是可以规律的进行的，只是自己的毅力还是不够吧，想想当初之所以选择科大，健身房也是吸引我的一个重要因素，不能因为生活，学习中的琐事就放弃了这么nice的健身氛围。另外就是游泳，由于办了游泳卡，去游泳馆的次数还是蛮多的，只用四五次就学会了蛙泳，彻底告别狗刨，但是也是因为自己的注意，导致耳朵进了水，最严重的时候几乎都听不到声音，跟失聪了一样，到最后不得不进行鼓膜穿刺才感觉好一点。所以以后要注意在运动的时候要十分注意进行防护，以免给自己造成不必要的疼苦。关于跑步，这一年总共也就跑了几十次吧，不是很多，特别是来到科大后，因为空气质量的原因就跑得比较少了，自己在跑步机上跑又会感觉自己的脚掌内部非常疼。我想这一切都是因为自己的不专业导致的，所以说以后在运动中，一定要科学地来进行，努力地做到专业，让自己得到有效且安全的提升。</p>
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/年度总结/">年度总结</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Spark-SQL对多数据源的支持" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/03/Spark-SQL对多数据源的支持/" class="article-date">
-  	<time datetime="2016-01-03T11:08:17.000Z" itemprop="datePublished">2016-01-03</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+            
+          </span>
         
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/03/Spark-SQL对多数据源的支持/">Spark SQL对多数据源的支持</a>
-    </h1>
   
 
-      </header>
-      
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2016/01/03/Spark-SQL对多数据源的支持/" itemprop="url">
+                  Spark SQL对多数据源的支持
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            發表於
+            <time itemprop="dateCreated" datetime="2016-01-03T19:08:17+08:00" content="2016-01-03">
+              2016-01-03
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        <h2 id="1-_什么是Spark_SQL?">1. 什么是Spark SQL?</h2><p>Spark SQL是一个针对结构化数据的Spark框架，它提供了一个叫DataFrames的编程抽象，而且还可以扮演分布式SQL查询引擎的角色。</p>
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="1-_什么是Spark_SQL?">1. 什么是Spark SQL?</h2><p>Spark SQL是一个针对结构化数据的Spark框架，它提供了一个叫DataFrames的编程抽象，而且还可以扮演分布式SQL查询引擎的角色。</p>
 <h3 id="1-1_Spark_SQL提供的数据抽象:DataFrame">1.1 Spark SQL提供的数据抽象:DataFrame</h3><p>一个DataFrame是一个列式数据构成的数据集合。它概念上等同于关系数据库中的一张表或者Python/R语言中的框架，但是在底层有更多的优化。DataFrame可以通过广泛的数据源来构建，例如：结构化的数据文件、Hive中的表、外部的数据库，或者已经存在的RDD。</p>
 <blockquote>
 <p>关于Spark SQL更多的介绍，可见<a href="http://spark.apache.org/docs/latest/sql-programming-guide.html#creating-dataframes" target="_blank" rel="external">Spark SQL and DataFrame Guide</a></p>
@@ -391,60 +445,81 @@
 <p>这一章节的相关引用<br>1.<a href="https://github.com/Stratio/spark-mongodb" target="_blank" rel="external">Stratio</a><br>2.<a href="http://stackoverflow.com/questions/31838468/save-mongodb-data-to-parquet-file-format-using-apache-spark" target="_blank" rel="external">Save MongoDB data to parquet file format using Apache Spark</a></p>
 </blockquote>
 <h2 id="6-_支持HBase">6. 支持HBase</h2>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SQL/">SQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spark/">Spark</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-解忧杂货店" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/10/10/解忧杂货店/" class="article-date">
-  	<time datetime="2015-10-10T12:25:04.000Z" itemprop="datePublished">2015-10-10</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+            
+          </span>
         
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/10/解忧杂货店/">《解忧杂货店》</a>
-    </h1>
   
 
-      </header>
-      
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2015/10/10/解忧杂货店/" itemprop="url">
+                  《解忧杂货店》
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            發表於
+            <time itemprop="dateCreated" datetime="2015-10-10T20:25:04+08:00" content="2015-10-10">
+              2015-10-10
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        <blockquote>
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <blockquote>
 <p>如果把找我咨询的人比喻成迷途的羔羊，通常他们手上都有地图，却没有去看，或是不知道自己目前的位置。但是我相信你不属于这两种情况。你的地图是一张白纸，所以即使想决定目的地，也不知道路在哪里。地图是一张白纸，这当然很伤脑筋。任何人都会不知所措。可是换个角度来看，正因为是一张白纸，才可以随心所欲地描绘地图。一切全在你自己。对你来说，一切都是自由的，在你面前是无限的可能。这可是很棒的事情啊。我衷心祈祷你可以相信自己，无悔地燃烧自己的人生。</p>
 </blockquote>
 <p>一间小小的杂货店，将几个处在人生岔路口的年轻人纠缠在一起。三个自称为“社会的渣滓”的无业小偷；因为男友身患癌症，在参加奥运会集训和陪伴男友的选择中迷茫的女运动员；在音乐梦想和继承祖传鱼店之间徘徊的音乐人；在当陪酒小姐赚快钱和独自开店创业的矛盾中挣扎的“迷途的小狗”…他们的迷茫好似互不相关，毫无关联，但是因为“解忧杂货店”的信箱和孤儿院“丸光园”被紧紧地联系在一起，最终，他们每个人都找到了补住内心漏洞的方法，找到了各自的人生方向，也深深地感受到了这个世界的善意和温暖。翔太、敦也、幸平是三个自称为“社会的渣滓”的社会青年，他们在进行一次绑架后不经意间躲到了浪矢老爷爷家杂货店里，却无意间收到了来自过去的咨询信，因为这件奇妙的房子，将他们和过去的几个人联系在一起，努力训练的击剑选手月兔因为他们的信最终坚持了自己的决定，即便他们好像不是因为他们；在隔着门听完那曲著名的《重生》后恍然大悟，将“丸光园”失火、慰问演出的歌手、以及后来成为著名歌手的孤儿小芹、、、这一切都联系在一起，因此鼓励那位徘徊的鱼店音乐人要坚持下去，说出“你对音乐的执着追求，绝不是白白付出”的话；指导“迷途的小狗”学习房地产、证券交易等方面的知识并告诉她最好的进军市场的时间；却发现自己绑架的那个女人就是曾经知道的“迷途的小狗”，因为“迷途的小狗”的感谢信而迷途知返、、、每个人的故事都像河面的独立涟漪一样，不可思议的交汇在一起，形成奇妙而和谐的共振。<br>    下面这段话引用自豆瓣，同时也代表了我读这本书的感受：</p>
@@ -452,60 +527,81 @@
 <p>“《解忧杂货店》缜密的故事架构与精妙的情节设计，让人不得不叹服：“才华”这东西，真是与生俱来啊﹗更重要的是，东野圭吾在洞悉世情与人心之余，愿以善意回应，让人明白在这破洞不断的世界里，仍有人竭尽所能在用心填补，知道每个人活在这世上都不容易，都有各自的难题，都有难以启齿而感觉被世界孤立的那一刻，也明白人们需要的未必是如何解决的答案，而是那一刻有人愿意认真倾听，且愿意与孤绝的自己同在。这就是《解忧杂货店》的精神，也是我心中书写价值的所在。 ”</p>
 </blockquote>
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书笔记/">读书笔记</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Apache-Spark-利用Intellij-IDEA开发Spark程序" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/09/04/Apache-Spark-利用Intellij-IDEA开发Spark程序/" class="article-date">
-  	<time datetime="2015-09-04T08:29:50.000Z" itemprop="datePublished">2015-09-04</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+            
+          </span>
         
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/04/Apache-Spark-利用Intellij-IDEA开发Spark程序/">Apache-Spark:利用Intellij IDEA开发Spark程序</a>
-    </h1>
   
 
-      </header>
-      
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2015/09/04/Apache-Spark-利用Intellij-IDEA开发Spark程序/" itemprop="url">
+                  Apache-Spark:利用Intellij IDEA开发Spark程序
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            發表於
+            <time itemprop="dateCreated" datetime="2015-09-04T16:29:50+08:00" content="2015-09-04">
+              2015-09-04
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        <h2 id="1-_准备工作">1. 准备工作</h2><ol>
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="1-_准备工作">1. 准备工作</h2><ol>
 <li>安装JDK7</li>
 <li>安装Scala 2.10.x（因为实验室的spark集群是1.1.1版本的，它指定需要Scala 2.10.x版本）</li>
 <li>Intellij IDEA Community Edition 14.1.4, 在安装的时候可以安装Scala插件，后面就不需要安装啦。</li>
@@ -526,60 +622,81 @@
 <li><a href="http://hadoop.apache.org/" target="_blank" rel="external">Hadoop</a></li>
 </ol>
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spark/">Spark</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-暑期总结" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/28/暑期总结/" class="article-date">
-  	<time datetime="2015-08-28T09:30:26.000Z" itemprop="datePublished">2015-08-28</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+            
+          </span>
         
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/28/暑期总结/">暑期总结（2015）</a>
-    </h1>
   
 
-      </header>
-      
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2015/08/28/暑期总结/" itemprop="url">
+                  暑期总结（2015）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            發表於
+            <time itemprop="dateCreated" datetime="2015-08-28T17:30:26+08:00" content="2015-08-28">
+              2015-08-28
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        <p>本科毕业典礼一完事，就早早地被学校赶回家了，非常感谢胖子和知雨兄最后的送行，感觉在大学四年能有几个志同道合的小伙伴还是一件蛮幸运的事 o(∩_∩)o 。然后就好好的在家里躺尸了几天，吃了几天妈妈吃的饭菜，就开始整理大学四年的一些记忆了，整理了几天，发现自己果然是一个拍照狂魔啊，好的差的拍了几万张，一张一张的整理了两三天，终于挑好了一些自己觉得满意的几百张照片。整理了将近两个星期，终于把这些杂七杂八的东西整理完了。接下来就要好好考虑该干嘛了，正好又买了Kindle,我就看了一些自己感兴趣的书籍，现一一列出：</p>
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>本科毕业典礼一完事，就早早地被学校赶回家了，非常感谢胖子和知雨兄最后的送行，感觉在大学四年能有几个志同道合的小伙伴还是一件蛮幸运的事 o(∩_∩)o 。然后就好好的在家里躺尸了几天，吃了几天妈妈吃的饭菜，就开始整理大学四年的一些记忆了，整理了几天，发现自己果然是一个拍照狂魔啊，好的差的拍了几万张，一张一张的整理了两三天，终于挑好了一些自己觉得满意的几百张照片。整理了将近两个星期，终于把这些杂七杂八的东西整理完了。接下来就要好好考虑该干嘛了，正好又买了Kindle,我就看了一些自己感兴趣的书籍，现一一列出：</p>
 <h2 id="1-演讲之禅">1.<a href="http://book.douban.com/subject/4760725/" target="_blank" rel="external">演讲之禅</a></h2><p>这是一本介绍关于演讲技巧的书籍，作者是一位技术演讲家，常年在各大互联网公司之间进行技术性的演讲。作者根据他多年的演讲经历总结了一些十分实用的演讲技巧。看完后，我觉得这是一本十分使用的书籍，书中的很多技巧无论对于小型演讲还是大型演讲都是十分有效的。</p>
 <h2 id="2-平凡的世界">2.<a href="http://book.douban.com/subject/6835758/" target="_blank" rel="external">平凡的世界</a></h2><p>无需多言，经典中的经典，作者平实的语言深刻形象地刻画了几个人物形象，尤为佩服孙少平和孙少安，他们都是铁骨铮铮的汉子！</p>
 <h2 id="3-明朝那些事儿">3.<a href="http://book.douban.com/subject/7163250/" target="_blank" rel="external">明朝那些事儿</a></h2><p>一本通俗有趣的历史科普书，本来以前也完整地看过一偏，但是意犹未尽，于是又看了一偏，记得看得第一遍的时候，只觉得里面的历史故事都蛮有趣的，但是这次再读的时候，我感受到了更多的东西，感受到名族大义与一己私利，忠诚与背叛，理性和感性，永垂不朽与遗臭万年，阿谀奉承与刚正不阿…。</p>
@@ -587,60 +704,81 @@
 <h2 id="5-Effective_Java">5.<a href="http://book.douban.com/subject/3360807/" target="_blank" rel="external">Effective Java</a></h2><p>本书介绍了在Java编程中78条极具实用价值的经验规则，这些经验规则涵盖了大多数开发人员每天所面临的问题的解决方案。但是以现在我的编程经验对于里面一些内容还不能理解，看来还要加强学习实践。这是一本值得多看几遍的书籍。</p>
 <h2 id="6-美国纽约摄影学院摄影教材">6.<a href="http://book.douban.com/subject/1007928/" target="_blank" rel="external">美国纽约摄影学院摄影教材</a></h2><p>觉得自己既然这么喜欢拍照，应该加强一下自己的拍照技巧，然后就在网上找到这本书，不得不说，对于喜欢摄影的人来说，这真的是一本非常合适的入门书籍，但是我只看了60%，因为暂时还没有买单反的计划 orz,就没有再看下去的动力了。</p>
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书笔记/">读书笔记</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-deep-into-JVM-6" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/06/deep-into-JVM-6/" class="article-date">
-  	<time datetime="2015-08-06T13:09:21.000Z" itemprop="datePublished">2015-08-06</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+            
+          </span>
         
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/06/deep-into-JVM-6/">深入理解JVM(6)</a>
-    </h1>
   
 
-      </header>
-      
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2015/08/06/deep-into-JVM-6/" itemprop="url">
+                  深入理解JVM(6)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            發表於
+            <time itemprop="dateCreated" datetime="2015-08-06T21:09:21+08:00" content="2015-08-06">
+              2015-08-06
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
 <h1 id="早期（编译期）优化">早期（编译期）优化</h1><h2 id="概述">概述</h2><ul>
 <li>前端编译器：Sun的Javac、 Eclipse JDT中的增量编译器</li>
 <li>JIT编译器： HotSpot VM的C1、C2编译器</li>
@@ -682,60 +820,81 @@
 <li>Java的即时编译器能进行动态优化，而C++不行。</li>
 </ol>
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书笔记/">读书笔记</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-deep-into-JVM-4-1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/04/deep-into-JVM-4-1/" class="article-date">
-  	<time datetime="2015-08-04T13:43:42.000Z" itemprop="datePublished">2015-08-04</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+            
+          </span>
         
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/04/deep-into-JVM-4-1/">深入理解JVM(5)</a>
-    </h1>
   
 
-      </header>
-      
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2015/08/04/deep-into-JVM-4-1/" itemprop="url">
+                  深入理解JVM(5)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            發表於
+            <time itemprop="dateCreated" datetime="2015-08-04T21:43:42+08:00" content="2015-08-04">
+              2015-08-04
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
 <h1 id="虚拟机类加载机制">虚拟机类加载机制</h1><p>与C++语言在编译时需要进行链接工作不同，Java语言里，类的加载和链接都是在运行时完成的，Java语言的动态扩展的特性便是依赖运行期动态加载和动态连接这个特点实现的。</p>
 <h2 id="类加载的时机">类加载的时机</h2><p>类从加载到虚拟机内存中开始，到卸载出内存为止，共经历了七个阶段。<br><img src="/images/JVM/JVM10.jpg" alt="类的生命周期"><br>如图，加载、验证、准备、初始化和卸载这五个过程是确定的，解析过程则不一定：它在某些情况下可以在初始化之后开始，这样是为了支持Java语言的运行时绑定。<br>jvm规定了下面四种情况需要立即对类进行“初始化”（而加载，验证，准备工作自然要在此之前）：</p>
 <ol>
@@ -791,60 +950,81 @@
 <p>双亲委派模型要求除了顶层的启动类加载器外，其余的类加载器都应当有自己的父类加载器。这个类加载器之间的父子关系一般不会以继承的关系实现，而是使用组合关系来复用父加载器的代码。</p>
 <p>双亲委派模型的工作过程是：如果一个类加载器受到了类加载的请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器去实现，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父加载器反馈自己无法完成这个加载请求（它的搜索范围中没有扎到所需要的类）时，子加载器才会尝试自己去加载。<br>双亲委派模型的好处是：保证了Java程序的稳定运行。</p>
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书笔记/">读书笔记</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-deep-into-JVM-4" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/03/deep-into-JVM-4/" class="article-date">
-  	<time datetime="2015-08-03T12:21:51.000Z" itemprop="datePublished">2015-08-03</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+            
+          </span>
         
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/03/deep-into-JVM-4/">深入理解JVM(4)</a>
-    </h1>
   
 
-      </header>
-      
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2015/08/03/deep-into-JVM-4/" itemprop="url">
+                  深入理解JVM(4)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            發表於
+            <time itemprop="dateCreated" datetime="2015-08-03T20:21:51+08:00" content="2015-08-03">
+              2015-08-03
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
 <h1 id="类文件结构">类文件结构</h1><p>因为虚拟机可以载入以及运行同一平台无关的字节码，从而实现了程序的“一次编写，出处运行”。</p>
 <h2 id="Class类文件的结构">Class类文件的结构</h2><p>一个编译后的类文件结构如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ClassFile &#123;</span><br><span class="line">    u4			magic;</span><br><span class="line">    u2			minor_version;</span><br><span class="line">    u2			major_version;</span><br><span class="line">    u2			constant_pool_count;</span><br><span class="line">    cp_info		contant_pool[constant_pool_count – <span class="number">1</span>];</span><br><span class="line">    u2			access_flags;</span><br><span class="line">    u2			this_class;</span><br><span class="line">    u2			super_class;</span><br><span class="line">    u2			interfaces_count;</span><br><span class="line">    u2			interfaces[interfaces_count];</span><br><span class="line">    u2			fields_count;</span><br><span class="line">    field_info		fields[fields_count];</span><br><span class="line">    u2			methods_count;</span><br><span class="line">    method_info		methods[methods_count];</span><br><span class="line">    u2			attributes_count;</span><br><span class="line">    attribute_info	attributes[attributes_count];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <ul>
@@ -904,60 +1084,81 @@
 <li>正捕捉异常的常量池索引<br>如果一个方法定义了一个try-catch或者try-final的异常句柄，那么一个异常表就会被创建。这包括了每个异常句柄的信息或者final块信息。<br>当一个异常被抛出时，JVM就会在当前方法中搜素匹配的句柄；如果没有找到匹配的，方法将会终止、从当前栈中弹出并且异常在新的当前框架中被重新抛出。如果在所有框架没有完全弹出栈之前没有找到匹配的异常句柄，这个线程就会被终止。如果这个线程是最后的非守护线程，那么JVM将会自终止，例如这个线程是主线程。<br><img src="/images/JVM/JVM9.PNG" alt="异常属性"></li>
 </ol>
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书笔记/">读书笔记</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-deep-into-JVM-3" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/02/deep-into-JVM-3/" class="article-date">
-  	<time datetime="2015-08-02T10:56:18.000Z" itemprop="datePublished">2015-08-02</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+            
+          </span>
         
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/02/deep-into-JVM-3/">深入理解JVM(3)</a>
-    </h1>
   
 
-      </header>
-      
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2015/08/02/deep-into-JVM-3/" itemprop="url">
+                  深入理解JVM(3)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            發表於
+            <time itemprop="dateCreated" datetime="2015-08-02T18:56:18+08:00" content="2015-08-02">
+              2015-08-02
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
 <h1 id="HotSpot虚拟机架构">HotSpot虚拟机架构</h1><p>以下这幅图展示了Java虚拟机里面的关键组件(是依据Java SE 7版本的Java虚拟机)。<br><img src="/images/JVM/JVM4.png" alt="HotSpot虚拟机"></p>
 <h1 id="虚拟机栈">虚拟机栈</h1><p>每当一个方法被调用时，一个新的Frame被创建并且push到虚拟机栈中。<br>每个Frame包括如下：</p>
 <ol>
@@ -1032,98 +1233,203 @@
 <h3 id="长期存活的对象将进入老年代">长期存活的对象将进入老年代</h3><p>通过对对象定义年龄的概念，当对象年龄增加到一定程度(默认为15岁)，就会被晋升到老年代。</p>
 <h3 id="空间分配担保">空间分配担保</h3><p>当出现MinorGC后依然存活大量的对象是，就需要老年代进行担保，让Survior无法容纳的对象直接进入老年代。</p>
 
+            
+          </span>
+        
       
     </div>
-    
-    <div class="article-info article-info-index">
+
+    <footer class="post-footer">
       
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书笔记/">读书笔记</a></li></ul>
-	</div>
 
       
 
       
-      <div class="clearfix"></div>
-    </div>
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
+  </section>
+
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+
+ </div>
+
+        
+
+        
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
   </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Fu Xi" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Fu Xi</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分類</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">標籤</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
   
-</article>
-
-
-
-
-
-
-
-  
-  
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
-  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fu Xi</span>
 </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info">
-    	<div class="footer-left">
-    		&copy; 2016 Fu Xi
-    	</div>
-      	<div class="footer-right">
-      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
-      	</div>
-    </div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
   </div>
-</footer>
-    </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+    
+
+  
 
 
-<script>
-	var yiliaConfig = {
-		fancybox: true,
-		mathjax: true,
-		animate: true,
-		isHome: true,
-		isPost: false,
-		isArchive: false,
-		isTag: false,
-		isCategory: false,
-		open_in_new: false
-	}
-</script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
 
 
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.2" id="motion.global"></script>
 
 
 
 
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    }
-});
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';                 
-    }       
-});
-</script>
+  
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
 
+      motionIntegrator.bootstrap();
+    });
+  </script>
 
-  </div>
+  
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
 </body>
 </html>
