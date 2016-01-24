@@ -110,7 +110,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Java/" style="font-size: 16.67px;">Java</a> <a href="/tags/SQL/" style="font-size: 10px;">SQL</a> <a href="/tags/Spark/" style="font-size: 13.33px;">Spark</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/toast/" style="font-size: 10px;">toast</a> <a href="/tags/读书笔记/" style="font-size: 20px;">读书笔记</a>
+						<a href="/tags/Java/" style="font-size: 16.67px;">Java</a> <a href="/tags/SQL/" style="font-size: 10px;">SQL</a> <a href="/tags/Spark/" style="font-size: 13.33px;">Spark</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/toast/" style="font-size: 10px;">toast</a> <a href="/tags/年度总结/" style="font-size: 10px;">年度总结</a> <a href="/tags/读书笔记/" style="font-size: 20px;">读书笔记</a>
 					</div>
 				</section>
 				
@@ -179,6 +179,78 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-deep-into-JVM-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/07/31/deep-into-JVM-1/" class="article-date">
+  	<time datetime="2015-07-31T13:07:34.000Z" itemprop="datePublished">2015-07-31</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/07/31/deep-into-JVM-1/">深入理解JVM(1)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
+<h2 id="Java技术体系">Java技术体系</h2><p><img src="/images/JVM/JVM1.jpg" alt="Java技术体系"><br>其中</p>
+<blockquote>
+<p>JDK = Java程序设计语言 + Java虚拟机 + Java API类库<br>JRE = Java虚拟机 + Java SE API子集</p>
+</blockquote>
+<h2 id="Sun_HotSpot_JVM">Sun HotSpot JVM</h2><blockquote>
+<p>Shortly after acquiring Animorphic, Sun intended to write a new just-in-time (JIT) compiler for the newly developed virtual machine.[3] This new compiler would give rise to the name “HotSpot”, which derives from the fact that, as the software runs Java bytecode, it continually analyzes the program’s performance for “hot spots” which are frequently or repeatedly executed. These are then targeted for optimization, leading to high-performance execution with a minimum of overhead for less performance-critical code. –<a href="https://en.wikipedia.org/wiki/HotSpot" target="_blank" rel="external">Wikipedia</a></p>
+</blockquote>
+<p>Sun公司主要开发两种JVM: 客户端虚拟机和服务器端虚拟机；客户端虚拟机主要为应用程序快速加载而调制；服务器端版本加载更慢，但运行更加高效。</p>
+<p>HotSpot提供如下部件：</p>
+<ul>
+<li>一个<a href="https://en.wikipedia.org/wiki/Java_Classloader" target="_blank" rel="external">类加载器</a></li>
+<li>一个<a href="https://en.wikipedia.org/wiki/Java_bytecode" target="_blank" rel="external">字节码</a><a href="https://en.wikipedia.org/wiki/Interpreter_(computing" target="_blank" rel="external">解释器</a>)</li>
+<li>客户端和服务器端虚拟机</li>
+<li>一些<a href="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science" target="_blank" rel="external">垃圾收集器</a>)</li>
+<li>运行库集合</li>
+</ul>
+<p>HotSpot源码结构图:<br><img src="/images/JVM/JVM2.PNG" alt="HotSpot源码结构"><br><img src="/images/JVM/JVM3.PNG" alt="HotSpot源码结构"></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书笔记/">读书笔记</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-markdown-test" class="article article-type-post" itemscope itemprop="blogPost">
   
