@@ -200,6 +200,155 @@
             
             
               
+                <a class="post-title-link" href="/2015/08/02/deep-into-JVM-3/" itemprop="url">
+                  深入理解JVM(3)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2015-08-02T18:56:18+08:00" content="2015-08-02">
+              2015-08-02
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
+<h1 id="HotSpot虚拟机架构">HotSpot虚拟机架构</h1><p>以下这幅图展示了Java虚拟机里面的关键组件(是依据Java SE 7版本的Java虚拟机)。<br><img src="/images/JVM/JVM4.png" alt="HotSpot虚拟机"></p>
+<h1 id="虚拟机栈">虚拟机栈</h1><p>每当一个方法被调用时，一个新的Frame被创建并且push到虚拟机栈中。<br>每个Frame包括如下：</p>
+<ol>
+<li>局部变量表</li>
+<li>返回值</li>
+<li>操作栈(Operand Stack)</li>
+<li>指向当前方法的类的运行时常量池的引用<h2 id="局部变量表">局部变量表</h2>局部变量表包括方法执行期间的变量：包括一个this引用，所有的方法参数和其他局部定义变量。对于类方法(比如.静态方法)，方法参数从零开始；然而对于实例方法，零槽位保留给this。<br>一个局部变量可以是：</li>
+</ol>
+<ul>
+<li>boolean</li>
+<li>byte</li>
+<li>char</li>
+<li>long</li>
+<li>short</li>
+<li>int </li>
+<li>float</li>
+<li>double</li>
+<li>reference</li>
+<li>returnAddress</li>
+</ul>
+<h2 id="操作栈">操作栈</h2><p>有点类似CPU中一般目的的寄存器，the operand stack在执行byte code指令时使用。大多数JVM byte code 将时间花费在操纵operand stack上：比如push,pop,duplicate,swap,或者执行产生或者消费变量的操作上。因此，在byte code中，那些在局部变量数组和operand stack之间的移动数据是非常频繁的。例如，一个简单的变量初始化会产生两个与operand stack打交道的byte codes。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i;</span><br></pre></td></tr></table></figure></p>
+<p>会得到编译后的byte code:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">iconst_0 <span class="comment">//push 0 to top of the operand stack</span></span><br><span class="line">istore_1 <span class="comment">//pop value from top of operand stack and store as local variable 1</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="动态链接">动态链接</h2><p>每个Frame都包含一个指向当前方法的类的运行时常量池的引用。这个引用是用来支持动态链接的。</p>
+<p>当一个Java类被编译时，所有的指向变量和方法的引用被作为一个符号引用保存在该类常量池中。符号引用是一个逻辑引用而不是一个指向实际地址的引用。JVM实现版本可是选择何时解决这些标记引用，这过程可以放生在类文件被识别时、加载之后，这叫做贪心或者静态解析；或者发生在当此标记引用被使用时，这叫做懒惰或者后期解析。绑定是以标记引用标识的区域(field)、方法、或者类被直接引用代替的过程。所有的直接引用都会以运行位置相关的存储结构偏移量类存储的。</p>
+<h1 id="垃圾回收">垃圾回收</h1><h2 id="根搜索算法">根搜索算法</h2><p>在主流的商用程序语言中，都是使用根搜索算法(GC Roots Tracing)判定对象是否存活的。<br>在Java语言中，可作为GC Roots的对象包括以下几种：</p>
+<ul>
+<li>虚拟机栈（栈帧中的本地变量表）中引用的对象</li>
+<li>方法区中的类静态属性引用的对象</li>
+<li>方法区中的常量引用的对象</li>
+<li>本地方法栈中<a href="http://www.cnblogs.com/mandroid/archive/2011/06/15/2081093.html" target="_blank" rel="external">JNI</a>(即一般说的Native方法)的引用的对象</li>
+</ul>
+<h2 id="回收永久代">回收永久代</h2><p>很多人认为JVM中的永久代是没有垃圾收集的，Java虚拟机规范的确说明可以不要求虚拟机在方法区实现垃圾收集，而且在方法区中进行垃圾手机的‘性价比’是比较低的；在堆中，尤其是新生代中，常规应用进行依次垃圾收集一般可以回收70%~90%的空间，而在永久代中的垃圾收集效率远低于此。<br>永久代回收主要回收两部分内容：</p>
+<ol>
+<li>废弃变量；包括字面量（String）,常量池中的其他类(接口)、方法、字段的符号引用等。</li>
+<li>无用的类；无用类需要满足下面三个条件<ul>
+<li>该类的所有实例均已经回收，即Java堆中不存在该类的任何实例</li>
+<li>加载该类的ClassLoader已经被回收</li>
+<li>该类对应的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li>
+</ul>
+</li>
+</ol>
+<h2 id="垃圾收集算法">垃圾收集算法</h2><h3 id="标记-清除算法">标记-清除算法</h3><p>首先标记出所有需要回收的对象，在标记完成后统一回收掉所有标记的对象。<br>缺点：</p>
+<ol>
+<li>效率不高；标记和清除的效率都不高；</li>
+<li>空间问题；标记清楚后会产生大量不连续的内存碎片；</li>
+</ol>
+<h3 id="复制算法">复制算法</h3><p>将内存容量分为大小相等的两块，每次只是只使用其中的一块。当这一块的内存用完了，就将还存活的对象复制到另外一块上面，然后再把已使用过的内存空间一次清理掉。<br><strong> 现在的商用虚拟机都采用这种收集算法来回收新生代，如HotSpot虚拟机将新生代分为Eden空间和两块较小的Survivor空间， 每次使用Eden和其中的一块Survivor。当回收时，将Eden和Survivor中还存活的对象一次性的拷贝到另外一块Survivor空间中，最后清理掉Eden和刚才用过的Survivor空间。 </strong></p>
+<h2 id="标记-整理算法">标记-整理算法</h2><p>根据老年代的特点，有人提出了一种“标记-整理(Mark-Compact)算法”,过程依然与“标记-清除算法”一样，不过后续步骤是让所有存活对象都向一端移动，然后直接清理掉端边界以外的内存，以便清除内存碎片。</p>
+<h2 id="垃圾收集器">垃圾收集器</h2><p>垃圾收集器是垃圾回收算法的具体实现；<br>下图描述了HotSpot收集器的示意图：<br><img src="/images/JVM/JVM7.jpg" alt="HotSpot收集器"></p>
+<h3 id="Serial收集器">Serial收集器</h3><p>单线程；在它收集时，必须暂停其他的工作线程，直至它收集结束。<br>特点：简单高效；对于运行在Client模式下的虚拟机来说是一个好选择。</p>
+<h3 id="PawNew收集器">PawNew收集器</h3><p>是Serial收集器的多线程版本。</p>
+<blockquote>
+<p>在讨论垃圾收集器的上下文语境中：</p>
+<ul>
+<li>并行： 指多条垃圾收集器线程并行工作，但此时用户线程依然处于等待状态</li>
+<li>并发： 指用户线程与垃圾收集线程同时运行（但不一定是并行的，可能会交替运行），用户程序继续运行，而垃圾收集程序运行在另一个CPU上。</li>
+</ul>
+</blockquote>
+<h3 id="Parallel_Scavenge收集器">Parallel Scavenge收集器</h3><p>新生代收集器，使用“复制”算法，并行的多线程收集器。着重于达到一个可控制的吞吐量。</p>
+<blockquote>
+<p>吞吐量 = 运行用户代码时间/(运行用户带啊时间+垃圾收集时间)</p>
+</blockquote>
+<h3 id="Serial_Old收集器">Serial Old收集器</h3><p>是Serial收集器的老年代版本，单线程收集器，使用“标记-整理”算法。</p>
+<h3 id="Parallel_Old收集器">Parallel Old收集器</h3><p>Parallel Scavenge收集器的老年代版本。</p>
+<h3 id="CMS收集器">CMS收集器</h3><p>系统停顿很短。</p>
+<h3 id="G1收集器">G1收集器</h3><ul>
+<li>使用“标记-整理”算法实现。</li>
+<li>可精确的控制停顿。</li>
+</ul>
+<h2 id="内存分配和回收策略">内存分配和回收策略</h2><h3 id="对象优先在Eden分配">对象优先在Eden分配</h3><p>大多数情况下，对象在新生代Eden区中分配。当Eden区没有足够的空间进行分配时，虚拟机将发动一MinorGC。</p>
+<h3 id="大对象直接进入老年代">大对象直接进入老年代</h3><p>很长的字符串及数组会直接分配到老年代。</p>
+<h3 id="长期存活的对象将进入老年代">长期存活的对象将进入老年代</h3><p>通过对对象定义年龄的概念，当对象年龄增加到一定程度(默认为15岁)，就会被晋升到老年代。</p>
+<h3 id="空间分配担保">空间分配担保</h3><p>当出现MinorGC后依然存活大量的对象是，就需要老年代进行担保，让Survior无法容纳的对象直接进入老年代。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
                 <a class="post-title-link" href="/2015/08/02/deep-into-JVM-2/" itemprop="url">
                   深入理解JVM(2)
                 </a>
@@ -603,7 +752,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -617,7 +766,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">10</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>

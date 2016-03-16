@@ -200,6 +200,102 @@
             
             
               
+                <a class="post-title-link" href="/2016/03/16/Datacenter-Network-Simulation-using-Mininet/" itemprop="url">
+                  Datacenter Network Simulation using Mininet
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2016-03-16T22:10:35+08:00" content="2016-03-16">
+              2016-03-16
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="一-_实验环境">一. 实验环境</h2><p>Ubuntu 14.04 LTS (GNU/Linux 3.13.0-24-generic i686), mininet 2.2.1, puTTY, Xming等</p>
+<h2 id="二-_实验步骤">二. 实验步骤</h2><ol>
+<li>安装ubuntu14.04：将实验用的Ubuntu虚拟机磁盘镜像导入到VMware workstation中启动，为虚拟机的网卡分配ip地址；</li>
+<li>在宿主机上通过putty登录上已经启动的虚拟机：<br><img src="/images/SDN/1.png" alt="picture"></li>
+<li>下载，安装，配置Xming，完成后重启Xming；</li>
+<li>在虚拟机上键入“xterm”，出现如下：<br><img src="/images/SDN/2.png" alt="picture"><br>说明能正常启动xterm；</li>
+<li>分别针对两个实验要求，设计，完成相关的实验；</li>
+</ol>
+<h2 id="三-_网络拓扑">三. 网络拓扑</h2><p><img src="/images/SDN/3.png" alt="picture"></p>
+<h2 id="四-_实验一：With_Controller:_spanning_tree,_like_failures">四. 实验一：With Controller: spanning tree, like failures</h2><h3 id="1_利用miniedit完成上述网络拓扑的描述">1 利用miniedit完成上述网络拓扑的描述</h3><h4 id="1-1_利用miniedit将各个组件：controller,_switch,_host,_link添加上去：">1.1 利用miniedit将各个组件：controller, switch, host, link添加上去：</h4><p><img src="/images/SDN/4.png" alt="picture"></p>
+<h4 id="1-2_根据FatTree的定址方式为h1_~_h12分配ip地址,如为h1分配地址：">1.2 根据FatTree的定址方式为h1 ~ h12分配ip地址,如为h1分配地址：</h4><p><img src="/images/SDN/5.png" alt="picture"></p>
+<h4 id="1-3_配置controller_c0的type为“remote_controller”类型:">1.3 配置controller c0的type为“remote controller”类型:</h4><p><img src="/images/SDN/6.png" alt="picture"></p>
+<h4 id="1-4_“File”_-&gt;_“Save”,保存为-mn文件">1.4 “File” -&gt; “Save”,保存为.mn文件</h4><h4 id="1-5_“File”_-&gt;_“Export_Level_2_Script”，导出为-py文件">1.5 “File” -&gt; “Export Level 2 Script”，导出为.py文件</h4><h3 id="2_找到并画出生成树拓扑">2 找到并画出生成树拓扑</h3><p>为了找到当前的生成数拓扑，需要确定当前所有交换机每个端口的状态。Mininet转储命令显示端口描述每个端口的状态。这个命令写了很多的信息终端,为简单起见,我只显示相关的输出一个开关下面的输出:<br><img src="/images/SDN/7.png" alt="picture"><br>根据每个交换机的各个端口状态，可以画出如下的生成树拓扑：<br><img src="/images/SDN/8.png" alt="picture"></p>
+<h3 id="3_使OpenFlow交换机表现成学习的交换机">3 使OpenFlow交换机表现成学习的交换机</h3><p>运行指令“sudo ./pox/pox.py forwarding.l2_learning openflow.spanning_tree –no-flood –hold-down log.level –DEBUG samples.pretty_log openflow.discovery host_tracker info.packet_dump”可以达到上述要求。<br>运行pingall指令得到如下结果：<br><img src="/images/SDN/9.png" alt="picture"><br>根据利用sudo ovs-ofctl dump-flows s3指令可以查看s3的流表如下：<br><img src="/images/SDN/10.png" alt="picture"></p>
+<h3 id="4_模拟链路损坏的情况（至少三条链路）">4 模拟链路损坏的情况（至少三条链路）</h3><h4 id="4-1_假设s2-s4,_s5-s7,_s9-s11三条链路down掉：">4.1 假设s2-s4, s5-s7, s9-s11三条链路down掉：</h4><p><img src="/images/SDN/11.png" alt="picture"></p>
+<h4 id="4-2_显示新的网络生成树拓扑">4.2 显示新的网络生成树拓扑</h4><p>在此运行上面提到的命令，得到新的网络生成树拓扑如下：<br><img src="/images/SDN/12.png" alt="picture"></p>
+<h4 id="4-3_在有受损链路的网络pingall结果：">4.3 在有受损链路的网络pingall结果：</h4><p><img src="/images/SDN/13.png" alt="picture"></p>
+<h4 id="4-4_查看流表">4.4 查看流表</h4><p><img src="/images/SDN/14.png" alt="picture"></p>
+<h2 id="五-_实验二：Without_Controller:_implement_FatTree’s_routing_rules_with_switch_flow_rules">五. 实验二：Without Controller: implement FatTree’s routing rules with switch flow rules</h2><h3 id="1_在仿真脚本中为交换机加入合适的流表">1 在仿真脚本中为交换机加入合适的流表</h3><p>在生成的FatTree拓扑树的.py代码中，“info( ‘<em>*</em> Post configure switches and hosts\n’)”的位置下面添加构建流表的代码，如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#   command_arp = r'ovs-ofctl add-flow %s "dl_type=0x806,  arp_tpa=10.%d.%d.%d, actions=output:%d"' % ('s1', 5, 6, 7, (7-2+1)%2 + 2 + 1)</span></span><br><span class="line"><span class="comment">#    print command_arp</span></span><br><span class="line"><span class="comment">#    net.get('s1').cmd(command_arp)</span></span><br><span class="line">    pods = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>)]</span><br><span class="line">    switches = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>)]</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">	<span class="keyword">for</span> z <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">4</span>):</span><br><span class="line">	    switch = <span class="string">'s%d'</span> % (x*<span class="number">4</span> + z + <span class="number">1</span>)</span><br><span class="line">	    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">4</span>):</span><br><span class="line">		<span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">		    <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">			command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, j, k, i, (i-<span class="number">2</span>+z)%<span class="number">2</span> + <span class="number">2</span> + <span class="number">1</span>) </span><br><span class="line">			command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, j, k, i, (i-<span class="number">2</span>+z)%<span class="number">2</span> + <span class="number">2</span> + <span class="number">1</span>)</span><br><span class="line">			net.get(switch).cmd(command_arp)</span><br><span class="line">			net.get(switch).cmd(command_ip) </span><br><span class="line">	    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">		<span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">		    command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, i, j + <span class="number">2</span>, i + <span class="number">1</span>) </span><br><span class="line">		    command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, i, j + <span class="number">2</span>, i + <span class="number">1</span>)</span><br><span class="line">		    net.get(switch).cmd(command_arp)</span><br><span class="line">		    net.get(switch).cmd(command_ip)</span><br><span class="line">	<span class="keyword">for</span> z <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">	    switch = <span class="string">'s%d'</span> % (x*<span class="number">4</span> + z + <span class="number">1</span>)</span><br><span class="line">	    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">4</span>):</span><br><span class="line">		<span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">		    <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">		        command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, j, k, i, (i-<span class="number">2</span>+z)%<span class="number">2</span> + <span class="number">2</span> + <span class="number">1</span>) </span><br><span class="line">		        command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, j, k, i, (i-<span class="number">2</span>+z)%<span class="number">2</span> + <span class="number">2</span> + <span class="number">1</span>)</span><br><span class="line">			net.get(switch).cmd(command_arp)</span><br><span class="line">			net.get(switch).cmd(command_ip)</span><br><span class="line">	    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">	        command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, z, (i+<span class="number">2</span>), i + <span class="number">1</span>)  </span><br><span class="line">	        command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, z, (i+<span class="number">2</span>), i + <span class="number">1</span>)</span><br><span class="line">		net.get(switch).cmd(command_arp)</span><br><span class="line">		net.get(switch).cmd(command_ip)</span><br><span class="line">    </span><br><span class="line">    switches = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">17</span>,<span class="number">21</span>)]</span><br><span class="line">    <span class="keyword">for</span> z <span class="keyword">in</span> range(<span class="number">17</span>,<span class="number">21</span>):</span><br><span class="line">	switch = <span class="string">'s%d'</span> % z</span><br><span class="line">	<span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">	    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">		<span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">4</span>):</span><br><span class="line">    	            command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, j, k, x + <span class="number">1</span>) </span><br><span class="line">	            command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, j, k, x + <span class="number">1</span>)</span><br><span class="line">		    net.get(switch).cmd(command_arp)</span><br><span class="line">		    net.get(switch).cmd(command_ip)</span><br></pre></td></tr></table></figure></p>
+<h3 id="2_用pingall指令测试路由规则">2 用pingall指令测试路由规则</h3><p><img src="/images/SDN/15.png" alt="picture"><br>结果显示，主机之间能够完全Ping通。</p>
+<h3 id="3_发证明FatTree中的流量通过流表被平均分配">3 发证明FatTree中的流量通过流表被平均分配</h3><p>通过iperf指令来验证处于同一个pod，不同pod的主机之间的流量数据：<br><img src="/images/SDN/16.png" alt="picture"><br>绘制成图标如下：<br><img src="/images/SDN/17.png" alt="picture"><br>数据表明，h1到其他的主机之间的上行、下行带宽基本都在19Gbits左右，比较平均。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
                 <a class="post-title-link" href="/2016/01/24/advices-for-2016/" itemprop="url">
                   advice && list for 2016
                 </a>
@@ -1126,155 +1222,6 @@
 
 
     
-      
-
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                <a class="post-title-link" href="/2015/08/02/deep-into-JVM-3/" itemprop="url">
-                  深入理解JVM(3)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2015-08-02T18:56:18+08:00" content="2015-08-02">
-              2015-08-02
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
-<h1 id="HotSpot虚拟机架构">HotSpot虚拟机架构</h1><p>以下这幅图展示了Java虚拟机里面的关键组件(是依据Java SE 7版本的Java虚拟机)。<br><img src="/images/JVM/JVM4.png" alt="HotSpot虚拟机"></p>
-<h1 id="虚拟机栈">虚拟机栈</h1><p>每当一个方法被调用时，一个新的Frame被创建并且push到虚拟机栈中。<br>每个Frame包括如下：</p>
-<ol>
-<li>局部变量表</li>
-<li>返回值</li>
-<li>操作栈(Operand Stack)</li>
-<li>指向当前方法的类的运行时常量池的引用<h2 id="局部变量表">局部变量表</h2>局部变量表包括方法执行期间的变量：包括一个this引用，所有的方法参数和其他局部定义变量。对于类方法(比如.静态方法)，方法参数从零开始；然而对于实例方法，零槽位保留给this。<br>一个局部变量可以是：</li>
-</ol>
-<ul>
-<li>boolean</li>
-<li>byte</li>
-<li>char</li>
-<li>long</li>
-<li>short</li>
-<li>int </li>
-<li>float</li>
-<li>double</li>
-<li>reference</li>
-<li>returnAddress</li>
-</ul>
-<h2 id="操作栈">操作栈</h2><p>有点类似CPU中一般目的的寄存器，the operand stack在执行byte code指令时使用。大多数JVM byte code 将时间花费在操纵operand stack上：比如push,pop,duplicate,swap,或者执行产生或者消费变量的操作上。因此，在byte code中，那些在局部变量数组和operand stack之间的移动数据是非常频繁的。例如，一个简单的变量初始化会产生两个与operand stack打交道的byte codes。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i;</span><br></pre></td></tr></table></figure></p>
-<p>会得到编译后的byte code:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">iconst_0 <span class="comment">//push 0 to top of the operand stack</span></span><br><span class="line">istore_1 <span class="comment">//pop value from top of operand stack and store as local variable 1</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="动态链接">动态链接</h2><p>每个Frame都包含一个指向当前方法的类的运行时常量池的引用。这个引用是用来支持动态链接的。</p>
-<p>当一个Java类被编译时，所有的指向变量和方法的引用被作为一个符号引用保存在该类常量池中。符号引用是一个逻辑引用而不是一个指向实际地址的引用。JVM实现版本可是选择何时解决这些标记引用，这过程可以放生在类文件被识别时、加载之后，这叫做贪心或者静态解析；或者发生在当此标记引用被使用时，这叫做懒惰或者后期解析。绑定是以标记引用标识的区域(field)、方法、或者类被直接引用代替的过程。所有的直接引用都会以运行位置相关的存储结构偏移量类存储的。</p>
-<h1 id="垃圾回收">垃圾回收</h1><h2 id="根搜索算法">根搜索算法</h2><p>在主流的商用程序语言中，都是使用根搜索算法(GC Roots Tracing)判定对象是否存活的。<br>在Java语言中，可作为GC Roots的对象包括以下几种：</p>
-<ul>
-<li>虚拟机栈（栈帧中的本地变量表）中引用的对象</li>
-<li>方法区中的类静态属性引用的对象</li>
-<li>方法区中的常量引用的对象</li>
-<li>本地方法栈中<a href="http://www.cnblogs.com/mandroid/archive/2011/06/15/2081093.html" target="_blank" rel="external">JNI</a>(即一般说的Native方法)的引用的对象</li>
-</ul>
-<h2 id="回收永久代">回收永久代</h2><p>很多人认为JVM中的永久代是没有垃圾收集的，Java虚拟机规范的确说明可以不要求虚拟机在方法区实现垃圾收集，而且在方法区中进行垃圾手机的‘性价比’是比较低的；在堆中，尤其是新生代中，常规应用进行依次垃圾收集一般可以回收70%~90%的空间，而在永久代中的垃圾收集效率远低于此。<br>永久代回收主要回收两部分内容：</p>
-<ol>
-<li>废弃变量；包括字面量（String）,常量池中的其他类(接口)、方法、字段的符号引用等。</li>
-<li>无用的类；无用类需要满足下面三个条件<ul>
-<li>该类的所有实例均已经回收，即Java堆中不存在该类的任何实例</li>
-<li>加载该类的ClassLoader已经被回收</li>
-<li>该类对应的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li>
-</ul>
-</li>
-</ol>
-<h2 id="垃圾收集算法">垃圾收集算法</h2><h3 id="标记-清除算法">标记-清除算法</h3><p>首先标记出所有需要回收的对象，在标记完成后统一回收掉所有标记的对象。<br>缺点：</p>
-<ol>
-<li>效率不高；标记和清除的效率都不高；</li>
-<li>空间问题；标记清楚后会产生大量不连续的内存碎片；</li>
-</ol>
-<h3 id="复制算法">复制算法</h3><p>将内存容量分为大小相等的两块，每次只是只使用其中的一块。当这一块的内存用完了，就将还存活的对象复制到另外一块上面，然后再把已使用过的内存空间一次清理掉。<br><strong> 现在的商用虚拟机都采用这种收集算法来回收新生代，如HotSpot虚拟机将新生代分为Eden空间和两块较小的Survivor空间， 每次使用Eden和其中的一块Survivor。当回收时，将Eden和Survivor中还存活的对象一次性的拷贝到另外一块Survivor空间中，最后清理掉Eden和刚才用过的Survivor空间。 </strong></p>
-<h2 id="标记-整理算法">标记-整理算法</h2><p>根据老年代的特点，有人提出了一种“标记-整理(Mark-Compact)算法”,过程依然与“标记-清除算法”一样，不过后续步骤是让所有存活对象都向一端移动，然后直接清理掉端边界以外的内存，以便清除内存碎片。</p>
-<h2 id="垃圾收集器">垃圾收集器</h2><p>垃圾收集器是垃圾回收算法的具体实现；<br>下图描述了HotSpot收集器的示意图：<br><img src="/images/JVM/JVM7.jpg" alt="HotSpot收集器"></p>
-<h3 id="Serial收集器">Serial收集器</h3><p>单线程；在它收集时，必须暂停其他的工作线程，直至它收集结束。<br>特点：简单高效；对于运行在Client模式下的虚拟机来说是一个好选择。</p>
-<h3 id="PawNew收集器">PawNew收集器</h3><p>是Serial收集器的多线程版本。</p>
-<blockquote>
-<p>在讨论垃圾收集器的上下文语境中：</p>
-<ul>
-<li>并行： 指多条垃圾收集器线程并行工作，但此时用户线程依然处于等待状态</li>
-<li>并发： 指用户线程与垃圾收集线程同时运行（但不一定是并行的，可能会交替运行），用户程序继续运行，而垃圾收集程序运行在另一个CPU上。</li>
-</ul>
-</blockquote>
-<h3 id="Parallel_Scavenge收集器">Parallel Scavenge收集器</h3><p>新生代收集器，使用“复制”算法，并行的多线程收集器。着重于达到一个可控制的吞吐量。</p>
-<blockquote>
-<p>吞吐量 = 运行用户代码时间/(运行用户带啊时间+垃圾收集时间)</p>
-</blockquote>
-<h3 id="Serial_Old收集器">Serial Old收集器</h3><p>是Serial收集器的老年代版本，单线程收集器，使用“标记-整理”算法。</p>
-<h3 id="Parallel_Old收集器">Parallel Old收集器</h3><p>Parallel Scavenge收集器的老年代版本。</p>
-<h3 id="CMS收集器">CMS收集器</h3><p>系统停顿很短。</p>
-<h3 id="G1收集器">G1收集器</h3><ul>
-<li>使用“标记-整理”算法实现。</li>
-<li>可精确的控制停顿。</li>
-</ul>
-<h2 id="内存分配和回收策略">内存分配和回收策略</h2><h3 id="对象优先在Eden分配">对象优先在Eden分配</h3><p>大多数情况下，对象在新生代Eden区中分配。当Eden区没有足够的空间进行分配时，虚拟机将发动一MinorGC。</p>
-<h3 id="大对象直接进入老年代">大对象直接进入老年代</h3><p>很长的字符串及数组会直接分配到老年代。</p>
-<h3 id="长期存活的对象将进入老年代">长期存活的对象将进入老年代</h3><p>通过对对象定义年龄的概念，当对象年龄增加到一定程度(默认为15岁)，就会被晋升到老年代。</p>
-<h3 id="空间分配担保">空间分配担保</h3><p>当出现MinorGC后依然存活大量的对象是，就需要老年代进行担保，让Survior无法容纳的对象直接进入老年代。</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1317,7 +1264,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -1331,7 +1278,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">10</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>

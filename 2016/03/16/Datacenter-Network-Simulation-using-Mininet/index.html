@@ -1,0 +1,693 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  
+
+
+<link rel="stylesheet" type="text/css" href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" />
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.2"/>
+
+
+
+
+  <meta name="keywords" content="SDN,network simulation," />
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+<meta name="description" content="一. 实验环境Ubuntu 14.04 LTS (GNU/Linux 3.13.0-24-generic i686), mininet 2.2.1, puTTY, Xming等
+二. 实验步骤
+安装ubuntu14.04：将实验用的Ubuntu虚拟机磁盘镜像导入到VMware workstation中启动，为虚拟机的网卡分配ip地址；
+在宿主机上通过putty登录上已经启动的虚拟机：
+下载，安装，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Datacenter Network Simulation using Mininet">
+<meta property="og:url" content="http://yoursite.com/2016/03/16/Datacenter-Network-Simulation-using-Mininet/index.html">
+<meta property="og:site_name" content="My Blog">
+<meta property="og:description" content="一. 实验环境Ubuntu 14.04 LTS (GNU/Linux 3.13.0-24-generic i686), mininet 2.2.1, puTTY, Xming等
+二. 实验步骤
+安装ubuntu14.04：将实验用的Ubuntu虚拟机磁盘镜像导入到VMware workstation中启动，为虚拟机的网卡分配ip地址；
+在宿主机上通过putty登录上已经启动的虚拟机：
+下载，安装，">
+<meta property="og:image" content="http://yoursite.com/images/SDN/1.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/2.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/3.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/4.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/5.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/6.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/7.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/8.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/9.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/10.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/11.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/12.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/13.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/14.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/15.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/16.png">
+<meta property="og:image" content="http://yoursite.com/images/SDN/17.png">
+<meta property="og:updated_time" content="2016-03-16T14:53:20.408Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Datacenter Network Simulation using Mininet">
+<meta name="twitter:description" content="一. 实验环境Ubuntu 14.04 LTS (GNU/Linux 3.13.0-24-generic i686), mininet 2.2.1, puTTY, Xming等
+二. 实验步骤
+安装ubuntu14.04：将实验用的Ubuntu虚拟机磁盘镜像导入到VMware workstation中启动，为虚拟机的网卡分配ip地址；
+在宿主机上通过putty登录上已经启动的虚拟机：
+下载，安装，">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+
+
+  <title> Datacenter Network Simulation using Mininet | My Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-/"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-/categories"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-/about"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-/archives"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-/tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Datacenter Network Simulation using Mininet
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2016-03-16T22:10:35+08:00" content="2016-03-16">
+              2016-03-16
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="一-_实验环境">一. 实验环境</h2><p>Ubuntu 14.04 LTS (GNU/Linux 3.13.0-24-generic i686), mininet 2.2.1, puTTY, Xming等</p>
+<h2 id="二-_实验步骤">二. 实验步骤</h2><ol>
+<li>安装ubuntu14.04：将实验用的Ubuntu虚拟机磁盘镜像导入到VMware workstation中启动，为虚拟机的网卡分配ip地址；</li>
+<li>在宿主机上通过putty登录上已经启动的虚拟机：<br><img src="/images/SDN/1.png" alt="picture"></li>
+<li>下载，安装，配置Xming，完成后重启Xming；</li>
+<li>在虚拟机上键入“xterm”，出现如下：<br><img src="/images/SDN/2.png" alt="picture"><br>说明能正常启动xterm；</li>
+<li>分别针对两个实验要求，设计，完成相关的实验；</li>
+</ol>
+<h2 id="三-_网络拓扑">三. 网络拓扑</h2><p><img src="/images/SDN/3.png" alt="picture"></p>
+<h2 id="四-_实验一：With_Controller:_spanning_tree,_like_failures">四. 实验一：With Controller: spanning tree, like failures</h2><h3 id="1_利用miniedit完成上述网络拓扑的描述">1 利用miniedit完成上述网络拓扑的描述</h3><h4 id="1-1_利用miniedit将各个组件：controller,_switch,_host,_link添加上去：">1.1 利用miniedit将各个组件：controller, switch, host, link添加上去：</h4><p><img src="/images/SDN/4.png" alt="picture"></p>
+<h4 id="1-2_根据FatTree的定址方式为h1_~_h12分配ip地址,如为h1分配地址：">1.2 根据FatTree的定址方式为h1 ~ h12分配ip地址,如为h1分配地址：</h4><p><img src="/images/SDN/5.png" alt="picture"></p>
+<h4 id="1-3_配置controller_c0的type为“remote_controller”类型:">1.3 配置controller c0的type为“remote controller”类型:</h4><p><img src="/images/SDN/6.png" alt="picture"></p>
+<h4 id="1-4_“File”_-&gt;_“Save”,保存为-mn文件">1.4 “File” -&gt; “Save”,保存为.mn文件</h4><h4 id="1-5_“File”_-&gt;_“Export_Level_2_Script”，导出为-py文件">1.5 “File” -&gt; “Export Level 2 Script”，导出为.py文件</h4><h3 id="2_找到并画出生成树拓扑">2 找到并画出生成树拓扑</h3><p>为了找到当前的生成数拓扑，需要确定当前所有交换机每个端口的状态。Mininet转储命令显示端口描述每个端口的状态。这个命令写了很多的信息终端,为简单起见,我只显示相关的输出一个开关下面的输出:<br><img src="/images/SDN/7.png" alt="picture"><br>根据每个交换机的各个端口状态，可以画出如下的生成树拓扑：<br><img src="/images/SDN/8.png" alt="picture"></p>
+<h3 id="3_使OpenFlow交换机表现成学习的交换机">3 使OpenFlow交换机表现成学习的交换机</h3><p>运行指令“sudo ./pox/pox.py forwarding.l2_learning openflow.spanning_tree –no-flood –hold-down log.level –DEBUG samples.pretty_log openflow.discovery host_tracker info.packet_dump”可以达到上述要求。<br>运行pingall指令得到如下结果：<br><img src="/images/SDN/9.png" alt="picture"><br>根据利用sudo ovs-ofctl dump-flows s3指令可以查看s3的流表如下：<br><img src="/images/SDN/10.png" alt="picture"></p>
+<h3 id="4_模拟链路损坏的情况（至少三条链路）">4 模拟链路损坏的情况（至少三条链路）</h3><h4 id="4-1_假设s2-s4,_s5-s7,_s9-s11三条链路down掉：">4.1 假设s2-s4, s5-s7, s9-s11三条链路down掉：</h4><p><img src="/images/SDN/11.png" alt="picture"></p>
+<h4 id="4-2_显示新的网络生成树拓扑">4.2 显示新的网络生成树拓扑</h4><p>在此运行上面提到的命令，得到新的网络生成树拓扑如下：<br><img src="/images/SDN/12.png" alt="picture"></p>
+<h4 id="4-3_在有受损链路的网络pingall结果：">4.3 在有受损链路的网络pingall结果：</h4><p><img src="/images/SDN/13.png" alt="picture"></p>
+<h4 id="4-4_查看流表">4.4 查看流表</h4><p><img src="/images/SDN/14.png" alt="picture"></p>
+<h2 id="五-_实验二：Without_Controller:_implement_FatTree’s_routing_rules_with_switch_flow_rules">五. 实验二：Without Controller: implement FatTree’s routing rules with switch flow rules</h2><h3 id="1_在仿真脚本中为交换机加入合适的流表">1 在仿真脚本中为交换机加入合适的流表</h3><p>在生成的FatTree拓扑树的.py代码中，“info( ‘<em>*</em> Post configure switches and hosts\n’)”的位置下面添加构建流表的代码，如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#   command_arp = r'ovs-ofctl add-flow %s "dl_type=0x806,  arp_tpa=10.%d.%d.%d, actions=output:%d"' % ('s1', 5, 6, 7, (7-2+1)%2 + 2 + 1)</span></span><br><span class="line"><span class="comment">#    print command_arp</span></span><br><span class="line"><span class="comment">#    net.get('s1').cmd(command_arp)</span></span><br><span class="line">    pods = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>)]</span><br><span class="line">    switches = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>)]</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">	<span class="keyword">for</span> z <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">4</span>):</span><br><span class="line">	    switch = <span class="string">'s%d'</span> % (x*<span class="number">4</span> + z + <span class="number">1</span>)</span><br><span class="line">	    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">4</span>):</span><br><span class="line">		<span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">		    <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">			command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, j, k, i, (i-<span class="number">2</span>+z)%<span class="number">2</span> + <span class="number">2</span> + <span class="number">1</span>) </span><br><span class="line">			command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, j, k, i, (i-<span class="number">2</span>+z)%<span class="number">2</span> + <span class="number">2</span> + <span class="number">1</span>)</span><br><span class="line">			net.get(switch).cmd(command_arp)</span><br><span class="line">			net.get(switch).cmd(command_ip) </span><br><span class="line">	    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">		<span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">		    command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, i, j + <span class="number">2</span>, i + <span class="number">1</span>) </span><br><span class="line">		    command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, i, j + <span class="number">2</span>, i + <span class="number">1</span>)</span><br><span class="line">		    net.get(switch).cmd(command_arp)</span><br><span class="line">		    net.get(switch).cmd(command_ip)</span><br><span class="line">	<span class="keyword">for</span> z <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">	    switch = <span class="string">'s%d'</span> % (x*<span class="number">4</span> + z + <span class="number">1</span>)</span><br><span class="line">	    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">4</span>):</span><br><span class="line">		<span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">		    <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">		        command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, j, k, i, (i-<span class="number">2</span>+z)%<span class="number">2</span> + <span class="number">2</span> + <span class="number">1</span>) </span><br><span class="line">		        command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, j, k, i, (i-<span class="number">2</span>+z)%<span class="number">2</span> + <span class="number">2</span> + <span class="number">1</span>)</span><br><span class="line">			net.get(switch).cmd(command_arp)</span><br><span class="line">			net.get(switch).cmd(command_ip)</span><br><span class="line">	    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">	        command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, z, (i+<span class="number">2</span>), i + <span class="number">1</span>)  </span><br><span class="line">	        command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, z, (i+<span class="number">2</span>), i + <span class="number">1</span>)</span><br><span class="line">		net.get(switch).cmd(command_arp)</span><br><span class="line">		net.get(switch).cmd(command_ip)</span><br><span class="line">    </span><br><span class="line">    switches = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">17</span>,<span class="number">21</span>)]</span><br><span class="line">    <span class="keyword">for</span> z <span class="keyword">in</span> range(<span class="number">17</span>,<span class="number">21</span>):</span><br><span class="line">	switch = <span class="string">'s%d'</span> % z</span><br><span class="line">	<span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">	    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">		<span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">4</span>):</span><br><span class="line">    	            command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, j, k, x + <span class="number">1</span>) </span><br><span class="line">	            command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, j, k, x + <span class="number">1</span>)</span><br><span class="line">		    net.get(switch).cmd(command_arp)</span><br><span class="line">		    net.get(switch).cmd(command_ip)</span><br></pre></td></tr></table></figure></p>
+<h3 id="2_用pingall指令测试路由规则">2 用pingall指令测试路由规则</h3><p><img src="/images/SDN/15.png" alt="picture"><br>结果显示，主机之间能够完全Ping通。</p>
+<h3 id="3_发证明FatTree中的流量通过流表被平均分配">3 发证明FatTree中的流量通过流表被平均分配</h3><p>通过iperf指令来验证处于同一个pod，不同pod的主机之间的流量数据：<br><img src="/images/SDN/16.png" alt="picture"><br>绘制成图标如下：<br><img src="/images/SDN/17.png" alt="picture"><br>数据表明，h1到其他的主机之间的上行、下行带宽基本都在19Gbits左右，比较平均。</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SDN/" rel="tag">#SDN</a>
+          
+            <a href="/tags/network-simulation/" rel="tag">#network simulation</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/24/advices-for-2016/" rel="next" title="advice && list for 2016">
+                <i class="fa fa-chevron-left"></i> advice && list for 2016
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+          </div>
+        
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Fu Xi" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Fu Xi</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://tsien.github.io/" target="_blank">Tsien</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.cnblogs.com/netfocus/" target="_blank">netfocus</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-_实验环境"><span class="nav-number">1.</span> <span class="nav-text">一. 实验环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-_实验步骤"><span class="nav-number">2.</span> <span class="nav-text">二. 实验步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-_网络拓扑"><span class="nav-number">3.</span> <span class="nav-text">三. 网络拓扑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-_实验一：With_Controller:_spanning_tree,_like_failures"><span class="nav-number">4.</span> <span class="nav-text">四. 实验一：With Controller: spanning tree, like failures</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1_利用miniedit完成上述网络拓扑的描述"><span class="nav-number">4.1.</span> <span class="nav-text">1 利用miniedit完成上述网络拓扑的描述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1_利用miniedit将各个组件：controller,_switch,_host,_link添加上去："><span class="nav-number">4.1.1.</span> <span class="nav-text">1.1 利用miniedit将各个组件：controller, switch, host, link添加上去：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2_根据FatTree的定址方式为h1_~_h12分配ip地址,如为h1分配地址："><span class="nav-number">4.1.2.</span> <span class="nav-text">1.2 根据FatTree的定址方式为h1 ~ h12分配ip地址,如为h1分配地址：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3_配置controller_c0的type为“remote_controller”类型:"><span class="nav-number">4.1.3.</span> <span class="nav-text">1.3 配置controller c0的type为“remote controller”类型:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4_“File”_->_“Save”,保存为-mn文件"><span class="nav-number">4.1.4.</span> <span class="nav-text">1.4 “File” -> “Save”,保存为.mn文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5_“File”_->_“Export_Level_2_Script”，导出为-py文件"><span class="nav-number">4.1.5.</span> <span class="nav-text">1.5 “File” -> “Export Level 2 Script”，导出为.py文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2_找到并画出生成树拓扑"><span class="nav-number">4.2.</span> <span class="nav-text">2 找到并画出生成树拓扑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3_使OpenFlow交换机表现成学习的交换机"><span class="nav-number">4.3.</span> <span class="nav-text">3 使OpenFlow交换机表现成学习的交换机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4_模拟链路损坏的情况（至少三条链路）"><span class="nav-number">4.4.</span> <span class="nav-text">4 模拟链路损坏的情况（至少三条链路）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1_假设s2-s4,_s5-s7,_s9-s11三条链路down掉："><span class="nav-number">4.4.1.</span> <span class="nav-text">4.1 假设s2-s4, s5-s7, s9-s11三条链路down掉：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2_显示新的网络生成树拓扑"><span class="nav-number">4.4.2.</span> <span class="nav-text">4.2 显示新的网络生成树拓扑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3_在有受损链路的网络pingall结果："><span class="nav-number">4.4.3.</span> <span class="nav-text">4.3 在有受损链路的网络pingall结果：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4_查看流表"><span class="nav-number">4.4.4.</span> <span class="nav-text">4.4 查看流表</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-_实验二：Without_Controller:_implement_FatTree’s_routing_rules_with_switch_flow_rules"><span class="nav-number">5.</span> <span class="nav-text">五. 实验二：Without Controller: implement FatTree’s routing rules with switch flow rules</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1_在仿真脚本中为交换机加入合适的流表"><span class="nav-number">5.1.</span> <span class="nav-text">1 在仿真脚本中为交换机加入合适的流表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2_用pingall指令测试路由规则"><span class="nav-number">5.2.</span> <span class="nav-text">2 用pingall指令测试路由规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3_发证明FatTree中的流量通过流表被平均分配"><span class="nav-number">5.3.</span> <span class="nav-text">3 发证明FatTree中的流量通过流表被平均分配</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fu Xi</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.2" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+
+      motionIntegrator.bootstrap();
+    });
+  </script>
+
+  
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>
