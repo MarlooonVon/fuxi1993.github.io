@@ -200,6 +200,96 @@
             
             
               
+                <a class="post-title-link" href="/2016/03/24/Design-Pattern-1-Factory-Method/" itemprop="url">
+                  Design Pattern (1): Factory Method
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2016-03-24T19:54:08+08:00" content="2016-03-24">
+              2016-03-24
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="1-_写在前面">1. 写在前面</h2><p>记得15年5月自己仔细看了《Head First设计模式》，顿时觉得自己对面向对象的设计理念的理解还有很多缺陷，正好这个学期的高级软件工程课程主要讲的就是面向模式的软件体系架构，自己也准备将Java作为自己的第一编译运行语言，所以决心结合设计模式理念和Java语言实例，深入学习一下设计模式理念。</p>
+<h2 id="2-_动机">2. 动机</h2><p>考虑这样一个应用框架，它可以向用户显示多个文档。在这个框架中，两个主要的抽象是类Application和Document。这两个类都是抽象的，客户必须通过它们的子类来做与具体应用相关的实现。例如，为创建一个绘图应用，我们定义类 DrawingApplication和DrawDocument。Application类负责管理Document并根据需要创建它们—例如，当用户从菜单中选择Open或New的时候。<br><em>出现的问题</em>：Application类仅知道一个新的文档何时应被创建，而不知道哪一种Document将被创建。这就产生了一个尴尬的局面：框架必须实例化类，但是它只知道不能被实例化的抽象类。<br><em>解决方案</em>：Factory Method模式提供了一个解决办案。它封装了哪一个Document子类将被创建的信息并将这些信息从该框架中分离出来。<br>Application的子类重定义 Application的抽象操作 CreatDocument以返回适当的 Document子类对象。一旦一个 Application子类实例化以后，它就可以实例化与应用相关的文档，而无需知道这些文档的类(非抽象类)。我们称CreateDocument是一个<em>工厂方法（factory method）</em>，因为它负责“生产”一个对象。<br><img src="/images/DP/FM/1.PNG" alt="picture"></p>
+<h2 id="3-_意图">3. 意图</h2><p>定义一个用于创建对象的<em>接口</em>，让子类决定实例化哪一个类。Factory Method使一个类的实例化延迟到其子类。</p>
+<h2 id="4-_适用性">4. 适用性</h2><p>在下列情况下可以使用 Factory Method模式：<br>• 当一个类(Creator)不知道它所必须创建的对象的类的时候。<br>• 当一个类(Creator)希望由它的子类来指定它所创建的对象的时候。<br>• 当类将创建对象的职责委托给多个帮助子类中的某一个，并且你希望将哪一个帮助子类<br>是代理者这一信息局部化的时候。</p>
+<h2 id="5-_结构">5. 结构</h2><p><img src="/images/DP/FM/2.PNG" alt="picture"></p>
+<h2 id="6-_参与者">6. 参与者</h2><p>• Product(Document)<br>— 定义工厂方法所创建的对象的接口。<br>• ConcreteProduct(MyDocument)<br>— 实现Product接口。<br>• Creator(Application)<br>— 声明工厂方法，该方法返回一个Product类型的对象。 Creator也可以定义一个工厂方<br>法的缺省实现，它返回一个缺省的ConcreteProduct对象。<br>— 可以调用工厂方法以创建一个Product对象。<br>• ConcreteCreator（MyApplication）<br>— 重定义工厂方法以返回一个ConcreteProduct实例。</p>
+<h2 id="7-_协作">7. 协作</h2><p>• Creator依赖于它的子类来定义工厂方法，所以它返回一个适当的ConcreteProduct实例。</p>
+<h2 id="8-_实例：Factory_design_pattern_used_in_Java_Library">8. 实例：Factory design pattern used in Java Library</h2><p>根据不同的参数，getInstance()返回一个Canlander不同的实例<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">java.util.Calendar - getInstance()</span><br><span class="line">java.util.Calendar - getInstance(TimeZone zone)</span><br><span class="line">java.util.Calendar - getInstance(Locale aLocale)</span><br><span class="line">java.util.Calendar - getInstance(TimeZone zone, Locale aLocale)</span><br><span class="line">java.text.NumberFormat - getInstance()</span><br><span class="line">java.text.NumberFormat - getInstance(Locale inLocale)</span><br></pre></td></tr></table></figure></p>
+<p>可在<a href="http://www.javased.com/?action=source-search" target="_blank" rel="external">javased.com</a>找到Calendar和NumberFormat的源代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * Gets a calendar using the default time zone and locale. The </span><br><span class="line"> * &lt;code&gt;Calendar&lt;/code&gt; returned is based on the current time </span><br><span class="line"> * in the default time zone with the default locale. </span><br><span class="line"> * </span><br><span class="line"> * <span class="doctag">@return</span> a Calendar. </span><br><span class="line"> */</span> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Calendar <span class="title">getInstance</span><span class="params">()</span> </span><br><span class="line"></span>&#123; </span><br><span class="line">    Calendar cal = createCalendar(TimeZone.getDefaultRef(), Locale.getDefault(Locale.Category.FORMAT)); </span><br><span class="line">    cal.sharedZone = <span class="keyword">true</span>; </span><br><span class="line">    <span class="keyword">return</span> cal; </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Gets a calendar using the specified time zone and default locale. </span><br><span class="line"> * The &lt;code&gt;Calendar&lt;/code&gt; returned is based on the current time </span><br><span class="line"> * in the given time zone with the default locale. </span><br><span class="line"> * </span><br><span class="line"> * <span class="doctag">@param</span> zone the time zone to use </span><br><span class="line"> * <span class="doctag">@return</span> a Calendar. </span><br><span class="line"> */</span> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Calendar <span class="title">getInstance</span><span class="params">(TimeZone zone)</span> </span><br><span class="line"></span>&#123; </span><br><span class="line">    <span class="keyword">return</span> createCalendar(zone, Locale.getDefault(Locale.Category.FORMAT)); </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Gets a calendar using the default time zone and specified locale. </span><br><span class="line"> * The &lt;code&gt;Calendar&lt;/code&gt; returned is based on the current time </span><br><span class="line"> * in the default time zone with the given locale. </span><br><span class="line"> * </span><br><span class="line"> * <span class="doctag">@param</span> aLocale the locale for the week data </span><br><span class="line"> * <span class="doctag">@return</span> a Calendar. </span><br><span class="line"> */</span> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Calendar <span class="title">getInstance</span><span class="params">(Locale aLocale)</span> </span><br><span class="line"></span>&#123; </span><br><span class="line">    Calendar cal = createCalendar(TimeZone.getDefaultRef(), aLocale); </span><br><span class="line">    cal.sharedZone = <span class="keyword">true</span>; </span><br><span class="line">    <span class="keyword">return</span> cal; </span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Gets a calendar with the specified time zone and locale. </span><br><span class="line"> * The &lt;code&gt;Calendar&lt;/code&gt; returned is based on the current time </span><br><span class="line"> * in the given time zone with the given locale. </span><br><span class="line"> * </span><br><span class="line"> * <span class="doctag">@param</span> zone the time zone to use </span><br><span class="line"> * <span class="doctag">@param</span> aLocale the locale for the week data </span><br><span class="line"> * <span class="doctag">@return</span> a Calendar. </span><br><span class="line"> */</span> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Calendar <span class="title">getInstance</span><span class="params">(TimeZone zone, </span><br><span class="line">                                   Locale aLocale)</span> </span><br><span class="line"></span>&#123; </span><br><span class="line">    <span class="keyword">return</span> createCalendar(zone, aLocale); </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Calendar <span class="title">createCalendar</span><span class="params">(TimeZone zone, </span><br><span class="line">                                       Locale aLocale)</span> </span><br><span class="line"></span>&#123; </span><br><span class="line">    Calendar cal = <span class="keyword">null</span>; </span><br><span class="line"> </span><br><span class="line">    String caltype = aLocale.getUnicodeLocaleType(<span class="string">"ca"</span>); </span><br><span class="line">    <span class="keyword">if</span> (caltype == <span class="keyword">null</span>) &#123; </span><br><span class="line">        <span class="comment">// Calendar type is not specified. </span></span><br><span class="line">        <span class="comment">// If the specified locale is a Thai locale, </span></span><br><span class="line">        <span class="comment">// returns a BuddhistCalendar instance. </span></span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"th"</span>.equals(aLocale.getLanguage()) </span><br><span class="line">                &amp;&amp; (<span class="string">"TH"</span>.equals(aLocale.getCountry()))) &#123; </span><br><span class="line">            cal = <span class="keyword">new</span> BuddhistCalendar(zone, aLocale); </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">            cal = <span class="keyword">new</span> GregorianCalendar(zone, aLocale); </span><br><span class="line">        &#125; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (caltype.equals(<span class="string">"japanese"</span>)) &#123; </span><br><span class="line">        cal = <span class="keyword">new</span> JapaneseImperialCalendar(zone, aLocale); </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (caltype.equals(<span class="string">"buddhist"</span>)) &#123; </span><br><span class="line">        cal = <span class="keyword">new</span> BuddhistCalendar(zone, aLocale); </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">        <span class="comment">// Unsupported calendar type. </span></span><br><span class="line">        <span class="comment">// Use Gregorian calendar as a fallback. </span></span><br><span class="line">        cal = <span class="keyword">new</span> GregorianCalendar(zone, aLocale); </span><br><span class="line">    &#125; </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> cal; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="参考资料">参考资料</h2><ol>
+<li><a href="https://book.douban.com/subject/1052241/" target="_blank" rel="external">设计模式-可复用面向对象软件的基础</a></li>
+<li><a href="https://book.douban.com/subject/2243615/" target="_blank" rel="external">Head First设计模式</a></li>
+<li><a href="http://www.programcreek.com/" target="_blank" rel="external">Programcreek</a></li>
+<li><a href="http://blog.csdn.net/sfdev/article/details/3906243" target="_blank" rel="external">UML中几种类间关系：继承、实现、依赖、关联、聚合、组合的联系与区别</a></li>
+</ol>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
                 <a class="post-title-link" href="/2016/03/16/Datacenter-Network-Simulation-using-Mininet/" itemprop="url">
                   Datacenter Network Simulation using Mininet
                 </a>
@@ -437,7 +527,7 @@
         
           <span itemprop="articleBody">
             
-              <h2 id="时间轴">时间轴</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2015年应该可以从保研之后开始算起；但是我觉得推免应该可以说是对我四年成绩的一次总体体现，且其中出现的各种意外也可以说是给我狠狠地上了几堂课，还是值得一说的，保研（推免）这个事可以说是从2014年七月份开始算起的，那个时候其实也没有想的那么多事情，但是Tisen说有时间就应该到处看看，见识一下外面的世界，对比一下就知道自己和别人的差距了，顿时觉得十分在理（在这里要特别说一下Tisen，真的是一位有远见，有计划，执行力强的牛人，膜拜ing），然后就是在新老校区之间跑来跑去，打成绩单、荣誉证书、推荐信等相关的东西。搞定这些东西，剩下的就是选择学校了，当时时有很多的合适的学校的，当时因为自己的固执和偏见只选择了里家里近的几所学校，会过来看自己的眼光还是太局限了，另外一个就是担心新的政策的施行问题，也错过了另一些学校的暑期实习，不得不说还是非常遗憾的。到了九十月份的时候基本上很多东西都确定了，不过在这个时候还是犯了提前计划不足，眼光局限的问题，这些方面都是我以后需要注意、改进、提高的提防的方面，但是最后的结果还是蛮令人满意的，非常荣幸能够来到科大继续我的研究生学习。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后就是11月份的考驾照，不得不说考驾照真的是一件熬心的事，天天早起去排队，还要受教练的气，熬了几个月，磕磕绊绊的算是考完驾照了。</p>
+              <h2 id="时间轴">时间轴</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2015年应该可以从保研之后开始算起；但是我觉得推免应该可以说是对我四年成绩的一次总体体现，且其中出现的各种意外也可以说是给我狠狠地上了几堂课，还是值得一说的，保研（推免）这个事可以说是从2014年七月份开始算起的，那个时候其实也没有想的那么多事情，但是Tisen说有时间就应该到处看看，见识一下外面的世界，对比一下就知道自己和别人的差距了，顿时觉得十分在理（在这里要特别说一下Tsien，真的是一位有远见，有计划，执行力强的牛人，膜拜ing），然后就是在新老校区之间跑来跑去，打成绩单、荣誉证书、推荐信等相关的东西。搞定这些东西，剩下的就是选择学校了，当时时有很多的合适的学校的，当时因为自己的固执和偏见只选择了里家里近的几所学校，会过来看自己的眼光还是太局限了，另外一个就是担心新的政策的施行问题，也错过了另一些学校的暑期实习，不得不说还是非常遗憾的。到了九十月份的时候基本上很多东西都确定了，不过在这个时候还是犯了提前计划不足，眼光局限的问题，这些方面都是我以后需要注意、改进、提高的提防的方面，但是最后的结果还是蛮令人满意的，非常荣幸能够来到科大继续我的研究生学习。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后就是11月份的考驾照，不得不说考驾照真的是一件熬心的事，天天早起去排队，还要受教练的气，熬了几个月，磕磕绊绊的算是考完驾照了。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;再后面就是三月份的开学了，开学过后就直接来科大准备毕业课设了，毕业设计是由师兄带着做的，这个毕业设计做的自己并不是非常满意，主要是后面没有做成一个可用，可以展示的model，另外就是还有自己的一些想法没有验证和实现，如果要要给自己的毕业设计打一个分数的话，我觉得差不多70分吧，毕业设计的经历给了我几个指导：</p>
 <ol>
 <li>多和师兄和老师交流，他们的经验可以让自己少走很多的弯路</li>
@@ -1088,140 +1178,6 @@
 
 
     
-      
-
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                <a class="post-title-link" href="/2015/08/03/deep-into-JVM-4/" itemprop="url">
-                  深入理解JVM(4)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2015-08-03T20:21:51+08:00" content="2015-08-03">
-              2015-08-03
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
-<h1 id="类文件结构">类文件结构</h1><p>因为虚拟机可以载入以及运行同一平台无关的字节码，从而实现了程序的“一次编写，出处运行”。</p>
-<h2 id="Class类文件的结构">Class类文件的结构</h2><p>一个编译后的类文件结构如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ClassFile &#123;</span><br><span class="line">    u4			magic;</span><br><span class="line">    u2			minor_version;</span><br><span class="line">    u2			major_version;</span><br><span class="line">    u2			constant_pool_count;</span><br><span class="line">    cp_info		contant_pool[constant_pool_count – <span class="number">1</span>];</span><br><span class="line">    u2			access_flags;</span><br><span class="line">    u2			this_class;</span><br><span class="line">    u2			super_class;</span><br><span class="line">    u2			interfaces_count;</span><br><span class="line">    u2			interfaces[interfaces_count];</span><br><span class="line">    u2			fields_count;</span><br><span class="line">    field_info		fields[fields_count];</span><br><span class="line">    u2			methods_count;</span><br><span class="line">    method_info		methods[methods_count];</span><br><span class="line">    u2			attributes_count;</span><br><span class="line">    attribute_info	attributes[attributes_count];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>magic、minor_version、major_version：指明类的版本和用来编译的JDK的版本</li>
-<li>constant_pool: 类似符号表，但包含更多的信息。</li>
-<li>access_flag: 提供这个类的修改器列表</li>
-<li>this_class:通过提供这个类的完整的index找到常数池，比如：org/jamesdbloom/foo/bar</li>
-<li>super_class: 通过提供父类的完整路径的索引指向常数池，比如：java/lang/Object</li>
-<li>interface: 通过提供所有指向已经实现的接口的索引。。</li>
-<li>fields: 通过提供完整的每个域的描述指向常数池的数组索引</li>
-<li>methods: 通过提供每个方法的完整的签名。。。</li>
-<li>attributes: 略。</li>
-</ul>
-<blockquote>
-<p>常量池之中主要存放两大变量：字面量（Literal）和符号引用（Symbolic Refences）。字符串比较接近于Java语言层面的常量概念，如文本字符串、被声明为final的常量值等。符号引用属于编译原理方面的概念，包括了下面三类常量：</p>
-<ul>
-<li>类和接口的全限定名</li>
-<li>字段的名称和描述符</li>
-<li>方法的名称和描述符</li>
-</ul>
-</blockquote>
-<p>比如编译一下简单的类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.jvminternals; </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleClass</span> </span>&#123;   </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;     </span><br><span class="line">        System.out.println(<span class="string">"Hello"</span>);   </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>那么通过下面指令：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">javap -v -p -s -sysinfo -constants</span><br><span class="line">classes/org/javinternals/SimpleClass.class</span><br></pre></td></tr></table></figure></p>
-<p>将会得到，如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">public class org.jvminternals.SimpleClass   </span><br><span class="line">  SourceFile: "SimpleClass.java"   </span><br><span class="line">  minor version: 0   </span><br><span class="line">  major version: 51   </span><br><span class="line">  flags: ACC_PUBLIC, ACC_SUPER </span><br><span class="line"> Constant pool:    </span><br><span class="line">    #1 = Methodref          #6.#17         //  java/lang/Object."&lt;init&gt;":()V    </span><br><span class="line">    #2 = Fieldref           #18.#19        //  java/lang/System.out:Ljava/io/PrintStream;    </span><br><span class="line">    #3 = String             #20            //  "Hello"    </span><br><span class="line">    #4 = Methodref          #21.#22        //  java/io/PrintStream.println:(Ljava/lang/String;)V    </span><br><span class="line">    #5 = Class              #23            //  org/jvminternals/SimpleClass    </span><br><span class="line">    #6 = Class              #24            //  java/lang/Object    </span><br><span class="line">    #7 = Utf8               &lt;init&gt;    </span><br><span class="line">    #8 = Utf8               ()V    </span><br><span class="line">    #9 = Utf8               Code   </span><br><span class="line">    #10 = Utf8               LineNumberTable   </span><br><span class="line">    #11 = Utf8               LocalVariableTable   </span><br><span class="line">    #12 = Utf8               this   </span><br><span class="line">    #13 = Utf8               Lorg/jvminternals/SimpleClass;   </span><br><span class="line">    #14 = Utf8               sayHello   </span><br><span class="line">    #15 = Utf8               SourceFile   </span><br><span class="line">    #16 = Utf8               SimpleClass.java   </span><br><span class="line">    #17 = NameAndType        #7:#8          //  "&lt;init&gt;":()V   </span><br><span class="line">    #18 = Class              #25            //  java/lang/System   </span><br><span class="line">    #19 = NameAndType        #26:#27        //  out:Ljava/io/PrintStream;   </span><br><span class="line">    #20 = Utf8               Hello   </span><br><span class="line">    #21 = Class              #28            //  java/io/PrintStream   </span><br><span class="line">    #22 = NameAndType        #29:#30        //  println:(Ljava/lang/String;)V   </span><br><span class="line">    #23 = Utf8               org/jvminternals/SimpleClass   </span><br><span class="line">    #24 = Utf8               java/lang/Object   </span><br><span class="line">    #25 = Utf8               java/lang/System   </span><br><span class="line">    #26 = Utf8               out   </span><br><span class="line">    #27 = Utf8               Ljava/io/PrintStream;   </span><br><span class="line">    #28 = Utf8               java/io/PrintStream   </span><br><span class="line">    #29 = Utf8               println   </span><br><span class="line">    #30 = Utf8               (Ljava/lang/String;)V </span><br><span class="line"> &#123;   </span><br><span class="line">    public org.jvminternals.SimpleClass();     </span><br><span class="line">    Signature: ()V     </span><br><span class="line">    flags: ACC_PUBLIC     </span><br><span class="line">    Code:       </span><br><span class="line">      stack=1, locals=1, args_size=1         </span><br><span class="line">        0: aload_0         </span><br><span class="line">        1: invokespecial #1    // Method java/lang/Object."&lt;init&gt;":()V         </span><br><span class="line">        4: return       </span><br><span class="line">      LineNumberTable:         </span><br><span class="line">        line 3: 0       </span><br><span class="line">      LocalVariableTable:         </span><br><span class="line">        Start  Length  Slot  Name   Signature          </span><br><span class="line">         0      5      0    this   Lorg/jvminternals/SimpleClass;    </span><br><span class="line">    public void sayHello();     </span><br><span class="line">    Signature: ()V     </span><br><span class="line">    flags: ACC_PUBLIC     </span><br><span class="line">    Code:       </span><br><span class="line">      stack=2, locals=1, args_size=1         </span><br><span class="line">        0: getstatic      #2    // Field java/lang/System.out:Ljava/io/PrintStream;         </span><br><span class="line">        3: ldc            #3    // String "Hello"         </span><br><span class="line">        5: invokevirtual  #4    // Method java/io/PrintStream.println:(Ljava/lang/String;)V         </span><br><span class="line">        8: return       </span><br><span class="line">      LineNumberTable:        </span><br><span class="line">        line 6: 0         </span><br><span class="line">        line 7: 8       </span><br><span class="line">      LocalVariableTable:        </span><br><span class="line">        Start  Length  Slot  Name   Signature          </span><br><span class="line">         0      9      0    this   Lorg/jvminternals/SimpleClass; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="各个组件的细节">各个组件的细节</h2><h3 id="运行时常量池">运行时常量池</h3><p>Java的bytecode需要数据，但是常常这些数据都太大以至于不能直接存储在bytecode中，所以它存储在常量池中并且bytecode保存着指向常量池的引用。运行时常量池使用的是动态链接。</p>
-<p>一些存储在常量池中的数据有如下类型：</p>
-<ol>
-<li>numeric literaal:数值常量</li>
-<li>String literals:字面串常量String a = “123”</li>
-<li>Class references：类引用</li>
-<li>Field reference：字段引用</li>
-<li>Method reference：方法引用</li>
-</ol>
-<p>比如说：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object foo = <span class="keyword">new</span> Object()</span><br></pre></td></tr></table></figure></p>
-<p>它的bytecode代码如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0: 	new #2 		    // Class java/lang/Object  </span><br><span class="line">1:	dup  </span><br><span class="line">2:	invokespecial #3    // Method java/ lang/Object "&lt;init&gt;"( ) V</span><br></pre></td></tr></table></figure></p>
-<p>new指令后接#2,这个操作数是一个指向常量池的引用，索引值为2，第二个索引是一个类引用，这个所以接着指向常量池中另外一个索引： UTF8 Class java/lang/Object。这个符号连接可以被用来找到java.lang.Object的类。new操作符创造了一个类实例并且初始化它的变量。一个指向类实例的引用然后被加入到operand stack中。Dup指令然后复制了operand stack栈顶的引用并再次加入到栈顶。最后，一个实例初始化方法被调用invokespecial。这个指令同样包含了一个指向常量池的引用。操作符将栈顶的引用当着参数消耗掉。在最后只用一个指向新对象的引用存在。</p>
-<p>如果编译一下的简单代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.jvminternals;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Hello"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>常量池将会如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">Constant pool:</span><br><span class="line">   #1 = Methodref          #6.#17         //  java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">   #2 = Fieldref           #18.#19        //  java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">   #3 = String             #20            //  "Hello"</span><br><span class="line">   #4 = Methodref          #21.#22        //  java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">   #5 = Class              #23            //  org/jvminternals/SimpleClass</span><br><span class="line">   #6 = Class              #24            //  java/lang/Object</span><br><span class="line">   #7 = Utf8               &lt;init&gt;</span><br><span class="line">   #8 = Utf8               ()V</span><br><span class="line">   #9 = Utf8               Code</span><br><span class="line">  #10 = Utf8               LineNumberTable</span><br><span class="line">  #11 = Utf8               LocalVariableTable</span><br><span class="line">  #12 = Utf8               this</span><br><span class="line">  #13 = Utf8               Lorg/jvminternals/SimpleClass;</span><br><span class="line">  #14 = Utf8               sayHello</span><br><span class="line">  #15 = Utf8               SourceFile</span><br><span class="line">  #16 = Utf8               SimpleClass.java</span><br><span class="line">  #17 = NameAndType        #7:#8          //  "&lt;init&gt;":()V</span><br><span class="line">  #18 = Class              #25            //  java/lang/System</span><br><span class="line">  #19 = NameAndType        #26:#27        //  out:Ljava/io/PrintStream;</span><br><span class="line">  #20 = Utf8               Hello</span><br><span class="line">  #21 = Class              #28            //  java/io/PrintStream</span><br><span class="line">  #22 = NameAndType        #29:#30        //  println:(Ljava/lang/String;)V</span><br><span class="line">  #23 = Utf8               org/jvminternals/SimpleClass</span><br><span class="line">  #24 = Utf8               java/lang/Object</span><br><span class="line">  #25 = Utf8               java/lang/System</span><br><span class="line">  #26 = Utf8               out</span><br><span class="line">  #27 = Utf8               Ljava/io/PrintStream;</span><br><span class="line">  #28 = Utf8               java/io/PrintStream</span><br><span class="line">  #29 = Utf8               println</span><br><span class="line">  #30 = Utf8               (Ljava/lang/String;)V</span><br></pre></td></tr></table></figure></p>
-<p>常量池主要包括一下类型：</p>
-<ul>
-<li>Interger: 一个4字节的常量</li>
-<li>Long:     一个8字节的常量</li>
-<li>Float:    一个4字节的浮点数常量</li>
-<li>Double:   一个8字节的浮点数常量</li>
-<li>String:   一个字符串常量指向一个UTF8的入口(他包含真正的字符串常量)。</li>
-<li>UTF8:     一个以UTF8编码的字节流。</li>
-<li>Class:    一个指向另外一个UTF8入口的类常量(此入口包含真正的类名)</li>
-<li>NameAndType:一个以“.”分割的值，每一个指向常量池的另一个入口。第一个值指向一个UTF8入口(它是一个方法或者域名称)，第二个指向另一个UTF8入口(它表示类型)。如果第一个是域名称，第二个则是一个完整的类名。如果第一个是方法名，第二个这是参数列表。</li>
-<li>Fieldref,Methodref,InterfaceMethodref: 一个以“.”分割的值，每一个值指向常量池的另一个入口。第一个入口指向一个类入口，第二个指向一个NameAndType入口。</li>
-</ul>
-<h3 id="属性(方法)表集合">属性(方法)表集合</h3><p><img src="/images/JVM/JVM8.jpg" alt="虚拟机规范预定义的属性"></p>
-<p>现在我们来方法表中的异常属性。<br>异常表存储了每个异常句柄的信息，像：</p>
-<ol>
-<li>起位置</li>
-<li>终位置</li>
-<li>PC偏移量</li>
-<li>正捕捉异常的常量池索引<br>如果一个方法定义了一个try-catch或者try-final的异常句柄，那么一个异常表就会被创建。这包括了每个异常句柄的信息或者final块信息。<br>当一个异常被抛出时，JVM就会在当前方法中搜素匹配的句柄；如果没有找到匹配的，方法将会终止、从当前栈中弹出并且异常在新的当前框架中被重新抛出。如果在所有框架没有完全弹出栈之前没有找到匹配的异常句柄，这个线程就会被终止。如果这个线程是最后的非守护线程，那么JVM将会自终止，例如这个线程是主线程。<br><img src="/images/JVM/JVM9.PNG" alt="异常属性"></li>
-</ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1264,7 +1220,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -1278,7 +1234,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-count">11</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>
