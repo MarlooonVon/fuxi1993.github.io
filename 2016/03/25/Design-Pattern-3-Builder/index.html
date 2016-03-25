@@ -34,7 +34,7 @@
 
 
 
-  <meta name="keywords" content="Java,读书笔记," />
+  <meta name="keywords" content="Design Pattern,Java," />
 
 
 
@@ -43,25 +43,19 @@
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
 
 
-<meta name="description" content="这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。
-HotSpot虚拟机架构以下这幅图展示了Java虚拟机里面的关键组件(是依据Java SE 7版本的Java虚拟机)。
-线程一个线程是程序的一次执行。JVM允许一个应用程序并行运行多个线程。在Hotspot JVM中存在着在Java线程和本地操作系统线程之间的映射。在准备完一个Java线程的所有状态，像thr">
+<meta name="description" content="1. 动机一个RTF（Rich Text Format）文档交换格式的阅读器应能将RTF转换为多种正文格式。该阅读器可以将 RT F文档转换成普通ASCII文本或转换成一个能以交互方式编辑的正文窗口组件。但问题在于可能转换的数目是无限的。因此要能够很容易实现新的转换的增加，同时却不改变RTF阅读器。一个解决办法是用一个可以将 RTF转换成另一种正文表示的TextConverter对象配置这个RTF">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深入理解JVM(2)">
-<meta property="og:url" content="http://yoursite.com/2015/08/02/deep-into-JVM-2/index.html">
+<meta property="og:title" content="Design Pattern(3): Builder">
+<meta property="og:url" content="http://yoursite.com/2016/03/25/Design-Pattern-3-Builder/index.html">
 <meta property="og:site_name" content="My Blog">
-<meta property="og:description" content="这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。
-HotSpot虚拟机架构以下这幅图展示了Java虚拟机里面的关键组件(是依据Java SE 7版本的Java虚拟机)。
-线程一个线程是程序的一次执行。JVM允许一个应用程序并行运行多个线程。在Hotspot JVM中存在着在Java线程和本地操作系统线程之间的映射。在准备完一个Java线程的所有状态，像thr">
-<meta property="og:image" content="http://yoursite.com/images/JVM/JVM4.png">
-<meta property="og:image" content="http://yoursite.com/images/JVM/JVM5.PNG">
-<meta property="og:image" content="http://yoursite.com/images/JVM/JVM6.PNG">
-<meta property="og:updated_time" content="2015-08-02T10:06:36.679Z">
+<meta property="og:description" content="1. 动机一个RTF（Rich Text Format）文档交换格式的阅读器应能将RTF转换为多种正文格式。该阅读器可以将 RT F文档转换成普通ASCII文本或转换成一个能以交互方式编辑的正文窗口组件。但问题在于可能转换的数目是无限的。因此要能够很容易实现新的转换的增加，同时却不改变RTF阅读器。一个解决办法是用一个可以将 RTF转换成另一种正文表示的TextConverter对象配置这个RTF">
+<meta property="og:image" content="http://yoursite.com/images/DP/Builder/1.PNG">
+<meta property="og:image" content="http://yoursite.com/images/DP/Builder/2.PNG">
+<meta property="og:image" content="http://yoursite.com/images/DP/Builder/3.PNG">
+<meta property="og:updated_time" content="2016-03-25T12:23:33.510Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深入理解JVM(2)">
-<meta name="twitter:description" content="这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。
-HotSpot虚拟机架构以下这幅图展示了Java虚拟机里面的关键组件(是依据Java SE 7版本的Java虚拟机)。
-线程一个线程是程序的一次执行。JVM允许一个应用程序并行运行多个线程。在Hotspot JVM中存在着在Java线程和本地操作系统线程之间的映射。在准备完一个Java线程的所有状态，像thr">
+<meta name="twitter:title" content="Design Pattern(3): Builder">
+<meta name="twitter:description" content="1. 动机一个RTF（Rich Text Format）文档交换格式的阅读器应能将RTF转换为多种正文格式。该阅读器可以将 RT F文档转换成普通ASCII文本或转换成一个能以交互方式编辑的正文窗口组件。但问题在于可能转换的数目是无限的。因此要能够很容易实现新的转换的增加，同时却不改变RTF阅读器。一个解决办法是用一个可以将 RTF转换成另一种正文表示的TextConverter对象配置这个RTF">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -73,7 +67,7 @@ HotSpot虚拟机架构以下这幅图展示了Java虚拟机里面的关键组件
 
 
 
-  <title> 深入理解JVM(2) | My Blog </title>
+  <title> Design Pattern(3): Builder | My Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -208,7 +202,7 @@ HotSpot虚拟机架构以下这幅图展示了Java虚拟机里面的关键组件
             
             
               
-                深入理解JVM(2)
+                Design Pattern(3): Builder
               
             
           </h1>
@@ -217,8 +211,8 @@ HotSpot虚拟机架构以下这幅图展示了Java虚拟机里面的关键组件
         <div class="post-meta">
           <span class="post-time">
             Posted on
-            <time itemprop="dateCreated" datetime="2015-08-02T16:16:11+08:00" content="2015-08-02">
-              2015-08-02
+            <time itemprop="dateCreated" datetime="2016-03-25T12:11:05+08:00" content="2016-03-25">
+              2016-03-25
             </time>
           </span>
 
@@ -241,48 +235,19 @@ HotSpot虚拟机架构以下这幅图展示了Java虚拟机里面的关键组件
       
 
       
-        <span itemprop="articleBody"><p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
-<h2 id="HotSpot虚拟机架构">HotSpot虚拟机架构</h2><p>以下这幅图展示了Java虚拟机里面的关键组件(是依据Java SE 7版本的Java虚拟机)。<br><img src="/images/JVM/JVM4.png" alt="HotSpot虚拟机"></p>
-<h2 id="线程">线程</h2><p>一个线程是程序的一次执行。JVM允许一个应用程序并行运行多个线程。在Hotspot JVM中存在着在Java线程和本地操作系统线程之间的映射。在准备完一个Java线程的所有状态，像thread-local存储、缓冲分配、对象同步、栈和程序计数器之后，本地线程就被创造出来了。本地线程将在Java线程终止后被回收。操作系统因此负责调度所有的线程和分配给它们可用的CPU。一旦本地线程初始化后，它将调用Java 线程里面的run()方法。当run()方法返回时，未捕捉的异常被处理，随后本地线程确定JVM是否需要因为线程的终止而被终止(比如说，它是最后的非守护线程)。当线程终止后，所有本地线程的和JVM线程的资源将被释放。</p>
-<h3 id="JVM系统线程">JVM系统线程</h3><p>如果你是用jconsole或者其他任何调试器是有可能看到后台有无数的线程在运行。这些后台线程运行是来补充主线程的，其部分是由于调用public static void main(String[])而构造出来的。在Hotspot JVM系统中主要的后台系统线程如下：</p>
-<ul>
-<li>VM 线程：这个线程等待那些需要JVM到达一个安全点(Safe-point)的操作。之所以这些操作需要发生在一个独立的线程是因为它们都需要JVM在一个安全点(safe-point)、这个点对堆的修改不会出现。线程执行的操作是stop-the-world型的垃圾回收器、线程栈dumps、thread suspension、和biased locking revocation。</li>
-<li>Periodic task 线程:这些线程是负责哪些用于调度阶段性的操作执行的时间事件(比如中断)</li>
-<li>GC 线程： 这些线程支持不同类型的垃圾回收活动</li>
-<li>Compiler 线程： 这些线程在运行时将byte code编译成本地码</li>
-<li>Signal dispatcher thread 这个线程接受发送给JVM进程的信号并且通过调用合适的JVM方法处理它们。<h3 id="每个线程">每个线程</h3>每一个线程有如下组件：<ol>
-<li>程序计数器(PC):除非它是本地的(Native)(在这种情况，PC的值为空(Undefined))，那么PC表示当前指令的地址，JVM用PC去追踪当前执行的指令；事实上PC将会指向方法区(Method Area)的一个内存地址；每条线程都需要一个独立的PC，各条线程之间互不影响，独立存储，我们称这类内存区域为“线程私有”的内存。</li>
-<li>栈：虚拟机栈描绘的是Java方法执行的内存模型：每个方法被执行的时候同时会创建一个栈帧(Stack Frame)用于存储局部变量表、操作栈、动态连接、方法出口(Return)等信息。在Java虚拟机规范中，对这个区域规定了两种异常情况：StackOverflowError异常；OutOfMemoryError异常（虚拟机栈在扩展时无法申请到足够的内存时会抛出）。</li>
-<li>本地方法栈(Native Stack)：本地方法栈与虚拟机栈所发挥的作用是非常相似的其区别不过是虚拟机栈执行的是Java方法(也就是字节码)服务，而本地方法栈则是为虚拟机执行Native方法服务。同样，在Java虚拟机规范中，对这个区域规定了两种异常情况：StackOverflowError异常；OutOfMemoryError异常（虚拟机栈在扩展时无法申请到足够的内存时会抛出）。</li>
-<li>栈限制：一个栈可以是动态的或者固定的大小。如果一个线程需要一个大的栈那么一个StackOverflowError异常被抛出。如果一个线程需要一些多的框架并且没有足够的存储分配那么一个OutOfMemoryError异常被抛出。</li>
-</ol>
-</li>
-</ul>
-<p><strong> 关于每个虚拟机栈的具体内容，可见会在下几个章节总结出来 </strong></p>
-<h2 id="线程共享的内容">线程共享的内容</h2><h3 id="堆内存">堆内存</h3><p>堆是用于在运行时分配类实例和数组的。因为一个框架(Frame)在创建后不是被设计为可以改变的，所以数组和对象永远不会存储在栈中。框架只会存储指向堆中的对象或者数组的引用。不像原始变量和引用存储在局部变量数组(在框架)中，对象总是存储在堆中，所以它们在一个方法结束后不会被移除。相反对象只会被垃圾收集器移除。</p>
-<h3 id="非堆内存">非堆内存</h3><p>那些被逻辑上认为是JVM机制的一部分对象不是被创建在堆中。<br>非堆内存包括：</p>
-<ol>
-<li>永久一代(permanent generation), 包括：<ul>
-<li>方法区(method area)</li>
-<li>内部字符串</li>
-</ul>
-</li>
-<li>缓存代码：主要用来存储那些被JIT编译器编译成的本地码(Native Code)</li>
-</ol>
-<blockquote>
-<p>Just In Time(JIT) Compilation：Java byte code 是被解释的但是这个并没有直接在JVM的宿主机CPU上执行本地代码快。为了改善性能，Oracle Hotspot VM寻找那些频繁执行的byte code代码并将它们编译成本地码。本地代码然后存放在缓存代码中(code cache)。用这种方法，Hotspot VM试着选择最合适的方法去在编译代码和执行解释的代码之间取得平衡。</p>
-</blockquote>
-<p><strong> 关于方法区的具体内容会在下几个章节写</strong></p>
-<h2 id="对象访问">对象访问</h2><p>对象访问涉及到Java栈、Java堆、方法去这三个重要的内存区域。<br>例如下面的代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object obj = <span class="keyword">new</span> Object();</span><br></pre></td></tr></table></figure></p>
-<p>假设这句代码出现在方法体中，那么“Object obj”这部分语意将反映在Java栈的本地变量表中，作为一个reference类型出现。而“new Object()”这部分的语义将会反映在Java堆中，形成一块存储了Ojbect()类型所有实例数据值(Instance Data, 对象中各个实例字段的数据)的结构化内存。另外在Java堆中还必须包含能查找到此对象类型数据(如对象类型、父类、实现的接口、方法等)的地址信息，这些类型信息则存储在方法区中。<br>由于reference类型在Java虚拟机规范里只定义了一个指向对象的引用，并没有定义这个引用应该通过那种方式去定位，以及访问到Java堆中的具体位置，因此不同虚拟机实现的对象访问方式会有所不同，主流的有两种：使用句柄和直接指针。</p>
-<ul>
-<li>通过句柄访问对象：<br><img src="/images/JVM/JVM5.PNG" alt="通过句柄访问对象"></li>
-<li>通过直接指针访问方式：<br><img src="/images/JVM/JVM6.PNG" alt="通过直接指针访问方式"></li>
-</ul>
-<p><strong> 引用 </strong></p>
-<ol>
-<li><a href="http://www.cnblogs.com/maverick-fu/p/4451811.html#3170784" target="_blank" rel="external">JVM剖析</a></li>
-<li><a href="http://blog.jamesdbloom.com/JVMInternals.html" target="_blank" rel="external">JVM Internals</a></li>
+        <span itemprop="articleBody"><h2 id="1-_动机">1. 动机</h2><p>一个RTF（Rich Text Format）文档交换格式的阅读器应能将RTF转换为多种正文格式。该阅读器可以将 RT F文档转换成普通ASCII文本或转换成一个能以交互方式编辑的正文窗口组件。但问题在于可能转换的数目是无限的。因此要能够很容易实现新的转换的增加，同时却不改变RTF阅读器。<br>一个解决办法是用一个可以将 RTF转换成另一种正文表示的TextConverter对象配置这个RTFReader类。当RTFReader对RTF文档进行语法分析时，它使用TextConverter去做转换。无论何时RTFReader识别了一个RTF标记（或是普通正文或是一个 RTF控制字），它都发送一个请求给TextConverter去转换这个标记。TextConverter对象负责进行数据转换以及用特定格式表示该标记，如下图所示。<br><img src="/images/DP/Builder/1.PNG" alt="picture"><br>每种转换器类将创建和装配一个复杂对象的机制隐含在抽象接口的后面。转换器独立于阅读器，阅读器负责对一个 RTF文档进行语法分析。<br>Builder模式描述了所有这些关系。每一个<strong>转换器类</strong>在该模式中被称为<strong>生成器（builder）</strong>，而<strong>阅读器</strong>则称为<strong>导向器（director）</strong>。在上面的例子中，Builder模式将分析文本格式的算法（即RTF文档的语法分析程序）与描述怎样创建和表示一个转换后格式的算法分离开来。这使我们可以重用 RTFReader的语法分析算法，根据RTF文档创建不同的正文表示—仅需使用不同的TextConverter的子类配置该RTFReader即可。</p>
+<h2 id="2-_意图">2. 意图</h2><p>将一个复杂对象的<strong>构建</strong>与它的<strong>表示</strong>分离，使得<strong>同样的构建过程</strong>可以<strong>创建不同的表示</strong>。</p>
+<h2 id="3-_适用性">3. 适用性</h2><p>在以下情况使用Builder模式<br>• 当创建复杂对象的算法应该独立于<strong>该对象的组成部分</strong>以及它们的<strong>装配方式</strong>时。<br>• 当构造过程必须允许被构造的对象有<strong>不同的表示</strong>时。</p>
+<h2 id="4-_结构">4. 结构</h2><p><img src="/images/DP/Builder/2.PNG" alt="picture"></p>
+<h2 id="5-_参与者">5. 参与者</h2><p>• Builder（ TextConverter）<br>— 为创建一个Product对象的各个部件指定抽象接口。<br>• ConcreteBuilder（ ASCIIConverter、 TeXConverter、 TextWidgetConverter）<br>— 实现Builder的接口以构造和装配该产品的各个部件。<br>— 定义并明确它所创建的表示。<br>— 提供一个检索产品的接口（例如， GetASCIIText和GetTextWidget）。<br>• Director（ RTFReader）<br>— 构造一个使用Builder接口的对象。<br>• Product（ ASCIIText、 TeXText、 TextWidget）<br>— 表示被构造的复杂对象。ConcreteBuilder创建该产品的内部表示并定义它的装配过程。<br>— 包含定义组成部件的类，包括将这些部件装配成最终产品的接口。</p>
+<h2 id="6-协作">6.协作</h2><p>• 客户创建Director对象，并用它所想要的Builder对象进行配置。<br>• 一旦产品部件被生成，导向器就会通知生成器。<br>• 生成器处理导向器的请求，并将部件添加到该产品中。<br>• 客户从生成器中检索产品。<br>下面的交互图说明了Builder和Director是如何与一个客户协作的。<br><img src="/images/DP/Builder/3.PNG" alt="picture"></p>
+<h2 id="7-实例">7.实例</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NutritionalFacts</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> sodium;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> fat;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> carbo;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> sodium;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> fat;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> carbo;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Builder</span><span class="params">(<span class="keyword">int</span> s)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.sodium = s;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">fat</span><span class="params">(<span class="keyword">int</span> f)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.fat = f;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">carbo</span><span class="params">(<span class="keyword">int</span> c)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.carbo = c;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> NutritionalFacts <span class="title">build</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> NutritionalFacts(<span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">NutritionalFacts</span><span class="params">(Builder b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.sodium = b.sodium;</span><br><span class="line">        <span class="keyword">this</span>.fat = b.fat;</span><br><span class="line">        <span class="keyword">this</span>.carbo = b.carbo;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        NutritionalFacts n = </span><br><span class="line">            <span class="keyword">new</span> NutritionalFacts.Builder(<span class="number">10</span>).carbo(<span class="number">23</span>).fat(<span class="number">1</span>).build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考资料">参考资料</h2><ol>
+<li><a href="https://book.douban.com/subject/1052241/" target="_blank" rel="external">设计模式-可复用面向对象软件的基础</a></li>
+<li><a href="https://book.douban.com/subject/2243615/" target="_blank" rel="external">Head First设计模式</a></li>
+<li><a href="http://www.programcreek.com/" target="_blank" rel="external">Programcreek</a></li>
+<li><a href="http://blog.csdn.net/sfdev/article/details/3906243" target="_blank" rel="external">UML中几种类间关系：继承、实现、依赖、关联、聚合、组合的联系与区别</a></li>
+<li><a href="http://stackoverflow.com/questions/5007355/builder-pattern-in-effective-java" target="_blank" rel="external">Builder Pattern in Effective Java</a></li>
 </ol>
 </span>
       
@@ -292,9 +257,9 @@ HotSpot虚拟机架构以下这幅图展示了Java虚拟机里面的关键组件
       
         <div class="post-tags">
           
-            <a href="/tags/Java/" rel="tag">#Java</a>
+            <a href="/tags/Design-Pattern/" rel="tag">#Design Pattern</a>
           
-            <a href="/tags/读书笔记/" rel="tag">#读书笔记</a>
+            <a href="/tags/Java/" rel="tag">#Java</a>
           
         </div>
       
@@ -303,17 +268,13 @@ HotSpot虚拟机架构以下这幅图展示了Java虚拟机里面的关键组件
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/07/31/deep-into-JVM-1/" rel="next" title="深入理解JVM(1)">
-                <i class="fa fa-chevron-left"></i> 深入理解JVM(1)
+              <a href="/2016/03/24/Design-Pattern-2-Abstact-Factory-Method/" rel="next" title="Design Pattern(2): Abstact Factory Method">
+                <i class="fa fa-chevron-left"></i> Design Pattern(2): Abstact Factory Method
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/08/02/deep-into-JVM-3/" rel="prev" title="深入理解JVM(3)">
-                深入理解JVM(3) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -431,7 +392,7 @@ HotSpot虚拟机架构以下这幅图展示了Java虚拟机里面的关键组件
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HotSpot虚拟机架构"><span class="nav-number">1.</span> <span class="nav-text">HotSpot虚拟机架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程"><span class="nav-number">2.</span> <span class="nav-text">线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM系统线程"><span class="nav-number">2.1.</span> <span class="nav-text">JVM系统线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#每个线程"><span class="nav-number">2.2.</span> <span class="nav-text">每个线程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程共享的内容"><span class="nav-number">3.</span> <span class="nav-text">线程共享的内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#堆内存"><span class="nav-number">3.1.</span> <span class="nav-text">堆内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非堆内存"><span class="nav-number">3.2.</span> <span class="nav-text">非堆内存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象访问"><span class="nav-number">4.</span> <span class="nav-text">对象访问</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-_动机"><span class="nav-number">1.</span> <span class="nav-text">1. 动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-_意图"><span class="nav-number">2.</span> <span class="nav-text">2. 意图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-_适用性"><span class="nav-number">3.</span> <span class="nav-text">3. 适用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-_结构"><span class="nav-number">4.</span> <span class="nav-text">4. 结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-_参与者"><span class="nav-number">5.</span> <span class="nav-text">5. 参与者</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-协作"><span class="nav-number">6.</span> <span class="nav-text">6.协作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-实例"><span class="nav-number">7.</span> <span class="nav-text">7.实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">8.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
