@@ -200,6 +200,713 @@
             
             
               
+                <a class="post-title-link" href="/2016/03/16/Datacenter-Network-Simulation-using-Mininet/" itemprop="url">
+                  Datacenter Network Simulation using Mininet
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2016-03-16T22:10:35+08:00" content="2016-03-16">
+              2016-03-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/16/Datacenter-Network-Simulation-using-Mininet/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/16/Datacenter-Network-Simulation-using-Mininet/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="一-_实验环境">一. 实验环境</h2><p>Ubuntu 14.04 LTS (GNU/Linux 3.13.0-24-generic i686), mininet 2.2.1, puTTY, Xming等</p>
+<h2 id="二-_实验步骤">二. 实验步骤</h2><ol>
+<li>安装ubuntu14.04：将实验用的Ubuntu虚拟机磁盘镜像导入到VMware workstation中启动，为虚拟机的网卡分配ip地址；</li>
+<li>在宿主机上通过putty登录上已经启动的虚拟机：<br><img src="/images/SDN/1.png" alt="picture"></li>
+<li>下载，安装，配置Xming，完成后重启Xming；</li>
+<li>在虚拟机上键入“xterm”，出现如下：<br><img src="/images/SDN/2.png" alt="picture"><br>说明能正常启动xterm；</li>
+<li>分别针对两个实验要求，设计，完成相关的实验；</li>
+</ol>
+<h2 id="三-_网络拓扑">三. 网络拓扑</h2><p><img src="/images/SDN/3.png" alt="picture"></p>
+<h2 id="四-_实验一：With_Controller:_spanning_tree,_like_failures">四. 实验一：With Controller: spanning tree, like failures</h2><h3 id="1_利用miniedit完成上述网络拓扑的描述">1 利用miniedit完成上述网络拓扑的描述</h3><h4 id="1-1_利用miniedit将各个组件：controller,_switch,_host,_link添加上去：">1.1 利用miniedit将各个组件：controller, switch, host, link添加上去：</h4><p><img src="/images/SDN/4.png" alt="picture"></p>
+<h4 id="1-2_根据FatTree的定址方式为h1_~_h12分配ip地址,如为h1分配地址：">1.2 根据FatTree的定址方式为h1 ~ h12分配ip地址,如为h1分配地址：</h4><p><img src="/images/SDN/5.png" alt="picture"></p>
+<h4 id="1-3_配置controller_c0的type为“remote_controller”类型:">1.3 配置controller c0的type为“remote controller”类型:</h4><p><img src="/images/SDN/6.png" alt="picture"></p>
+<h4 id="1-4_“File”_-&gt;_“Save”,保存为-mn文件">1.4 “File” -&gt; “Save”,保存为.mn文件</h4><h4 id="1-5_“File”_-&gt;_“Export_Level_2_Script”，导出为-py文件">1.5 “File” -&gt; “Export Level 2 Script”，导出为.py文件</h4><h3 id="2_找到并画出生成树拓扑">2 找到并画出生成树拓扑</h3><p>为了找到当前的生成数拓扑，需要确定当前所有交换机每个端口的状态。Mininet转储命令显示端口描述每个端口的状态。这个命令写了很多的信息终端,为简单起见,我只显示相关的输出一个开关下面的输出:<br><img src="/images/SDN/7.png" alt="picture"><br>根据每个交换机的各个端口状态，可以画出如下的生成树拓扑：<br><img src="/images/SDN/8.png" alt="picture"></p>
+<h3 id="3_使OpenFlow交换机表现成学习的交换机">3 使OpenFlow交换机表现成学习的交换机</h3><p>运行指令“sudo ./pox/pox.py forwarding.l2_learning openflow.spanning_tree –no-flood –hold-down log.level –DEBUG samples.pretty_log openflow.discovery host_tracker info.packet_dump”可以达到上述要求。<br>运行pingall指令得到如下结果：<br><img src="/images/SDN/9.png" alt="picture"><br>根据利用sudo ovs-ofctl dump-flows s3指令可以查看s3的流表如下：<br><img src="/images/SDN/10.png" alt="picture"></p>
+<h3 id="4_模拟链路损坏的情况（至少三条链路）">4 模拟链路损坏的情况（至少三条链路）</h3><h4 id="4-1_假设s2-s4,_s5-s7,_s9-s11三条链路down掉：">4.1 假设s2-s4, s5-s7, s9-s11三条链路down掉：</h4><p><img src="/images/SDN/11.png" alt="picture"></p>
+<h4 id="4-2_显示新的网络生成树拓扑">4.2 显示新的网络生成树拓扑</h4><p>在此运行上面提到的命令，得到新的网络生成树拓扑如下：<br><img src="/images/SDN/12.png" alt="picture"></p>
+<h4 id="4-3_在有受损链路的网络pingall结果：">4.3 在有受损链路的网络pingall结果：</h4><p><img src="/images/SDN/13.png" alt="picture"></p>
+<h4 id="4-4_查看流表">4.4 查看流表</h4><p><img src="/images/SDN/14.png" alt="picture"></p>
+<h2 id="五-_实验二：Without_Controller:_implement_FatTree’s_routing_rules_with_switch_flow_rules">五. 实验二：Without Controller: implement FatTree’s routing rules with switch flow rules</h2><h3 id="1_在仿真脚本中为交换机加入合适的流表">1 在仿真脚本中为交换机加入合适的流表</h3><p>在生成的FatTree拓扑树的.py代码中，“info( ‘<em>*</em> Post configure switches and hosts\n’)”的位置下面添加构建流表的代码，如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#   command_arp = r'ovs-ofctl add-flow %s "dl_type=0x806,  arp_tpa=10.%d.%d.%d, actions=output:%d"' % ('s1', 5, 6, 7, (7-2+1)%2 + 2 + 1)</span></span><br><span class="line"><span class="comment">#    print command_arp</span></span><br><span class="line"><span class="comment">#    net.get('s1').cmd(command_arp)</span></span><br><span class="line">    pods = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>)]</span><br><span class="line">    switches = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>)]</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">	<span class="keyword">for</span> z <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">4</span>):</span><br><span class="line">	    switch = <span class="string">'s%d'</span> % (x*<span class="number">4</span> + z + <span class="number">1</span>)</span><br><span class="line">	    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">4</span>):</span><br><span class="line">		<span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">		    <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">			command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, j, k, i, (i-<span class="number">2</span>+z)%<span class="number">2</span> + <span class="number">2</span> + <span class="number">1</span>) </span><br><span class="line">			command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, j, k, i, (i-<span class="number">2</span>+z)%<span class="number">2</span> + <span class="number">2</span> + <span class="number">1</span>)</span><br><span class="line">			net.get(switch).cmd(command_arp)</span><br><span class="line">			net.get(switch).cmd(command_ip) </span><br><span class="line">	    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">		<span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">		    command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, i, j + <span class="number">2</span>, i + <span class="number">1</span>) </span><br><span class="line">		    command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, i, j + <span class="number">2</span>, i + <span class="number">1</span>)</span><br><span class="line">		    net.get(switch).cmd(command_arp)</span><br><span class="line">		    net.get(switch).cmd(command_ip)</span><br><span class="line">	<span class="keyword">for</span> z <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">	    switch = <span class="string">'s%d'</span> % (x*<span class="number">4</span> + z + <span class="number">1</span>)</span><br><span class="line">	    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">4</span>):</span><br><span class="line">		<span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">		    <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">		        command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, j, k, i, (i-<span class="number">2</span>+z)%<span class="number">2</span> + <span class="number">2</span> + <span class="number">1</span>) </span><br><span class="line">		        command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, j, k, i, (i-<span class="number">2</span>+z)%<span class="number">2</span> + <span class="number">2</span> + <span class="number">1</span>)</span><br><span class="line">			net.get(switch).cmd(command_arp)</span><br><span class="line">			net.get(switch).cmd(command_ip)</span><br><span class="line">	    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">	        command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, z, (i+<span class="number">2</span>), i + <span class="number">1</span>)  </span><br><span class="line">	        command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, z, (i+<span class="number">2</span>), i + <span class="number">1</span>)</span><br><span class="line">		net.get(switch).cmd(command_arp)</span><br><span class="line">		net.get(switch).cmd(command_ip)</span><br><span class="line">    </span><br><span class="line">    switches = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">17</span>,<span class="number">21</span>)]</span><br><span class="line">    <span class="keyword">for</span> z <span class="keyword">in</span> range(<span class="number">17</span>,<span class="number">21</span>):</span><br><span class="line">	switch = <span class="string">'s%d'</span> % z</span><br><span class="line">	<span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">4</span>):</span><br><span class="line">	    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">2</span>):</span><br><span class="line">		<span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">4</span>):</span><br><span class="line">    	            command_arp = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x806, arp_tpa=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, j, k, x + <span class="number">1</span>) </span><br><span class="line">	            command_ip = <span class="string">r'ovs-ofctl add-flow %s "dl_type=0x800, nw_dst=10.%d.%d.%d, actions=output:%d"'</span> % (switch, x, j, k, x + <span class="number">1</span>)</span><br><span class="line">		    net.get(switch).cmd(command_arp)</span><br><span class="line">		    net.get(switch).cmd(command_ip)</span><br></pre></td></tr></table></figure></p>
+<h3 id="2_用pingall指令测试路由规则">2 用pingall指令测试路由规则</h3><p><img src="/images/SDN/15.png" alt="picture"><br>结果显示，主机之间能够完全Ping通。</p>
+<h3 id="3_发证明FatTree中的流量通过流表被平均分配">3 发证明FatTree中的流量通过流表被平均分配</h3><p>通过iperf指令来验证处于同一个pod，不同pod的主机之间的流量数据：<br><img src="/images/SDN/16.png" alt="picture"><br>绘制成图标如下：<br><img src="/images/SDN/17.png" alt="picture"><br>数据表明，h1到其他的主机之间的上行、下行带宽基本都在19Gbits左右，比较平均。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2016/01/24/advices-for-2016/" itemprop="url">
+                  advice && list for 2016
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2016-01-24T19:30:02+08:00" content="2016-01-24">
+              2016-01-24
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/24/advices-for-2016/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/24/advices-for-2016/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="关于生活">关于生活</h2><h3 id="1-for_sports">1.for sports</h3><ul>
+<li>be professional:无论是健身，跑步，还是游泳，都应该尽量专业，以达到高效、安全的目的；这方面可以从知乎、quora以及相关的论坛找到相关的专业知识。</li>
+<li>try to be regular: 虽然有各种各样的事情来打乱计划，但是应该尽量保持有规律的运动，每个星期尽量能偶健身一到两次，游泳一次。</li>
+<li>try to break the bottleneck:尽量有意识的通过较为专业的训练来突破自己的界限，走出身体的舒适区，尝试那些没有试过的分支项目。</li>
+</ul>
+<h3 id="2-for_regular_life">2.for regular life</h3><ul>
+<li>don’t judge: cited from 《The Great Gatsby》  <blockquote>
+<p>‘Whenever you feel like criticizing any one,’ he told me,’just remember that all the people in this world haven’t<br>had the advantages that you’ve had.’</p>
+</blockquote>
+</li>
+<li>注意健康饮食： 不吃夜宵，早餐尽量吃高蛋白事物，尽量吃低脂食物。</li>
+<li>规律睡眠：尽量在十二点之前入睡，八点之前起床。</li>
+<li>敏锐观察，不断自省：留心生活中的人和事，理解其中的小规律(规矩)，并不断取其精华，去其糟粕，不断充实、完善自己。</li>
+<li>知行合一：“知是行的主意，行是知的工夫；知是行之始，行是知之成” -王守仁</li>
+</ul>
+<h2 id="关于学习">关于学习</h2><ul>
+<li>完成实验室的项目，争取在计划时间内成功交付<ul>
+<li>能找到自己做的部分里有价值的东西，并提交开源代码及报告</li>
+</ul>
+</li>
+<li>及时记下自己在平时脑子里冒出来的idea, 并花一定的时间分析它的可行性和价值<ul>
+<li>idea is important, so track it down</li>
+</ul>
+</li>
+<li>及早确定研究方向，以便能够及早做出成果，当然能发出一到两篇论文就更好了</li>
+<li>及时总结记录，好记性不如烂笔头</li>
+</ul>
+<p><em>to be continued</em></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2016/01/24/2015总结/" itemprop="url">
+                  2015总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2016-01-24T09:40:19+08:00" content="2016-01-24">
+              2016-01-24
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/24/2015总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/24/2015总结/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="时间轴">时间轴</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2015年应该可以从保研之后开始算起；但是我觉得推免应该可以说是对我四年成绩的一次总体体现，且其中出现的各种意外也可以说是给我狠狠地上了几堂课，还是值得一说的，保研（推免）这个事可以说是从2014年七月份开始算起的，那个时候其实也没有想的那么多事情，但是Tisen说有时间就应该到处看看，见识一下外面的世界，对比一下就知道自己和别人的差距了，顿时觉得十分在理（在这里要特别说一下Tsien，真的是一位有远见，有计划，执行力强的牛人，膜拜ing），然后就是在新老校区之间跑来跑去，打成绩单、荣誉证书、推荐信等相关的东西。搞定这些东西，剩下的就是选择学校了，当时时有很多的合适的学校的，当时因为自己的固执和偏见只选择了里家里近的几所学校，会过来看自己的眼光还是太局限了，另外一个就是担心新的政策的施行问题，也错过了另一些学校的暑期实习，不得不说还是非常遗憾的。到了九十月份的时候基本上很多东西都确定了，不过在这个时候还是犯了提前计划不足，眼光局限的问题，这些方面都是我以后需要注意、改进、提高的提防的方面，但是最后的结果还是蛮令人满意的，非常荣幸能够来到科大继续我的研究生学习。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后就是11月份的考驾照，不得不说考驾照真的是一件熬心的事，天天早起去排队，还要受教练的气，熬了几个月，磕磕绊绊的算是考完驾照了。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;再后面就是三月份的开学了，开学过后就直接来科大准备毕业课设了，毕业设计是由师兄带着做的，这个毕业设计做的自己并不是非常满意，主要是后面没有做成一个可用，可以展示的model，另外就是还有自己的一些想法没有验证和实现，如果要要给自己的毕业设计打一个分数的话，我觉得差不多70分吧，毕业设计的经历给了我几个指导：</p>
+<ol>
+<li>多和师兄和老师交流，他们的经验可以让自己少走很多的弯路</li>
+<li>要带着讨论的态度看待别人的论文，不能拿来主义，应取其精华，去其糟粕</li>
+<li>在进行专业性的演讲时应该充分考虑到听者的专业层次</li>
+</ol>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在后面就是开学的事情了，上学期的课其实还有很多蛮有意思的，首先要说的是密码学，原本我是不喜欢密码学这个方向的，觉得都是一堆的数论知识很无聊，但是上了课就觉得老师讲的蛮有意思的，唯一的缺憾就是没有什么相关的project，感觉有点浮在表面上；下一个我喜欢的课就是老王的导师教的高级计算机网络，虽然上课的时候并没有听多少，但是project做的很开心，也学习了很多，像目前研究的比较热的SDN, 新型网络架构等都可以说让我打开眼界；另外一门组合数学的课尽是理论，到目前为止我还没看到它对与计算机科学有什么用的啊，看来还是我的level太低了；</p>
+<h2 id="生活方面">生活方面</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关于生活方面，首先是运动方面，这一年的各种运动也都有一直在做，但是因为各种各样的原因总是断断续续的，一直不能持续的训练，其实这个是可以规律的进行的，只是自己的毅力还是不够吧，想想当初之所以选择科大，健身房也是吸引我的一个重要因素，不能因为生活，学习中的琐事就放弃了这么nice的健身氛围。另外就是游泳，由于办了游泳卡，去游泳馆的次数还是蛮多的，只用四五次就学会了蛙泳，彻底告别狗刨，但是也是因为自己的注意，导致耳朵进了水，最严重的时候几乎都听不到声音，跟失聪了一样，到最后不得不进行鼓膜穿刺才感觉好一点。所以以后要注意在运动的时候要十分注意进行防护，以免给自己造成不必要的疼苦。关于跑步，这一年总共也就跑了几十次吧，不是很多，特别是来到科大后，因为空气质量的原因就跑得比较少了，自己在跑步机上跑又会感觉自己的脚掌内部非常疼。我想这一切都是因为自己的不专业导致的，所以说以后在运动中，一定要科学地来进行，努力地做到专业，让自己得到有效且安全的提升。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2016/01/03/Spark-SQL对多数据源的支持/" itemprop="url">
+                  Spark SQL对多数据源的支持
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2016-01-03T19:08:17+08:00" content="2016-01-03">
+              2016-01-03
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/03/Spark-SQL对多数据源的支持/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/03/Spark-SQL对多数据源的支持/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="1-_什么是Spark_SQL?">1. 什么是Spark SQL?</h2><p>Spark SQL是一个针对结构化数据的Spark框架，它提供了一个叫DataFrames的编程抽象，而且还可以扮演分布式SQL查询引擎的角色。</p>
+<h3 id="1-1_Spark_SQL提供的数据抽象:DataFrame">1.1 Spark SQL提供的数据抽象:DataFrame</h3><p>一个DataFrame是一个列式数据构成的数据集合。它概念上等同于关系数据库中的一张表或者Python/R语言中的框架，但是在底层有更多的优化。DataFrame可以通过广泛的数据源来构建，例如：结构化的数据文件、Hive中的表、外部的数据库，或者已经存在的RDD。</p>
+<blockquote>
+<p>关于Spark SQL更多的介绍，可见<a href="http://spark.apache.org/docs/latest/sql-programming-guide.html#creating-dataframes" target="_blank" rel="external">Spark SQL and DataFrame Guide</a></p>
+</blockquote>
+<h2 id="2-_支持JSON数据类型">2. 支持JSON数据类型</h2><p>以下关于Spark SQL对JSON文件的处理过程同样适用与其他各种类型的外部数据源，DataFrame数据结构提供了统一的数据抽象。</p>
+<h3 id="2-1_开始：SQLContext">2.1 开始：SQLContext</h3><p>Spark SQL的入口是SQLContext类（或者是它的子类）。为了创建SQLContext，只需要SparkContext。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sc</span>:</span> <span class="type">SparkContext</span> <span class="comment">// An existing SparkContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> <span class="keyword">new</span> org.apache.spark.sql.<span class="type">SQLContext</span>(sc)</span><br><span class="line"></span><br><span class="line"><span class="comment">// this is used to implicitly convert an RDD to a DataFrame.</span></span><br><span class="line"><span class="keyword">import</span> sqlContext.implicits._</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-2_创建DataFrame">2.2 创建DataFrame</h3><p>利用SQLContext，应用可以从一个已存在的RDD（需要知道Schema）、Hive Table、各种外部数据源来创建DataFrame。<br>下面是基于一个JSON文件的内容创建一个DataFrame：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sc</span>:</span> <span class="type">SparkContext</span> <span class="comment">// An existing SparkContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> <span class="keyword">new</span> org.apache.spark.sql.<span class="type">SQLContext</span>(sc)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">df</span> =</span> sqlContext.read.json(<span class="string">"examples/src/main/resources/people.json"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Displays the content of the DataFrame to stdout</span></span><br><span class="line">df.show()</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-3_DataFrame的操作">2.3 DataFrame的操作</h3><p>DataFrame以Scala, Java, Python语言为结构化的数据操作提供了域限定性语言。<br>下面展示了使用DataFrame进行一些基本的结构化数据操作：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sc</span>:</span> <span class="type">SparkContext</span> <span class="comment">// An existing SparkContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> <span class="keyword">new</span> org.apache.spark.sql.<span class="type">SQLContext</span>(sc)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Create the DataFrame</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">df</span> =</span> sqlContext.read.json(<span class="string">"examples/src/main/resources/people.json"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Show the content of the DataFrame</span></span><br><span class="line">df.show()</span><br><span class="line"><span class="comment">// age  name</span></span><br><span class="line"><span class="comment">// null Michael</span></span><br><span class="line"><span class="comment">// 30   Andy</span></span><br><span class="line"><span class="comment">// 19   Justin</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Print the schema in a tree format</span></span><br><span class="line">df.printSchema()</span><br><span class="line"><span class="comment">// root</span></span><br><span class="line"><span class="comment">// |-- age: long (nullable = true)</span></span><br><span class="line"><span class="comment">// |-- name: string (nullable = true)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Select only the "name" column</span></span><br><span class="line">df.select(<span class="string">"name"</span>).show()</span><br><span class="line"><span class="comment">// name</span></span><br><span class="line"><span class="comment">// Michael</span></span><br><span class="line"><span class="comment">// Andy</span></span><br><span class="line"><span class="comment">// Justin</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Select everybody, but increment the age by 1</span></span><br><span class="line">df.select(df(<span class="string">"name"</span>), df(<span class="string">"age"</span>) + <span class="number">1</span>).show()</span><br><span class="line"><span class="comment">// name    (age + 1)</span></span><br><span class="line"><span class="comment">// Michael null</span></span><br><span class="line"><span class="comment">// Andy    31</span></span><br><span class="line"><span class="comment">// Justin  20</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Select people older than 21</span></span><br><span class="line">df.filter(df(<span class="string">"age"</span>) &gt; <span class="number">21</span>).show()</span><br><span class="line"><span class="comment">// age name</span></span><br><span class="line"><span class="comment">// 30  Andy</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Count people by age</span></span><br><span class="line">df.groupBy(<span class="string">"age"</span>).count().show()</span><br><span class="line"><span class="comment">// age  count</span></span><br><span class="line"><span class="comment">// null 1</span></span><br><span class="line"><span class="comment">// 19   1</span></span><br><span class="line"><span class="comment">// 30   1</span></span><br></pre></td></tr></table></figure></p>
+<p>关于DataFrame的全部的操作列表，可见<a href="http://spark.apache.org/docs/latest/api/java/org/apache/spark/sql/DataFrame.html" target="_blank" rel="external">the API Documentation</a>。<br>除了上面这些简单的列操作已经表达式操作，DataFrame还有一个丰富的库来支持字符串操作，数值运算等。完整的列表可见<a href="http://spark.apache.org/docs/latest/api/java/org/apache/spark/sql/functions.html" target="_blank" rel="external">DataFrame Function Reference</a>。</p>
+<h3 id="2-4_运行SQL查询语句">2.4 运行SQL查询语句</h3><p>SQLContext类中的sql函数可以使应用程序化的运行SQL 查询语句，并且以DataFrame的形式返回。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> ...  <span class="comment">// An existing SQLContext</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">df</span> =</span> sqlContext.sql(<span class="string">"SELECT * FROM table"</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-_解释RDD">3. 解释RDD</h2><p>Spark SQL支持两种不同的方法将现有的RDD转化为DataFrames。第一种方法是使用反射来导出一个RDD的schema。写spark的应用程序时，在已知数据的schema的时候，反射的方法可以帮助写出更简介的代码。<br>第二种方法，通过一个编程接口（这个编程接口可以帮助你构建一个schema并且应用到一个已经存在的RDD上）。</p>
+<h3 id="3-1_利用反射来导出Schema">3.1 利用反射来导出Schema</h3><p>Spark SQL 的scala接口支持将一个包含类类型(case class)的RDD转换成DataFrame的接口。类类型(case class)定义了表的schema。通过反射机制来读取类类型的参数，其将成为列名(column)，类类型(case class)也支持嵌套以及复杂的数据类型，像Sequence 和 Array。这种RDD可以被隐式地转换成DataFrame并转换成表，然后就可以执行SQL操作。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sc is an existing SparkContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> <span class="keyword">new</span> org.apache.spark.sql.<span class="type">SQLContext</span>(sc)</span><br><span class="line"><span class="comment">// this is used to implicitly convert an RDD to a DataFrame.</span></span><br><span class="line"><span class="keyword">import</span> sqlContext.implicits._</span><br><span class="line"></span><br><span class="line"><span class="comment">// Define the schema using a case class.</span></span><br><span class="line"><span class="comment">// Note: Case classes in Scala 2.10 can support only up to 22 fields. To work around this limit,</span></span><br><span class="line"><span class="comment">// you can use custom classes that implement the Product interface.</span></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span>(</span>name: <span class="type">String</span>, age: <span class="type">Int</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Create an RDD of Person objects and register it as a table.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">people</span> =</span> sc.textFile(<span class="string">"examples/src/main/resources/people.txt"</span>).map(_.split(<span class="string">","</span>)).map(p =&gt; <span class="type">Person</span>(p(<span class="number">0</span>), p(<span class="number">1</span>).trim.toInt)).toDF()</span><br><span class="line">people.registerTempTable(<span class="string">"people"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// SQL statements can be run by using the sql methods provided by sqlContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">teenagers</span> =</span> sqlContext.sql(<span class="string">"SELECT name, age FROM people WHERE age &gt;= 13 AND age &lt;= 19"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// The results of SQL queries are DataFrames and support all the normal RDD operations.</span></span><br><span class="line"><span class="comment">// The columns of a row in the result can be accessed by field index:</span></span><br><span class="line">teenagers.map(t =&gt; <span class="string">"Name: "</span> + t(<span class="number">0</span>)).collect().foreach(println)</span><br><span class="line"></span><br><span class="line"><span class="comment">// or by field name:</span></span><br><span class="line">teenagers.map(t =&gt; <span class="string">"Name: "</span> + t.getAs[<span class="type">String</span>](<span class="string">"name"</span>)).collect().foreach(println)</span><br><span class="line"></span><br><span class="line"><span class="comment">// row.getValuesMap[T] retrieves multiple columns at once into a Map[String, T]</span></span><br><span class="line">teenagers.map(_.getValuesMap[<span class="type">Any</span>](<span class="type">List</span>(<span class="string">"name"</span>, <span class="string">"age"</span>))).collect().foreach(println)</span><br><span class="line"><span class="comment">// Map("name" -&gt; "Justin", "age" -&gt; 19)</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="3-2_利用编程接口来得出Schema">3.2 利用编程接口来得出Schema</h3><p>当一个case class类没有事先定义的时候（比如说，一个记录的结构被编码进了一个字符串中，或者是一个文本集，它针对不同的用户可能解析不同的field），则一个DataFrame可以通过下面三步构造成功：</p>
+<ol>
+<li>从一个存在RDD中构造行RDD（RDD of Rows）；</li>
+<li>从步骤1中每行对应的结构类型中构造Schema；</li>
+<li>通过CreateDataFrame方法将每行的Schema(schema of rows)应用到行RDD中；</li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sc is an existing SparkContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> <span class="keyword">new</span> org.apache.spark.sql.<span class="type">SQLContext</span>(sc)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Create an RDD</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">people</span> =</span> sc.textFile(<span class="string">"examples/src/main/resources/people.txt"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// The schema is encoded in a string</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">schemaString</span> =</span> <span class="string">"name age"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Import Row.</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.<span class="type">Row</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Import Spark SQL data types</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.types.&#123;<span class="type">StructType</span>,<span class="type">StructField</span>,<span class="type">StringType</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Generate the schema based on the string of schema</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">schema</span> =</span></span><br><span class="line">  <span class="type">StructType</span>(</span><br><span class="line">    schemaString.split(<span class="string">" "</span>).map(fieldName =&gt; <span class="type">StructField</span>(fieldName, <span class="type">StringType</span>, <span class="literal">true</span>)))</span><br><span class="line"></span><br><span class="line"><span class="comment">// Convert records of the RDD (people) to Rows.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">rowRDD</span> =</span> people.map(_.split(<span class="string">","</span>)).map(p =&gt; <span class="type">Row</span>(p(<span class="number">0</span>), p(<span class="number">1</span>).trim))</span><br><span class="line"></span><br><span class="line"><span class="comment">// Apply the schema to the RDD.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">peopleDataFrame</span> =</span> sqlContext.createDataFrame(rowRDD, schema)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Register the DataFrames as a table.</span></span><br><span class="line">peopleDataFrame.registerTempTable(<span class="string">"people"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// SQL statements can be run by using the sql methods provided by sqlContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">results</span> =</span> sqlContext.sql(<span class="string">"SELECT name FROM people"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// The results of SQL queries are DataFrames and support all the normal RDD operations.</span></span><br><span class="line"><span class="comment">// The columns of a row in the result can be accessed by field index or by field name.</span></span><br><span class="line">results.map(t =&gt; <span class="string">"Name: "</span> + t(<span class="number">0</span>)).collect().foreach(println)</span><br></pre></td></tr></table></figure>
+<h2 id="4-_支持MySQL等关系型数据库">4. 支持MySQL等关系型数据库</h2><p>对于spark sql支持mysql数据库，只需要将mysql-connector-java-x.x.x-bin.jar加入到spark的系统路径中。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> jdbcDF = sqlContext.read.format(<span class="string">"jdbc"</span>).options(<span class="type">Map</span>(<span class="string">"url"</span> -&gt; <span class="string">"jdbc:mysql://210.45.64.92:3306/weibo_prediction?user=root&amp;password=123456"</span>,<span class="string">"dbtable"</span> -&gt; <span class="string">"weibo_train"</span> ).load();</span><br><span class="line">jdbcDF.registerTempTable(<span class="string">"weibo_train"</span>);</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>这一章的引用：<br>1.<a href="http://stackoverflow.com/questions/29196457/how-to-use-spark-dataframe-with-mysql" target="_blank" rel="external">stackoverflow</a><br>2.<a href="http://www.infoobjects.com/spark-dataframes-and-jdbc/" target="_blank" rel="external">Spark: DataFrame and JDBC</a> </p>
+</blockquote>
+<h2 id="5-_支持MangoDB等非关系型数据库">5. 支持MangoDB等非关系型数据库</h2><h3 id="5-1_最原始的方法">5.1 最原始的方法</h3><p>类似RDD，目前spark sql对mongoDB的支持，需要采用利用saprkContext接口将mongodb读取成RDD，然后利用第三节的方法来解释RDD，得到DataFrame。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.examples </span><br><span class="line"><span class="keyword">import</span> org.apache.spark.&#123;<span class="type">SparkContext</span>, <span class="type">SparkConf</span>&#125; </span><br><span class="line"><span class="keyword">import</span> org.apache.spark.rdd.<span class="type">RDD</span> </span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.<span class="type">Configuration</span> </span><br><span class="line"><span class="keyword">import</span> org.bson.<span class="type">BSONObject</span> </span><br><span class="line"><span class="keyword">import</span> com.mongodb.hadoop.&#123;<span class="type">MongoInputFormat</span>, <span class="type">BSONFileInputFormat</span>&#125; </span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql </span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.<span class="type">SQLContext</span> </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">DataMigrator</span> &#123;</span> </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>])</span><br><span class="line">    &#123; </span><br><span class="line">        <span class="function"><span class="keyword">val</span> <span class="title">conf</span> =</span> <span class="keyword">new</span> <span class="type">SparkConf</span>().setAppName(<span class="string">"Migration    App"</span>).setMaster(<span class="string">"local"</span>) </span><br><span class="line">        <span class="function"><span class="keyword">val</span> <span class="title">sc</span> =</span> <span class="keyword">new</span> <span class="type">SparkContext</span>(conf) </span><br><span class="line">        <span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> <span class="keyword">new</span> <span class="type">SQLContext</span>(sc) </span><br><span class="line"></span><br><span class="line">        <span class="comment">// Import statement to implicitly convert an RDD to a DataFrame </span></span><br><span class="line">        <span class="keyword">import</span> sqlContext.implicits._ </span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">val</span> <span class="title">mongoConfig</span> =</span> <span class="keyword">new</span> <span class="type">Configuration</span>() </span><br><span class="line">        mongoConfig.set(<span class="string">"mongo.input.uri"</span>,   <span class="string">"mongodb://localhost:27017/mongosails4.case"</span>) </span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">val</span> <span class="title">mongoRDD</span> =</span> sc.newAPIHadoopRDD(mongoConfig, classOf[<span class="type">MongoInputFormat</span>], classOf[<span class="type">Object</span>], classOf[<span class="type">BSONObject</span>]);     </span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">val</span> <span class="title">count</span> =</span> countsRDD.count()</span><br><span class="line"></span><br><span class="line">        <span class="comment">// the count value is aprox 100,000 </span></span><br><span class="line">        println(<span class="string">"================ PRINTING ====================="</span>) </span><br><span class="line">        println(s<span class="string">"ROW COUNT IS $count"</span>) </span><br><span class="line">        println(<span class="string">"================ PRINTING ====================="</span>) </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在得到一个RDD后需要</p>
+<ol>
+<li><p>为你的RDD 创建一个case class</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Data</span>(</span>x: <span class="type">Int</span>, s: <span class="type">String</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将rdd中的值映射到case class中的实例</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">dataRDD</span> =</span> mongoRDD.values.map &#123; obj =&gt; <span class="type">Data</span>(obj.get(<span class="string">"x"</span>), obj.get(<span class="string">"s"</span>)) &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>利用RDD data, 通过sqlcontext创建dataframe</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">myDF</span> =</span> sqlContext.createDataFrame(dataRDD)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="5-2_更好的解决方案:Stratio">5.2 更好的解决方案:Stratio</h3><p>目前开源api Stratio可以很好的支持 Mongodb，免去了应用程序定义case class的繁琐过程。<br>例子如下：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">mcInputBuilder</span> =</span> <span class="type">MongodbConfigBuilder</span>(<span class="type">Map</span>(<span class="type">Host</span> -&gt; <span class="type">List</span>(<span class="string">"localhost:27017"</span>), <span class="type">Database</span> -&gt; <span class="string">"marketdata"</span>, <span class="type">Collection</span> -&gt; <span class="string">"minbars"</span>, <span class="type">SamplingRatio</span> -&gt; <span class="number">1.0</span>, <span class="type">WriteConcern</span> -&gt; <span class="type">MongodbWriteConcern</span>.<span class="type">Normal</span>))</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">readConfig</span> =</span> mcInputBuilder.build()</span><br><span class="line"></span><br><span class="line"><span class="comment">//HiveContext uses Hive's SQL parser with a superset of features of SQLContext so I used that one</span></span><br><span class="line"><span class="comment">//	See http://spark.apache.org/docs/1.4.0/sql-programming-guide.html#starting-point-sqlcontext for more info</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> <span class="keyword">new</span> <span class="type">HiveContext</span>(sc)			<span class="comment">//sc is already defined as a SparkContext by the shell</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">dfOneMin</span> =</span> sqlContext.fromMongoDB(readConfig) 	<span class="comment">//set up the MongoDB collection to read from as a DataFrame</span></span><br><span class="line">dfOneMin.registerTempTable(<span class="string">"minbars"</span>)			<span class="comment">//make the table minbars available to the SQL expressions later</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>这一章节的相关引用<br>1.<a href="https://github.com/Stratio/spark-mongodb" target="_blank" rel="external">Stratio</a><br>2.<a href="http://stackoverflow.com/questions/31838468/save-mongodb-data-to-parquet-file-format-using-apache-spark" target="_blank" rel="external">Save MongoDB data to parquet file format using Apache Spark</a></p>
+</blockquote>
+<h2 id="6-_支持HBase">6. 支持HBase</h2>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2015/10/10/解忧杂货店/" itemprop="url">
+                  《解忧杂货店》
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2015-10-10T20:25:04+08:00" content="2015-10-10">
+              2015-10-10
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/10/10/解忧杂货店/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/10/解忧杂货店/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <blockquote>
+<p>如果把找我咨询的人比喻成迷途的羔羊，通常他们手上都有地图，却没有去看，或是不知道自己目前的位置。但是我相信你不属于这两种情况。你的地图是一张白纸，所以即使想决定目的地，也不知道路在哪里。地图是一张白纸，这当然很伤脑筋。任何人都会不知所措。可是换个角度来看，正因为是一张白纸，才可以随心所欲地描绘地图。一切全在你自己。对你来说，一切都是自由的，在你面前是无限的可能。这可是很棒的事情啊。我衷心祈祷你可以相信自己，无悔地燃烧自己的人生。</p>
+</blockquote>
+<p>一间小小的杂货店，将几个处在人生岔路口的年轻人纠缠在一起。三个自称为“社会的渣滓”的无业小偷；因为男友身患癌症，在参加奥运会集训和陪伴男友的选择中迷茫的女运动员；在音乐梦想和继承祖传鱼店之间徘徊的音乐人；在当陪酒小姐赚快钱和独自开店创业的矛盾中挣扎的“迷途的小狗”…他们的迷茫好似互不相关，毫无关联，但是因为“解忧杂货店”的信箱和孤儿院“丸光园”被紧紧地联系在一起，最终，他们每个人都找到了补住内心漏洞的方法，找到了各自的人生方向，也深深地感受到了这个世界的善意和温暖。翔太、敦也、幸平是三个自称为“社会的渣滓”的社会青年，他们在进行一次绑架后不经意间躲到了浪矢老爷爷家杂货店里，却无意间收到了来自过去的咨询信，因为这件奇妙的房子，将他们和过去的几个人联系在一起，努力训练的击剑选手月兔因为他们的信最终坚持了自己的决定，即便他们好像不是因为他们；在隔着门听完那曲著名的《重生》后恍然大悟，将“丸光园”失火、慰问演出的歌手、以及后来成为著名歌手的孤儿小芹、、、这一切都联系在一起，因此鼓励那位徘徊的鱼店音乐人要坚持下去，说出“你对音乐的执着追求，绝不是白白付出”的话；指导“迷途的小狗”学习房地产、证券交易等方面的知识并告诉她最好的进军市场的时间；却发现自己绑架的那个女人就是曾经知道的“迷途的小狗”，因为“迷途的小狗”的感谢信而迷途知返、、、每个人的故事都像河面的独立涟漪一样，不可思议的交汇在一起，形成奇妙而和谐的共振。<br>    下面这段话引用自豆瓣，同时也代表了我读这本书的感受：</p>
+<blockquote>
+<p>“《解忧杂货店》缜密的故事架构与精妙的情节设计，让人不得不叹服：“才华”这东西，真是与生俱来啊﹗更重要的是，东野圭吾在洞悉世情与人心之余，愿以善意回应，让人明白在这破洞不断的世界里，仍有人竭尽所能在用心填补，知道每个人活在这世上都不容易，都有各自的难题，都有难以启齿而感觉被世界孤立的那一刻，也明白人们需要的未必是如何解决的答案，而是那一刻有人愿意认真倾听，且愿意与孤绝的自己同在。这就是《解忧杂货店》的精神，也是我心中书写价值的所在。 ”</p>
+</blockquote>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2015/09/04/Apache-Spark-利用Intellij-IDEA开发Spark程序/" itemprop="url">
+                  Apache-Spark:利用Intellij IDEA开发Spark程序
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2015-09-04T16:29:50+08:00" content="2015-09-04">
+              2015-09-04
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/09/04/Apache-Spark-利用Intellij-IDEA开发Spark程序/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/04/Apache-Spark-利用Intellij-IDEA开发Spark程序/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="1-_准备工作">1. 准备工作</h2><ol>
+<li>安装JDK7</li>
+<li>安装Scala 2.10.x（因为实验室的spark集群是1.1.1版本的，它指定需要Scala 2.10.x版本）</li>
+<li>Intellij IDEA Community Edition 14.1.4, 在安装的时候可以安装Scala插件，后面就不需要安装啦。</li>
+</ol>
+<h2 id="2-_WordCount例子">2. WordCount例子</h2><h3 id="2-1_新建Maven工程">2.1 新建Maven工程</h3><p>在intellij IDEA中创建Maven project, “File”-&gt;”New”-&gt;”Project”-&gt;”Maven”，填入相关信息，如下：<br><img src="/images/Spark/1.png" alt="picture"></p>
+<h2 id="2-2_编写pom-xml文件">2.2 编写pom.xml文件</h2><p>在pom.xml文件加入依赖和插件：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.apache.spark<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spark-core_2.10<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">version</span>&gt;</span>1.1.1<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="title">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">plugins</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">version</span>&gt;</span>3.1<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="title">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">build</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="2-3_导入相关的包">2.3 导入相关的包</h2><h3 id="2-3-1_导入spark的JAR包">2.3.1 导入spark的JAR包</h3><p>选择“File”–&gt; “project structure” –&gt; “Libraries”，选择“+”，将spark-hadoop 对应的包导入，比如导入spark-examples-1.1.1-hadoop2.3.0.jar（它在Spark的安装目录的lib文件夹下）。<br><img src="/images/Spark/2.png" alt="picture"></p>
+<h3 id="2-3-2_导入scala库">2.3.2 导入scala库</h3><p>选择“File”–&gt; “project structure” –&gt; “Modules”，选择“+”，会自动出现Scala的库选项，添加,“Apply”-&gt;“OK”。<br><img src="/images/Spark/4.png" alt="picture"></p>
+<h3 id="2-4_新建WordCount_Java类">2.4 新建WordCount Java类</h3><p>在src/main/java下新建Java类，取名“WordCount”，添加如下代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scala.Tuple2;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.SparkConf;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaPairRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaSparkContext;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.FlatMapFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.Function2;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.PairFunction;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.regex.Pattern;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">WordCount</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Pattern SPACE = Pattern.compile(<span class="string">" "</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">//System.setProperty("hadoop.home.dir", "c:\\winutil\\");</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (args.length &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            System.err.println(<span class="string">"Usage: JavaWordCount &lt;file&gt;"</span>);</span><br><span class="line">            System.exit(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">long</span> begin = System.currentTimeMillis();</span><br><span class="line">        SparkConf sparkConf = <span class="keyword">new</span> SparkConf().setAppName(<span class="string">"WordCount"</span>);</span><br><span class="line">        sparkConf.setMaster(<span class="string">"local"</span>);</span><br><span class="line">        JavaSparkContext ctx = <span class="keyword">new</span> JavaSparkContext(sparkConf);</span><br><span class="line">        JavaRDD&lt;String&gt; lines = ctx.textFile(args[<span class="number">0</span>], <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        JavaRDD&lt;String&gt; words = lines.flatMap(<span class="keyword">new</span> FlatMapFunction&lt;String, String&gt;() &#123;</span><br><span class="line">            <span class="annotation">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Iterable&lt;String&gt; <span class="title">call</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> Arrays.asList(SPACE.split(s));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        JavaPairRDD&lt;String, Integer&gt; ones = words.mapToPair(<span class="keyword">new</span> PairFunction&lt;String, String, Integer&gt;() &#123;</span><br><span class="line">            <span class="annotation">@Override</span></span><br><span class="line">            <span class="keyword">public</span> Tuple2&lt;String, Integer&gt; call(String s) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String, Integer&gt;(s, <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        JavaPairRDD&lt;String, Integer&gt; counts = ones.reduceByKey(<span class="keyword">new</span> Function2&lt;Integer, Integer, Integer&gt;() &#123;</span><br><span class="line">            <span class="annotation">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Integer <span class="title">call</span><span class="params">(Integer i1, Integer i2)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> i1 + i2;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        List&lt;Tuple2&lt;String, Integer&gt;&gt; output = counts.collect();</span><br><span class="line">        <span class="keyword">for</span> (Tuple2&lt;?,?&gt; tuple : output) &#123;</span><br><span class="line">            System.out.println(tuple._1() + <span class="string">": "</span> + tuple._2());</span><br><span class="line">        &#125;</span><br><span class="line">        ctx.stop();</span><br><span class="line">        <span class="keyword">long</span> end = System.currentTimeMillis() - begin;</span><br><span class="line">        System.out.println(<span class="string">"wasting time:"</span>+end+<span class="string">"ms"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-5_配置运行">2.5 配置运行</h3><p>点击“Run”-&gt;“Run”设置相关参数，如下：<br><img src="/images/Spark/3.png" alt="picture"><br>“Apply”-&gt;“Run”。<br>运行结果如下图所示：<br><img src="/images/Spark/5.png" alt="picture"></p>
+<h2 id="3-_注意：">3. 注意：</h2><ol>
+<li>在Windows下运行需要Spark需要hadoop的插件包：<a href="http://jingyan.baidu.com/article/d3b74d64cc2a0c1f77e609d2.html" target="_blank" rel="external">help</a></li>
+<li>如果出现“ A master URL must be set in your configuration”错误：参见<a href="http://www.ithao123.cn/content-514918.html" target="_blank" rel="external">help1</a></li>
+</ol>
+<h2 id="4-_参考资料">4. 参考资料</h2><ol>
+<li><a href="http://spark.apache.org/" target="_blank" rel="external">Spark</a>;</li>
+<li><a href="https://www.jetbrains.com/idea/download/" target="_blank" rel="external">intellij IDEA</a></li>
+<li><a href="http://hadoop.apache.org/" target="_blank" rel="external">Hadoop</a></li>
+</ol>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/2015/08/28/暑期总结/" itemprop="url">
+                  暑期总结（2015）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2015-08-28T17:30:26+08:00" content="2015-08-28">
+              2015-08-28
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/08/28/暑期总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/28/暑期总结/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>本科毕业典礼一完事，就早早地被学校赶回家了，非常感谢胖子和知雨兄最后的送行，感觉在大学四年能有几个志同道合的小伙伴还是一件蛮幸运的事 o(∩_∩)o 。然后就好好的在家里躺尸了几天，吃了几天妈妈吃的饭菜，就开始整理大学四年的一些记忆了，整理了几天，发现自己果然是一个拍照狂魔啊，好的差的拍了几万张，一张一张的整理了两三天，终于挑好了一些自己觉得满意的几百张照片。整理了将近两个星期，终于把这些杂七杂八的东西整理完了。接下来就要好好考虑该干嘛了，正好又买了Kindle,我就看了一些自己感兴趣的书籍，现一一列出：</p>
+<h2 id="1-演讲之禅">1.<a href="http://book.douban.com/subject/4760725/" target="_blank" rel="external">演讲之禅</a></h2><p>这是一本介绍关于演讲技巧的书籍，作者是一位技术演讲家，常年在各大互联网公司之间进行技术性的演讲。作者根据他多年的演讲经历总结了一些十分实用的演讲技巧。看完后，我觉得这是一本十分使用的书籍，书中的很多技巧无论对于小型演讲还是大型演讲都是十分有效的。</p>
+<h2 id="2-平凡的世界">2.<a href="http://book.douban.com/subject/6835758/" target="_blank" rel="external">平凡的世界</a></h2><p>无需多言，经典中的经典，作者平实的语言深刻形象地刻画了几个人物形象，尤为佩服孙少平和孙少安，他们都是铁骨铮铮的汉子！</p>
+<h2 id="3-明朝那些事儿">3.<a href="http://book.douban.com/subject/7163250/" target="_blank" rel="external">明朝那些事儿</a></h2><p>一本通俗有趣的历史科普书，本来以前也完整地看过一偏，但是意犹未尽，于是又看了一偏，记得看得第一遍的时候，只觉得里面的历史故事都蛮有趣的，但是这次再读的时候，我感受到了更多的东西，感受到名族大义与一己私利，忠诚与背叛，理性和感性，永垂不朽与遗臭万年，阿谀奉承与刚正不阿…。</p>
+<h2 id="4-深入理解Java虚拟机">4.<a href="http://book.douban.com/subject/6522893/" target="_blank" rel="external">深入理解Java虚拟机</a></h2><p>这是我读过的为数不多的国人写过的好的技术书籍之一。书中对于JVM的内存管理系统，执行子系统，程序编译和优化等内容都有很详细的介绍。我觉得对于想从事Java编程的人都应该读一下这本书。值得再看一遍。</p>
+<h2 id="5-Effective_Java">5.<a href="http://book.douban.com/subject/3360807/" target="_blank" rel="external">Effective Java</a></h2><p>本书介绍了在Java编程中78条极具实用价值的经验规则，这些经验规则涵盖了大多数开发人员每天所面临的问题的解决方案。但是以现在我的编程经验对于里面一些内容还不能理解，看来还要加强学习实践。这是一本值得多看几遍的书籍。</p>
+<h2 id="6-美国纽约摄影学院摄影教材">6.<a href="http://book.douban.com/subject/1007928/" target="_blank" rel="external">美国纽约摄影学院摄影教材</a></h2><p>觉得自己既然这么喜欢拍照，应该加强一下自己的拍照技巧，然后就在网上找到这本书，不得不说，对于喜欢摄影的人来说，这真的是一本非常合适的入门书籍，但是我只看了60%，因为暂时还没有买单反的计划 orz,就没有再看下去的动力了。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
                 <a class="post-title-link" href="/2015/08/06/deep-into-JVM-6/" itemprop="url">
                   深入理解JVM(6)
                 </a>
@@ -585,572 +1292,11 @@
 
 
     
-      
-
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                <a class="post-title-link" href="/2015/08/02/deep-into-JVM-3/" itemprop="url">
-                  深入理解JVM(3)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2015-08-02T18:56:18+08:00" content="2015-08-02">
-              2015-08-02
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/08/02/deep-into-JVM-3/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/02/deep-into-JVM-3/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
-<h1 id="HotSpot虚拟机架构">HotSpot虚拟机架构</h1><p>以下这幅图展示了Java虚拟机里面的关键组件(是依据Java SE 7版本的Java虚拟机)。<br><img src="/images/JVM/JVM4.png" alt="HotSpot虚拟机"></p>
-<h1 id="虚拟机栈">虚拟机栈</h1><p>每当一个方法被调用时，一个新的Frame被创建并且push到虚拟机栈中。<br>每个Frame包括如下：</p>
-<ol>
-<li>局部变量表</li>
-<li>返回值</li>
-<li>操作栈(Operand Stack)</li>
-<li>指向当前方法的类的运行时常量池的引用<h2 id="局部变量表">局部变量表</h2>局部变量表包括方法执行期间的变量：包括一个this引用，所有的方法参数和其他局部定义变量。对于类方法(比如.静态方法)，方法参数从零开始；然而对于实例方法，零槽位保留给this。<br>一个局部变量可以是：</li>
-</ol>
-<ul>
-<li>boolean</li>
-<li>byte</li>
-<li>char</li>
-<li>long</li>
-<li>short</li>
-<li>int </li>
-<li>float</li>
-<li>double</li>
-<li>reference</li>
-<li>returnAddress</li>
-</ul>
-<h2 id="操作栈">操作栈</h2><p>有点类似CPU中一般目的的寄存器，the operand stack在执行byte code指令时使用。大多数JVM byte code 将时间花费在操纵operand stack上：比如push,pop,duplicate,swap,或者执行产生或者消费变量的操作上。因此，在byte code中，那些在局部变量数组和operand stack之间的移动数据是非常频繁的。例如，一个简单的变量初始化会产生两个与operand stack打交道的byte codes。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i;</span><br></pre></td></tr></table></figure></p>
-<p>会得到编译后的byte code:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">iconst_0 <span class="comment">//push 0 to top of the operand stack</span></span><br><span class="line">istore_1 <span class="comment">//pop value from top of operand stack and store as local variable 1</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="动态链接">动态链接</h2><p>每个Frame都包含一个指向当前方法的类的运行时常量池的引用。这个引用是用来支持动态链接的。</p>
-<p>当一个Java类被编译时，所有的指向变量和方法的引用被作为一个符号引用保存在该类常量池中。符号引用是一个逻辑引用而不是一个指向实际地址的引用。JVM实现版本可是选择何时解决这些标记引用，这过程可以放生在类文件被识别时、加载之后，这叫做贪心或者静态解析；或者发生在当此标记引用被使用时，这叫做懒惰或者后期解析。绑定是以标记引用标识的区域(field)、方法、或者类被直接引用代替的过程。所有的直接引用都会以运行位置相关的存储结构偏移量类存储的。</p>
-<h1 id="垃圾回收">垃圾回收</h1><h2 id="根搜索算法">根搜索算法</h2><p>在主流的商用程序语言中，都是使用根搜索算法(GC Roots Tracing)判定对象是否存活的。<br>在Java语言中，可作为GC Roots的对象包括以下几种：</p>
-<ul>
-<li>虚拟机栈（栈帧中的本地变量表）中引用的对象</li>
-<li>方法区中的类静态属性引用的对象</li>
-<li>方法区中的常量引用的对象</li>
-<li>本地方法栈中<a href="http://www.cnblogs.com/mandroid/archive/2011/06/15/2081093.html" target="_blank" rel="external">JNI</a>(即一般说的Native方法)的引用的对象</li>
-</ul>
-<h2 id="回收永久代">回收永久代</h2><p>很多人认为JVM中的永久代是没有垃圾收集的，Java虚拟机规范的确说明可以不要求虚拟机在方法区实现垃圾收集，而且在方法区中进行垃圾手机的‘性价比’是比较低的；在堆中，尤其是新生代中，常规应用进行依次垃圾收集一般可以回收70%~90%的空间，而在永久代中的垃圾收集效率远低于此。<br>永久代回收主要回收两部分内容：</p>
-<ol>
-<li>废弃变量；包括字面量（String）,常量池中的其他类(接口)、方法、字段的符号引用等。</li>
-<li>无用的类；无用类需要满足下面三个条件<ul>
-<li>该类的所有实例均已经回收，即Java堆中不存在该类的任何实例</li>
-<li>加载该类的ClassLoader已经被回收</li>
-<li>该类对应的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li>
-</ul>
-</li>
-</ol>
-<h2 id="垃圾收集算法">垃圾收集算法</h2><h3 id="标记-清除算法">标记-清除算法</h3><p>首先标记出所有需要回收的对象，在标记完成后统一回收掉所有标记的对象。<br>缺点：</p>
-<ol>
-<li>效率不高；标记和清除的效率都不高；</li>
-<li>空间问题；标记清楚后会产生大量不连续的内存碎片；</li>
-</ol>
-<h3 id="复制算法">复制算法</h3><p>将内存容量分为大小相等的两块，每次只是只使用其中的一块。当这一块的内存用完了，就将还存活的对象复制到另外一块上面，然后再把已使用过的内存空间一次清理掉。<br><strong> 现在的商用虚拟机都采用这种收集算法来回收新生代，如HotSpot虚拟机将新生代分为Eden空间和两块较小的Survivor空间， 每次使用Eden和其中的一块Survivor。当回收时，将Eden和Survivor中还存活的对象一次性的拷贝到另外一块Survivor空间中，最后清理掉Eden和刚才用过的Survivor空间。 </strong></p>
-<h2 id="标记-整理算法">标记-整理算法</h2><p>根据老年代的特点，有人提出了一种“标记-整理(Mark-Compact)算法”,过程依然与“标记-清除算法”一样，不过后续步骤是让所有存活对象都向一端移动，然后直接清理掉端边界以外的内存，以便清除内存碎片。</p>
-<h2 id="垃圾收集器">垃圾收集器</h2><p>垃圾收集器是垃圾回收算法的具体实现；<br>下图描述了HotSpot收集器的示意图：<br><img src="/images/JVM/JVM7.jpg" alt="HotSpot收集器"></p>
-<h3 id="Serial收集器">Serial收集器</h3><p>单线程；在它收集时，必须暂停其他的工作线程，直至它收集结束。<br>特点：简单高效；对于运行在Client模式下的虚拟机来说是一个好选择。</p>
-<h3 id="PawNew收集器">PawNew收集器</h3><p>是Serial收集器的多线程版本。</p>
-<blockquote>
-<p>在讨论垃圾收集器的上下文语境中：</p>
-<ul>
-<li>并行： 指多条垃圾收集器线程并行工作，但此时用户线程依然处于等待状态</li>
-<li>并发： 指用户线程与垃圾收集线程同时运行（但不一定是并行的，可能会交替运行），用户程序继续运行，而垃圾收集程序运行在另一个CPU上。</li>
-</ul>
-</blockquote>
-<h3 id="Parallel_Scavenge收集器">Parallel Scavenge收集器</h3><p>新生代收集器，使用“复制”算法，并行的多线程收集器。着重于达到一个可控制的吞吐量。</p>
-<blockquote>
-<p>吞吐量 = 运行用户代码时间/(运行用户带啊时间+垃圾收集时间)</p>
-</blockquote>
-<h3 id="Serial_Old收集器">Serial Old收集器</h3><p>是Serial收集器的老年代版本，单线程收集器，使用“标记-整理”算法。</p>
-<h3 id="Parallel_Old收集器">Parallel Old收集器</h3><p>Parallel Scavenge收集器的老年代版本。</p>
-<h3 id="CMS收集器">CMS收集器</h3><p>系统停顿很短。</p>
-<h3 id="G1收集器">G1收集器</h3><ul>
-<li>使用“标记-整理”算法实现。</li>
-<li>可精确的控制停顿。</li>
-</ul>
-<h2 id="内存分配和回收策略">内存分配和回收策略</h2><h3 id="对象优先在Eden分配">对象优先在Eden分配</h3><p>大多数情况下，对象在新生代Eden区中分配。当Eden区没有足够的空间进行分配时，虚拟机将发动一MinorGC。</p>
-<h3 id="大对象直接进入老年代">大对象直接进入老年代</h3><p>很长的字符串及数组会直接分配到老年代。</p>
-<h3 id="长期存活的对象将进入老年代">长期存活的对象将进入老年代</h3><p>通过对对象定义年龄的概念，当对象年龄增加到一定程度(默认为15岁)，就会被晋升到老年代。</p>
-<h3 id="空间分配担保">空间分配担保</h3><p>当出现MinorGC后依然存活大量的对象是，就需要老年代进行担保，让Survior无法容纳的对象直接进入老年代。</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                <a class="post-title-link" href="/2015/08/02/deep-into-JVM-2/" itemprop="url">
-                  深入理解JVM(2)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2015-08-02T16:16:11+08:00" content="2015-08-02">
-              2015-08-02
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/08/02/deep-into-JVM-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/02/deep-into-JVM-2/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
-<h2 id="HotSpot虚拟机架构">HotSpot虚拟机架构</h2><p>以下这幅图展示了Java虚拟机里面的关键组件(是依据Java SE 7版本的Java虚拟机)。<br><img src="/images/JVM/JVM4.png" alt="HotSpot虚拟机"></p>
-<h2 id="线程">线程</h2><p>一个线程是程序的一次执行。JVM允许一个应用程序并行运行多个线程。在Hotspot JVM中存在着在Java线程和本地操作系统线程之间的映射。在准备完一个Java线程的所有状态，像thread-local存储、缓冲分配、对象同步、栈和程序计数器之后，本地线程就被创造出来了。本地线程将在Java线程终止后被回收。操作系统因此负责调度所有的线程和分配给它们可用的CPU。一旦本地线程初始化后，它将调用Java 线程里面的run()方法。当run()方法返回时，未捕捉的异常被处理，随后本地线程确定JVM是否需要因为线程的终止而被终止(比如说，它是最后的非守护线程)。当线程终止后，所有本地线程的和JVM线程的资源将被释放。</p>
-<h3 id="JVM系统线程">JVM系统线程</h3><p>如果你是用jconsole或者其他任何调试器是有可能看到后台有无数的线程在运行。这些后台线程运行是来补充主线程的，其部分是由于调用public static void main(String[])而构造出来的。在Hotspot JVM系统中主要的后台系统线程如下：</p>
-<ul>
-<li>VM 线程：这个线程等待那些需要JVM到达一个安全点(Safe-point)的操作。之所以这些操作需要发生在一个独立的线程是因为它们都需要JVM在一个安全点(safe-point)、这个点对堆的修改不会出现。线程执行的操作是stop-the-world型的垃圾回收器、线程栈dumps、thread suspension、和biased locking revocation。</li>
-<li>Periodic task 线程:这些线程是负责哪些用于调度阶段性的操作执行的时间事件(比如中断)</li>
-<li>GC 线程： 这些线程支持不同类型的垃圾回收活动</li>
-<li>Compiler 线程： 这些线程在运行时将byte code编译成本地码</li>
-<li>Signal dispatcher thread 这个线程接受发送给JVM进程的信号并且通过调用合适的JVM方法处理它们。<h3 id="每个线程">每个线程</h3>每一个线程有如下组件：<ol>
-<li>程序计数器(PC):除非它是本地的(Native)(在这种情况，PC的值为空(Undefined))，那么PC表示当前指令的地址，JVM用PC去追踪当前执行的指令；事实上PC将会指向方法区(Method Area)的一个内存地址；每条线程都需要一个独立的PC，各条线程之间互不影响，独立存储，我们称这类内存区域为“线程私有”的内存。</li>
-<li>栈：虚拟机栈描绘的是Java方法执行的内存模型：每个方法被执行的时候同时会创建一个栈帧(Stack Frame)用于存储局部变量表、操作栈、动态连接、方法出口(Return)等信息。在Java虚拟机规范中，对这个区域规定了两种异常情况：StackOverflowError异常；OutOfMemoryError异常（虚拟机栈在扩展时无法申请到足够的内存时会抛出）。</li>
-<li>本地方法栈(Native Stack)：本地方法栈与虚拟机栈所发挥的作用是非常相似的其区别不过是虚拟机栈执行的是Java方法(也就是字节码)服务，而本地方法栈则是为虚拟机执行Native方法服务。同样，在Java虚拟机规范中，对这个区域规定了两种异常情况：StackOverflowError异常；OutOfMemoryError异常（虚拟机栈在扩展时无法申请到足够的内存时会抛出）。</li>
-<li>栈限制：一个栈可以是动态的或者固定的大小。如果一个线程需要一个大的栈那么一个StackOverflowError异常被抛出。如果一个线程需要一些多的框架并且没有足够的存储分配那么一个OutOfMemoryError异常被抛出。</li>
-</ol>
-</li>
-</ul>
-<p><strong> 关于每个虚拟机栈的具体内容，可见会在下几个章节总结出来 </strong></p>
-<h2 id="线程共享的内容">线程共享的内容</h2><h3 id="堆内存">堆内存</h3><p>堆是用于在运行时分配类实例和数组的。因为一个框架(Frame)在创建后不是被设计为可以改变的，所以数组和对象永远不会存储在栈中。框架只会存储指向堆中的对象或者数组的引用。不像原始变量和引用存储在局部变量数组(在框架)中，对象总是存储在堆中，所以它们在一个方法结束后不会被移除。相反对象只会被垃圾收集器移除。</p>
-<h3 id="非堆内存">非堆内存</h3><p>那些被逻辑上认为是JVM机制的一部分对象不是被创建在堆中。<br>非堆内存包括：</p>
-<ol>
-<li>永久一代(permanent generation), 包括：<ul>
-<li>方法区(method area)</li>
-<li>内部字符串</li>
-</ul>
-</li>
-<li>缓存代码：主要用来存储那些被JIT编译器编译成的本地码(Native Code)</li>
-</ol>
-<blockquote>
-<p>Just In Time(JIT) Compilation：Java byte code 是被解释的但是这个并没有直接在JVM的宿主机CPU上执行本地代码快。为了改善性能，Oracle Hotspot VM寻找那些频繁执行的byte code代码并将它们编译成本地码。本地代码然后存放在缓存代码中(code cache)。用这种方法，Hotspot VM试着选择最合适的方法去在编译代码和执行解释的代码之间取得平衡。</p>
-</blockquote>
-<p><strong> 关于方法区的具体内容会在下几个章节写</strong></p>
-<h2 id="对象访问">对象访问</h2><p>对象访问涉及到Java栈、Java堆、方法去这三个重要的内存区域。<br>例如下面的代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object obj = <span class="keyword">new</span> Object();</span><br></pre></td></tr></table></figure></p>
-<p>假设这句代码出现在方法体中，那么“Object obj”这部分语意将反映在Java栈的本地变量表中，作为一个reference类型出现。而“new Object()”这部分的语义将会反映在Java堆中，形成一块存储了Ojbect()类型所有实例数据值(Instance Data, 对象中各个实例字段的数据)的结构化内存。另外在Java堆中还必须包含能查找到此对象类型数据(如对象类型、父类、实现的接口、方法等)的地址信息，这些类型信息则存储在方法区中。<br>由于reference类型在Java虚拟机规范里只定义了一个指向对象的引用，并没有定义这个引用应该通过那种方式去定位，以及访问到Java堆中的具体位置，因此不同虚拟机实现的对象访问方式会有所不同，主流的有两种：使用句柄和直接指针。</p>
-<ul>
-<li>通过句柄访问对象：<br><img src="/images/JVM/JVM5.PNG" alt="通过句柄访问对象"></li>
-<li>通过直接指针访问方式：<br><img src="/images/JVM/JVM6.PNG" alt="通过直接指针访问方式"></li>
-</ul>
-<p><strong> 引用 </strong></p>
-<ol>
-<li><a href="http://www.cnblogs.com/maverick-fu/p/4451811.html#3170784" target="_blank" rel="external">JVM剖析</a></li>
-<li><a href="http://blog.jamesdbloom.com/JVMInternals.html" target="_blank" rel="external">JVM Internals</a></li>
-</ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                <a class="post-title-link" href="/2015/07/31/deep-into-JVM-1/" itemprop="url">
-                  深入理解JVM(1)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2015-07-31T21:07:34+08:00" content="2015-07-31">
-              2015-07-31
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/07/31/deep-into-JVM-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/31/deep-into-JVM-1/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>这是我写的关于《深入理解Java虚拟机：JVM高级特性与最佳实战（第2版）》的读书笔记。</p>
-<h2 id="Java技术体系">Java技术体系</h2><p><img src="/images/JVM/JVM1.jpg" alt="Java技术体系"><br>其中</p>
-<blockquote>
-<p>JDK = Java程序设计语言 + Java虚拟机 + Java API类库<br>JRE = Java虚拟机 + Java SE API子集</p>
-</blockquote>
-<h2 id="Sun_HotSpot_JVM">Sun HotSpot JVM</h2><blockquote>
-<p>Shortly after acquiring Animorphic, Sun intended to write a new just-in-time (JIT) compiler for the newly developed virtual machine.[3] This new compiler would give rise to the name “HotSpot”, which derives from the fact that, as the software runs Java bytecode, it continually analyzes the program’s performance for “hot spots” which are frequently or repeatedly executed. These are then targeted for optimization, leading to high-performance execution with a minimum of overhead for less performance-critical code. –<a href="https://en.wikipedia.org/wiki/HotSpot" target="_blank" rel="external">Wikipedia</a></p>
-</blockquote>
-<p>Sun公司主要开发两种JVM: 客户端虚拟机和服务器端虚拟机；客户端虚拟机主要为应用程序快速加载而调制；服务器端版本加载更慢，但运行更加高效。</p>
-<p>HotSpot提供如下部件：</p>
-<ul>
-<li>一个<a href="https://en.wikipedia.org/wiki/Java_Classloader" target="_blank" rel="external">类加载器</a></li>
-<li>一个<a href="https://en.wikipedia.org/wiki/Java_bytecode" target="_blank" rel="external">字节码</a><a href="https://en.wikipedia.org/wiki/Interpreter_(computing" target="_blank" rel="external">解释器</a>)</li>
-<li>客户端和服务器端虚拟机</li>
-<li>一些<a href="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science" target="_blank" rel="external">垃圾收集器</a>)</li>
-<li>运行库集合</li>
-</ul>
-<p>HotSpot源码结构图:<br><img src="/images/JVM/JVM2.PNG" alt="HotSpot源码结构"><br><img src="/images/JVM/JVM3.PNG" alt="HotSpot源码结构"></p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                <a class="post-title-link" href="/2015/07/31/markdown-test/" itemprop="url">
-                  markdown-test
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2015-07-31T10:30:26+08:00" content="2015-07-31">
-              2015-07-31
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/07/31/markdown-test/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/31/markdown-test/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>this is a toast for markdown</p>
-<h2 id="start"><strong>start</strong></h2><h3 id="1-_insert_a_hyperlink"><strong>1. insert a hyperlink</strong></h3><p>More information about markdown: <a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">markdown</a></p>
-<h3 id="2-_insert_a_code_block"><strong>2. insert a code block</strong></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">"hello markdown"</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="3-_insert_a_picture"><strong>3. insert a picture</strong></h3><p>this is a picture:<br><img src="/images/true-monster.JPG" alt="this is a picture"></p>
-<h3 id="4-_insert_a_reference"><strong>4. insert a reference</strong></h3><blockquote>
-<p>this world is beautiful and worth fighting for it. I only agree with the latter one.</p>
-</blockquote>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                <a class="post-title-link" href="/2015/07/31/hello-world/" itemprop="url">
-                  Hello World
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2015-07-31T10:04:41+08:00" content="2015-07-31">
-              2015-07-31
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/07/31/hello-world/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/31/hello-world/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1188,7 +1334,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-count">25</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
