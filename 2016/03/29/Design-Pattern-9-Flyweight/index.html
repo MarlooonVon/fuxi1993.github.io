@@ -34,7 +34,7 @@
 
 
 
-  <meta name="keywords" content="Hexo,next" />
+  <meta name="keywords" content="Design Pattern,Java," />
 
 
 
@@ -43,16 +43,18 @@
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
 
 
-<meta name="description">
+<meta name="description" content="1. 动机有些应用程序得益于在其整个设计过程中采用对象技术，但简单化的实现代价极大。例如，大多数文档编辑器的实现都有文本格式化和编辑功能，这些功能在一定程度上是模块化的。面向对象的文档编辑器通常使用对象来表示嵌入的成分，例如表格和图形。尽管用对象来表示文档中的每个字符会极大地提高应用程序的灵活性，但是这些编辑器通常并不这样做。字符和嵌入成分可以在绘制和格式化时统一处理，从而在不影响其他功能的情况下">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Design Pattern(9): Flyweight">
 <meta property="og:url" content="http://yoursite.com/2016/03/29/Design-Pattern-9-Flyweight/index.html">
 <meta property="og:site_name" content="My Blog">
-<meta property="og:description">
-<meta property="og:updated_time" content="2016-03-29T12:56:00.755Z">
+<meta property="og:description" content="1. 动机有些应用程序得益于在其整个设计过程中采用对象技术，但简单化的实现代价极大。例如，大多数文档编辑器的实现都有文本格式化和编辑功能，这些功能在一定程度上是模块化的。面向对象的文档编辑器通常使用对象来表示嵌入的成分，例如表格和图形。尽管用对象来表示文档中的每个字符会极大地提高应用程序的灵活性，但是这些编辑器通常并不这样做。字符和嵌入成分可以在绘制和格式化时统一处理，从而在不影响其他功能的情况下">
+<meta property="og:image" content="http://yoursite.com/images/DP/Flyweight/1.PNG">
+<meta property="og:image" content="http://yoursite.com/images/DP/Flyweight/2.PNG">
+<meta property="og:updated_time" content="2016-04-03T14:14:19.327Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Design Pattern(9): Flyweight">
-<meta name="twitter:description">
+<meta name="twitter:description" content="1. 动机有些应用程序得益于在其整个设计过程中采用对象技术，但简单化的实现代价极大。例如，大多数文档编辑器的实现都有文本格式化和编辑功能，这些功能在一定程度上是模块化的。面向对象的文档编辑器通常使用对象来表示嵌入的成分，例如表格和图形。尽管用对象来表示文档中的每个字符会极大地提高应用程序的灵活性，但是这些编辑器通常并不这样做。字符和嵌入成分可以在绘制和格式化时统一处理，从而在不影响其他功能的情况下">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -239,11 +241,32 @@
       
 
       
-        <span itemprop="articleBody"></span>
+        <span itemprop="articleBody"><h2 id="1-_动机">1. 动机</h2><p>有些应用程序得益于在其整个设计过程中采用对象技术，但简单化的实现代价极大。<br>例如，大多数文档编辑器的实现都有文本格式化和编辑功能，这些功能在一定程度上是模块化的。面向对象的文档编辑器通常使用对象来表示嵌入的成分，例如表格和图形。尽管用对象来表示文档中的每个字符会极大地提高应用程序的灵活性，但是这些编辑器通常并不这样做。字符和嵌入成分可以在绘制和格式化时统一处理，从而在不影响其他功能的情况下能对应用程序进行扩展，支持新的字符集。应用程序的对象结构可以模拟文档的物理结构。<br>但这种设计的缺点在于代价太大。即使是一个中等大小的文档也可能要求成百上千的字符对象，这会耗费大量内存，产生难以接受的运行开销。所以通常并不是对每个字符都用一个对象来表示的。Flyweight模式描述了如何共享对象，使得可以细粒度地使用它们而无需高昂的代价。<br>flyweight是一个共享对象，它可以同时在多个场景 ( context )中使用，并且在每个场景中<br>flyweight都可以作为一个独立的对象—这一点与非共享对象的实例没有区别。Flyweight不能<br>对它所运行的场景做出任何假设，这里的关键概念是内部状态和外部状态之间的区别。内部<br>状态存储于Flyweight中，它包含了独立于Flyweight场景的信息，这些信息使得Flyweight可以<br>被共享。而外部状态取决于Flyweight场景，并根据场景而变化，因此不可共享。用户对象负<br>责在必要的时候将外部状态传递给Flyweight。</p>
+<h2 id="2-_意图">2. 意图</h2><p>运用共享技术有效地支持大量细粒度的对象。</p>
+<h2 id="3-_适用性">3. 适用性</h2><p>flyweight模式的有效性很大程度上取决于如何使用它以及在何处使用它。当以下情况都<br>成立时使用flyweight模式：<br>• 一个应用程序使用了大量的对象。<br>• 完全由于使用大量的对象，造成很大的存储开销。<br>• 对象的大多数状态都可变为外部状态。<br>• 如果删除对象的外部状态，那么可以用相对较少的共享对象取代很多组对象。<br>• 应用程序不依赖于对象标识。由于Flyweight对象可以被共享，对于概念上明显有别的对<br>象，标识测试将返回真值。</p>
+<h2 id="4-_结构">4. 结构</h2><p><img src="/images/DP/Flyweight/1.PNG" alt="picture"><br>下面的对象图说明了如何共享Flyweight。<br><img src="/images/DP/Flyweight/2.PNG" alt="picture"></p>
+<h2 id="5-_参与者">5. 参与者</h2><p>•Flyweight<br>— 描述一个接口，通过这个接口Flyweight可以接受并作用于外部状态。<br>•ConcreteFlyweight<br>— 实现Flyweight接口 ，并为内部状态（如果有的话）增加存储空间 。<br>ConcreteFlyweight对象必须是可共享的。它所存储的状态必须是内部的；即，它必须独立于ConcreteFlyweight对象的场景。<br>• UnsharedConcreteFlyweight<br>— 并非所有的flyweight子类都需要被共享。Flyweight接口使共享成为可能，但它并不强制共享。在Flyweight对象结构的某些层次， UnsharedConcreteFlyweight对象通常<br>将ConcreteFlyweight对象作为子节点<br>•FlyweightFactory<br>— 创建并管理flyweight对象。<br>— 确保合理地共享Flyweight。当用户请求一个Flyweight时，FlyweightFactory对象提供<br>一个已创建的实例或者创建一个（如果不存在的话）。<br>• Client<br>— 维持一个对flyweight的引用。<br>— 计算或存储一个（多个）Flyweight的外部状态。</p>
+<h2 id="6-_协作">6. 协作</h2><p>• Flyweight执行时所需的状态必定是内部的或外部的。内部状态存储于ConcreteFlyweight对象之中；而外部对象则由Client对象存储或计算。当用户调用Flyweight对象的操作时，将该状态传递给它。<br>• 用户不应直接对ConcreteFlyweight类进行实例化，而只能从FlyweightFactory对象得到ConcreteFlyweight对象，这可以保证对它们适当地进行共享。</p>
+<h2 id="7-实例">7.实例</h2><p><a href="http://www.cnblogs.com/zhenyulu/articles/55793.html" target="_blank" rel="external">享元（Flyweight）模式</a></p>
+<h2 id="参考资料">参考资料</h2><ol>
+<li><a href="https://book.douban.com/subject/1052241/" target="_blank" rel="external">设计模式-可复用面向对象软件的基础</a></li>
+<li><a href="https://book.douban.com/subject/2243615/" target="_blank" rel="external">Head First设计模式</a></li>
+<li><a href="http://www.programcreek.com/" target="_blank" rel="external">Programcreek</a></li>
+<li><a href="http://blog.csdn.net/sfdev/article/details/3906243" target="_blank" rel="external">UML中几种类间关系：继承、实现、依赖、关联、聚合、组合的联系与区别</a></li>
+</ol>
+</span>
       
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Design-Pattern/" rel="tag">#Design Pattern</a>
+          
+            <a href="/tags/Java/" rel="tag">#Java</a>
+          
+        </div>
       
 
       
@@ -382,7 +405,7 @@
           <div class="post-toc">
             
             
-              <p class="post-toc-empty">This post does not have a Table Of Contents</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-_动机"><span class="nav-number">1.</span> <span class="nav-text">1. 动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-_意图"><span class="nav-number">2.</span> <span class="nav-text">2. 意图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-_适用性"><span class="nav-number">3.</span> <span class="nav-text">3. 适用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-_结构"><span class="nav-number">4.</span> <span class="nav-text">4. 结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-_参与者"><span class="nav-number">5.</span> <span class="nav-text">5. 参与者</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-_协作"><span class="nav-number">6.</span> <span class="nav-text">6. 协作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-实例"><span class="nav-number">7.</span> <span class="nav-text">7.实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">8.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

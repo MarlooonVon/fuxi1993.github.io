@@ -34,7 +34,7 @@
 
 
 
-  <meta name="keywords" content="Hexo,next" />
+  <meta name="keywords" content="Design Pattern,Java," />
 
 
 
@@ -43,16 +43,24 @@
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
 
 
-<meta name="description">
+<meta name="description" content="1. 意图为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。
+2. 动机将一个系统划分成为若干个子系统有利于降低系统的复杂性。一个常见的设计目标是使子系统间的通信和相互依赖关系达到最小。达到该目标的途径之一是就是引入一个外观（facade）对象，它为子系统中较一般的设施提供了一个单一而简单的界面。
+3. 适用性在遇到以下情况使用 Fac">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Design Pattern(8): Facade">
 <meta property="og:url" content="http://yoursite.com/2016/03/29/Design-Pattern-8-Facade/index.html">
 <meta property="og:site_name" content="My Blog">
-<meta property="og:description">
-<meta property="og:updated_time" content="2016-03-29T12:55:16.806Z">
+<meta property="og:description" content="1. 意图为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。
+2. 动机将一个系统划分成为若干个子系统有利于降低系统的复杂性。一个常见的设计目标是使子系统间的通信和相互依赖关系达到最小。达到该目标的途径之一是就是引入一个外观（facade）对象，它为子系统中较一般的设施提供了一个单一而简单的界面。
+3. 适用性在遇到以下情况使用 Fac">
+<meta property="og:image" content="http://yoursite.com/images/DP/Facade/1.PNG">
+<meta property="og:image" content="http://yoursite.com/images/DP/Facade/2.PNG">
+<meta property="og:updated_time" content="2016-04-03T13:36:03.303Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Design Pattern(8): Facade">
-<meta name="twitter:description">
+<meta name="twitter:description" content="1. 意图为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。
+2. 动机将一个系统划分成为若干个子系统有利于降低系统的复杂性。一个常见的设计目标是使子系统间的通信和相互依赖关系达到最小。达到该目标的途径之一是就是引入一个外观（facade）对象，它为子系统中较一般的设施提供了一个单一而简单的界面。
+3. 适用性在遇到以下情况使用 Fac">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -239,11 +247,31 @@
       
 
       
-        <span itemprop="articleBody"></span>
+        <span itemprop="articleBody"><h2 id="1-_意图">1. 意图</h2><p>为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。</p>
+<h2 id="2-_动机">2. 动机</h2><p>将一个系统划分成为若干个子系统有利于降低系统的复杂性。一个常见的设计目标是使子系统间的通信和相互依赖关系达到最小。达到该目标的途径之一是就是引入一个外观（facade）对象，它为子系统中较一般的设施提供了一个单一而简单的界面。<br><img src="/images/DP/Facade/1.PNG" alt="picture"></p>
+<h2 id="3-_适用性">3. 适用性</h2><p>在遇到以下情况使用 Facade模式<br>• 当你要为一个复杂子系统提供一个简单接口时。子系统往往因为不断演化而变得越来越复杂。大多数模式使用时都会产生更多更小的类。这使得子系统更具可重用性，也更容易对子系统进行定制，但这也给那些不需要定制子系统的用户带来一些使用上的困难。Facade可以提供一个简单的缺省视图，这一视图对大多数用户来说已经足够，而那些需要更多的可定制性的用户可以越过 facade层。<br>• 客户程序与抽象类的实现部分之间存在着很大的依赖性。引入facade将这个子系统与客户以及其他的子系统分离，可以提高子系统的独立性和可移植性。<br>• 当你需要构建一个层次结构的子系统时，使用 facade模式定义子系统中每层的入口点。如果子系统之间是相互依赖的，你可以让它们仅通过facade进行通讯，从而简化了它们之间的依赖关系。</p>
+<h2 id="4-结构">4.结构</h2><p><img src="/images/DP/Facade/2.PNG" alt="picture"></p>
+<h2 id="5-参与者">5.参与者</h2><p>• Facade ( Compiler)<br>— 知道哪些子系统类负责处理请求。<br>— 将客户的请求代理给适当的子系统对象。<br>• Subsystem classes (Scanner、Parser、ProgramNode等)<br>— 实现子系统的功能。<br>— 处理由Facade对象指派的任务。<br>— 没有facade的任何相关信息；即没有指向facade的指针。</p>
+<h2 id="6-_协作">6. 协作</h2><p>• 客户程序通过发送请求给Facade的方式与子系统通讯，Facade将这些消息转发给适当的子系统对象。尽管是子系统中的有关对象在做实际工作，但Facade模式本身也必须将它的接口转换成子系统的接口。<br>• 使用Facade的客户程序不需要直接访问子系统对象。</p>
+<h2 id="参考资料">参考资料</h2><ol>
+<li><a href="https://book.douban.com/subject/1052241/" target="_blank" rel="external">设计模式-可复用面向对象软件的基础</a></li>
+<li><a href="https://book.douban.com/subject/2243615/" target="_blank" rel="external">Head First设计模式</a></li>
+<li><a href="http://www.programcreek.com/" target="_blank" rel="external">Programcreek</a></li>
+<li><a href="http://blog.csdn.net/sfdev/article/details/3906243" target="_blank" rel="external">UML中几种类间关系：继承、实现、依赖、关联、聚合、组合的联系与区别</a></li>
+</ol>
+</span>
       
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Design-Pattern/" rel="tag">#Design Pattern</a>
+          
+            <a href="/tags/Java/" rel="tag">#Java</a>
+          
+        </div>
       
 
       
@@ -382,7 +410,7 @@
           <div class="post-toc">
             
             
-              <p class="post-toc-empty">This post does not have a Table Of Contents</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-_意图"><span class="nav-number">1.</span> <span class="nav-text">1. 意图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-_动机"><span class="nav-number">2.</span> <span class="nav-text">2. 动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-_适用性"><span class="nav-number">3.</span> <span class="nav-text">3. 适用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-结构"><span class="nav-number">4.</span> <span class="nav-text">4.结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-参与者"><span class="nav-number">5.</span> <span class="nav-text">5.参与者</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-_协作"><span class="nav-number">6.</span> <span class="nav-text">6. 协作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
